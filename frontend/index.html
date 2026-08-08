@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Offer a Ride - RideSync</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Font -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- Material Symbols -->
+    <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    >
+
+    <style>
+        body {
+            font-family: "Plus Jakarta Sans", sans-serif;
+        }
+
+        .map-container {
+            height: 100vh;
+            width: 100%;
+            background: #f3f3f3;
+            position: relative;
+        }
+
+        #map {
+            height: 100%;
+            width: 100%;
+        }
+
+        .sidebar-active {
+            background: #2563eb;
+            color: white;
+        }
+
+        /* Simple map-style background */
+        .fake-map {
+            background-color: #e8eee7;
+            background-image:
+                linear-gradient(
+                    30deg,
+                    rgba(255, 255, 255, 0.7) 12%,
+                    transparent 12.5%,
+                    transparent 87%,
+                    rgba(255, 255, 255, 0.7) 87.5%,
+                    rgba(255, 255, 255, 0.7)
+                ),
+                linear-gradient(
+                    150deg,
+                    rgba(255, 255, 255, 0.7) 12%,
+                    transparent 12.5%,
+                    transparent 87%,
+                    rgba(255, 255, 255, 0.7) 87.5%,
+                    rgba(255, 255, 255, 0.7)
+                );
+            background-size: 80px 80px;
+        }
+    </style>
+</head>
+
+<body class="bg-[#f9f9f9] text-[#1a1a1a] overflow-hidden">
+
+    <div class="flex h-screen">
+
+        <!-- =========================================
+             SIDE NAVIGATION
+        ========================================== -->
+        <aside
+            class="w-64 bg-white border-r border-gray-100
+                   flex flex-col p-6 gap-8 z-20"
+        >
+
+            <!-- Logo -->
+            <div class="text-2xl font-extrabold tracking-tighter">
+                RideSync
+            </div>
+
+            <!-- Navigation -->
+            <nav class="flex flex-col gap-2 flex-grow">
+
+                <!-- Home -->
+                <a
+                    href="#"
+                    class="flex items-center gap-3 p-3 rounded-lg
+                           text-gray-500 hover:bg-gray-50 transition-all"
+                >
+                    <span class="material-symbols-outlined">
+                        home
+                    </span>
+
+                    <span class="font-medium text-sm">
+                        Home
+                    </span>
+                </a>
+
+                <!-- Offer Ride -->
+                <a
+                    href="#"
+                    class="flex items-center gap-3 p-3 rounded-lg
+                           sidebar-active transition-all"
+                >
+                    <span class="material-symbols-outlined">
+                        add_circle
+                    </span>
+
+                    <span class="font-medium text-sm">
+                        Offer Ride
+                    </span>
+                </a>
+
+                <!-- Vehicles -->
+                <a
+                    href="#"
+                    class="flex items-center gap-3 p-3 rounded-lg
+                           text-gray-500 hover:bg-gray-50 transition-all"
+                >
+                    <span class="material-symbols-outlined">
+                        garage
+                    </span>
+
+                    <span class="font-medium text-sm">
+                        Vehicles
+                    </span>
+                </a>
+
+                <!-- History -->
+                <a
+                    href="#"
+                    class="flex items-center gap-3 p-3 rounded-lg
+                           text-gray-500 hover:bg-gray-50 transition-all"
+                >
+                    <span class="material-symbols-outlined">
+                        history
+                    </span>
+
+                    <span class="font-medium text-sm">
+                        History
+                    </span>
+                </a>
+
+                <!-- Messages -->
+                <a
+                    href="#"
+                    class="flex items-center gap-3 p-3 rounded-lg
+                           text-gray-500 hover:bg-gray-50 transition-all"
+                >
+                    <span class="material-symbols-outlined">
+                        chat
+                    </span>
+
+                    <span class="font-medium text-sm">
+                        Messages
+                    </span>
+                </a>
+
+            </nav>
+
+            <!-- Profile Section -->
+            <div class="pt-6 border-t border-gray-100">
+
+                <div class="flex items-center gap-3 mb-4">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=100"
+                        alt="Profile"
+                        class="w-10 h-10 rounded-full object-cover"
+                    >
+
+                    <div>
+                        <div class="text-xs font-bold">
+                            Alex Morgan
+                        </div>
+
+                        <div
+                            class="text-[10px] text-gray-400
+                                   font-medium uppercase tracking-wider"
+                        >
+                            Pro Driver • 4.98 ★
+                        </div>
+                    </div>
+
+                </div>
+
+                <button
+                    class="w-full py-2.5 bg-[#0052ff] text-white
+                           text-xs font-bold rounded-lg
+                           hover:bg-[#0041cc] transition-colors"
+                >
+                    Become a Partner
+                </button>
+
+            </div>
+
+        </aside>
+
+
+        <!-- =========================================
+             MAIN CONTENT / FORM
+        ========================================== -->
+        <main
+            class="w-[500px] bg-white shadow-2xl z-10
+                   flex flex-col p-12 overflow-y-auto"
+        >
+
+            <!-- Heading -->
+            <h1 class="text-3xl font-extrabold mb-2">
+                Offer a Ride
+            </h1>
+
+            <p class="text-gray-500 mb-10">
+                Share your journey and earn while driving.
+            </p>
+
+
+            <!-- =====================================
+                 LOCATION & TRIP DETAILS
+            ====================================== -->
+            <div class="space-y-4 mb-8">
+
+                <!-- Pickup Location -->
+                <div class="relative group">
+
+                    <span
+                        class="material-symbols-outlined
+                               absolute left-4 top-1/2
+                               -translate-y-1/2 text-gray-400
+                               group-focus-within:text-[#0052ff]"
+                    >
+                        my_location
+                    </span>
+
+                    <input
+                        type="text"
+                        id="pickup"
+                        placeholder="Pickup Location"
+                        class="w-full pl-12 pr-4 py-4
+                               bg-gray-50 border border-transparent
+                               rounded-xl focus:bg-white
+                               focus:border-[#0052ff]
+                               outline-none transition-all
+                               text-sm font-medium"
+                    >
+
+                </div>
+
+
+                <!-- Destination -->
+                <div class="relative group">
+
+                    <span
+                        class="material-symbols-outlined
+                               absolute left-4 top-1/2
+                               -translate-y-1/2 text-gray-400
+                               group-focus-within:text-[#0052ff]"
+                    >
+                        location_on
+                    </span>
+
+                    <input
+                        type="text"
+                        id="destination"
+                        placeholder="Destination"
+                        class="w-full pl-12 pr-4 py-4
+                               bg-gray-50 border border-transparent
+                               rounded-xl focus:bg-white
+                               focus:border-[#0052ff]
+                               outline-none transition-all
+                               text-sm font-medium"
+                    >
+
+                </div>
+
+
+                <!-- Date & Time -->
+                <div class="grid grid-cols-2 gap-4">
+
+                    <!-- Date -->
+                    <div class="relative group">
+
+                        <span
+                            class="material-symbols-outlined
+                                   absolute left-4 top-1/2
+                                   -translate-y-1/2 text-gray-400"
+                        >
+                            calendar_today
+                        </span>
+
+                        <input
+                            type="date"
+                            id="rideDate"
+                            class="w-full pl-12 pr-4 py-4
+                                   bg-gray-50 border border-transparent
+                                   rounded-xl focus:bg-white
+                                   focus:border-[#0052ff]
+                                   outline-none transition-all
+                                   text-sm font-medium"
+                        >
+
+                    </div>
+
+
+                    <!-- Time -->
+                    <div class="relative group">
+
+                        <span
+                            class="material-symbols-outlined
+                                   absolute left-4 top-1/2
+                                   -translate-y-1/2 text-gray-400"
+                        >
+                            schedule
+                        </span>
+
+                        <input
+                            type="time"
+                            id="rideTime"
+                            class="w-full pl-12 pr-4 py-4
+                                   bg-gray-50 border border-transparent
+                                   rounded-xl focus:bg-white
+                                   focus:border-[#0052ff]
+                                   outline-none transition-all
+                                   text-sm font-medium"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- Passenger Seats -->
+                <div class="relative">
+
+                    <span
+                        class="material-symbols-outlined
+                               absolute left-4 top-1/2
+                               -translate-y-1/2 text-gray-400"
+                    >
+                        group
+                    </span>
+
+                    <select
+                        id="seats"
+                        class="w-full pl-12 pr-4 py-4
+                               bg-gray-50 border border-transparent
+                               rounded-xl focus:bg-white
+                               focus:border-[#0052ff]
+                               outline-none transition-all
+                               text-sm font-medium appearance-none"
+                    >
+                        <option value="1">
+                            1 Passenger Seat
+                        </option>
+
+                        <option value="2">
+                            2 Passenger Seats
+                        </option>
+
+                        <option value="3">
+                            3 Passenger Seats
+                        </option>
+
+                        <option value="4">
+                            4 Passenger Seats
+                        </option>
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <!-- =====================================
+                 RIDE SETTINGS
+            ====================================== -->
+            <div
+                class="bg-gray-50 rounded-2xl p-6 mb-8
+                       border border-gray-100"
+            >
+
+                <div class="flex items-center justify-between">
+
+                    <div class="flex items-center gap-3">
+
+                        <span
+                            class="material-symbols-outlined
+                                   text-[#0052ff]"
+                        >
+                            payments
+                        </span>
+
+                        <div>
+                            <p class="text-sm font-bold">
+                                Suggested Contribution
+                            </p>
+
+                            <p class="text-xs text-gray-400">
+                                Based on distance and fuel cost
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="text-right">
+                        <div
+                            id="price"
+                            class="text-xl font-extrabold"
+                        >
+                            ₹250
+                        </div>
+
+                        <div class="text-[10px] text-gray-400">
+                            per passenger
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =====================================
+                 RIDE PREFERENCES
+            ====================================== -->
+            <div class="mb-8">
+
+                <h2 class="text-sm font-bold mb-4">
+                    Ride Preferences
+                </h2>
+
+                <div class="space-y-3">
+
+                    <!-- No Smoking -->
+                    <label
+                        class="flex items-center justify-between
+                               p-3 rounded-xl border border-gray-100
+                               hover:bg-gray-50 cursor-pointer"
+                    >
+                        <div class="flex items-center gap-3">
+
+                            <span
+                                class="material-symbols-outlined
+                                       text-gray-500"
+                            >
+                                smoking_rooms
+                            </span>
+
+                            <span class="text-sm font-medium">
+                                No Smoking
+                            </span>
+
+                        </div>
+
+                        <input
+                            type="checkbox"
+                            checked
+                            class="w-4 h-4 accent-[#0052ff]"
+                        >
+
+                    </label>
+
+
+                    <!-- Music -->
+                    <label
+                        class="flex items-center justify-between
+                               p-3 rounded-xl border border-gray-100
+                               hover:bg-gray-50 cursor-pointer"
+                    >
+                        <div class="flex items-center gap-3">
+
+                            <span
+                                class="material-symbols-outlined
+                                       text-gray-500"
+                            >
+                                music_note
+                            </span>
+
+                            <span class="text-sm font-medium">
+                                Music Allowed
+                            </span>
+
+                        </div>
+
+                        <input
+                            type="checkbox"
+                            class="w-4 h-4 accent-[#0052ff]"
+                        >
+
+                    </label>
+
+
+                    <!-- Pets -->
+                    <label
+                        class="flex items-center justify-between
+                               p-3 rounded-xl border border-gray-100
+                               hover:bg-gray-50 cursor-pointer"
+                    >
+                        <div class="flex items-center gap-3">
+
+                            <span
+                                class="material-symbols-outlined
+                                       text-gray-500"
+                            >
+                                pets
+                            </span>
+
+                            <span class="text-sm font-medium">
+                                Pets Allowed
+                            </span>
+
+                        </div>
+
+                        <input
+                            type="checkbox"
+                            class="w-4 h-4 accent-[#0052ff]"
+                        >
+
+                    </label>
+
+                </div>
+
+            </div>
+
+
+            <!-- =====================================
+                 OFFER RIDE BUTTON
+            ====================================== -->
+            <button
+                id="offerRideBtn"
+                onclick="offerRide()"
+                class="w-full py-4 bg-[#0052ff]
+                       hover:bg-[#0041cc]
+                       text-white rounded-xl
+                       font-bold text-sm
+                       transition-all shadow-lg
+                       shadow-blue-100"
+            >
+                Offer This Ride
+            </button>
+
+            <p
+                id="successMessage"
+                class="hidden text-center text-sm
+                       text-green-600 font-semibold mt-4"
+            >
+                ✓ Your ride has been successfully posted!
+            </p>
+
+        </main>
+
+
+        <!-- =========================================
+             MAP SECTION
+        ========================================== -->
+        <section class="flex-1 relative">
+
+            <div
+                id="map"
+                class="map-container fake-map"
+            >
+
+                <!-- Map Overlay -->
+                <div
+                    class="absolute inset-0
+                           flex items-center justify-center"
+                >
+
+                    <div
+                        class="bg-white/95 backdrop-blur-sm
+                               px-6 py-5 rounded-2xl
+                               shadow-xl text-center"
+                    >
+
+                        <span
+                            class="material-symbols-outlined
+                                   text-[#0052ff] text-4xl mb-2"
+                        >
+                            map
+                        </span>
+
+                        <h2 class="font-bold text-lg">
+                            Your Route
+                        </h2>
+
+                        <p class="text-sm text-gray-500 mt-1">
+                            Enter your pickup and destination
+                            to view your route.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Pickup Marker -->
+                <div
+                    class="absolute top-[38%] left-[30%]
+                           bg-[#0052ff] text-white
+                           w-10 h-10 rounded-full
+                           flex items-center justify-center
+                           shadow-lg"
+                >
+                    <span class="material-symbols-outlined">
+                        my_location
+                    </span>
+                </div>
+
+
+                <!-- Destination Marker -->
+                <div
+                    class="absolute bottom-[30%] right-[25%]
+                           bg-red-500 text-white
+                           w-10 h-10 rounded-full
+                           flex items-center justify-center
+                           shadow-lg"
+                >
+                    <span class="material-symbols-outlined">
+                        location_on
+                    </span>
+                </div>
+
+            </div>
+
+
+            <!-- Map Controls -->
+            <div
+                class="absolute right-6 top-6
+                       flex flex-col gap-2"
+            >
+
+                <button
+                    class="w-11 h-11 bg-white
+                           rounded-xl shadow-lg
+                           flex items-center justify-center
+                           hover:bg-gray-50"
+                    title="Current Location"
+                >
+                    <span class="material-symbols-outlined">
+                        my_location
+                    </span>
+                </button>
+
+                <button
+                    class="w-11 h-11 bg-white
+                           rounded-xl shadow-lg
+                           flex items-center justify-center
+                           hover:bg-gray-50"
+                    title="Zoom In"
+                >
+                    <span class="material-symbols-outlined">
+                        add
+                    </span>
+                </button>
+
+                <button
+                    class="w-11 h-11 bg-white
+                           rounded-xl shadow-lg
+                           flex items-center justify-center
+                           hover:bg-gray-50"
+                    title="Zoom Out"
+                >
+                    <span class="material-symbols-outlined">
+                        remove
+                    </span>
+                </button>
+
+            </div>
+
+        </section>
+
+    </div>
+
+
+    <!-- =========================================
+         JAVASCRIPT
+    ========================================== -->
+    <script>
+
+        function offerRide() {
+
+            const pickup =
+                document.getElementById("pickup").value.trim();
+
+            const destination =
+                document.getElementById("destination").value.trim();
+
+            const date =
+                document.getElementById("rideDate").value;
+
+            const time =
+                document.getElementById("rideTime").value;
+
+            const seats =
+                document.getElementById("seats").value;
+
+            const successMessage =
+                document.getElementById("successMessage");
+
+
+            // Validation
+            if (!pickup) {
+                alert("Please enter your pickup location.");
+                return;
+            }
+
+            if (!destination) {
+                alert("Please enter your destination.");
+                return;
+            }
+
+            if (!date) {
+                alert("Please select the ride date.");
+                return;
+            }
+
+            if (!time) {
+                alert("Please select the ride time.");
+                return;
+            }
+
+
+            // Show success message
+            successMessage.classList.remove("hidden");
+
+            // Console output for testing
+            console.log("Ride Details:");
+            console.log("Pickup:", pickup);
+            console.log("Destination:", destination);
+            console.log("Date:", date);
+            console.log("Time:", time);
+            console.log("Seats:", seats);
+        }
+
+    </script>
+
+</body>
+</html>
