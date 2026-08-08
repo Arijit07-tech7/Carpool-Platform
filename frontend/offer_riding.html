@@ -171,14 +171,14 @@
                 <div class="flex items-center gap-3 mb-4">
 
                     <img
-                        src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=100"
+                        src="https://images.unsplash.com/photo-1531384441138-2736e62e44b3?auto=format&fit=crop&q=80&w=100"
                         alt="Profile"
                         class="w-10 h-10 rounded-full object-cover"
                     >
 
                     <div>
                         <div class="text-xs font-bold">
-                            Alex Morgan
+                            Shankar Santra
                         </div>
 
                         <div
@@ -602,7 +602,8 @@
 
                 <!-- Pickup Marker -->
                 <div
-                    class="absolute top-[38%] left-[30%]
+                    id="pickupMarker"
+                    class="hidden absolute top-[38%] left-[30%]
                            bg-[#0052ff] text-white
                            w-10 h-10 rounded-full
                            flex items-center justify-center
@@ -616,7 +617,8 @@
 
                 <!-- Destination Marker -->
                 <div
-                    class="absolute bottom-[30%] right-[25%]
+                    id="destinationMarker"
+                    class="hidden absolute bottom-[30%] right-[25%]
                            bg-red-500 text-white
                            w-10 h-10 rounded-full
                            flex items-center justify-center
@@ -684,6 +686,23 @@
     ========================================== -->
     <script>
 
+
+        // Google Maps — centered on Kolkata
+        function initMap() {
+            const kolkata = { lat: 22.5726, lng: 88.3639 };
+
+            window.rideSyncMap = new google.maps.Map(
+                document.getElementById("map"),
+                {
+                    center: kolkata,
+                    zoom: 12,
+                    mapTypeControl: true,
+                    streetViewControl: true,
+                    fullscreenControl: true
+                }
+            );
+        }
+
         function offerRide() {
 
             const pickup =
@@ -739,6 +758,13 @@
             console.log("Seats:", seats);
         }
 
+    </script>
+
+
+    <script
+        async
+        defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBXINXYhwOmPz1EOFH63mU0GdOMpC6XHqs&callback=initMap">
     </script>
 
 </body>

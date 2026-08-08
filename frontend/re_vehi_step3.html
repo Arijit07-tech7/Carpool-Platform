@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+
+<html lang="en" class="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+```
+<title>Document Upload - RideSync</title>
+
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- Google Font -->
+<link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+>
+
+<!-- Material Icons -->
+<link
+    href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
+    rel="stylesheet"
+>
+
+<!-- Tailwind Configuration -->
+<script>
+    tailwind.config = {
+        darkMode: "class",
+
+        theme: {
+            extend: {
+                colors: {
+                    primary: "#0052ff",
+                    "primary-container": "#dbeafe",
+                    "on-primary-container": "#001a41",
+
+                    surface: "#f9f9f9",
+                    "surface-container": "#f3f3f3",
+                    "surface-container-low": "#f9f9f9",
+                    "surface-container-high": "#ececec",
+
+                    "on-surface": "#1a1a1a",
+                    "on-surface-variant": "#444444",
+
+                    outline: "#dadada",
+                    "outline-variant": "#eeeeee"
+                },
+
+                fontFamily: {
+                    sans: ["Plus Jakarta Sans", "sans-serif"]
+                },
+
+                borderRadius: {
+                    xl: "12px",
+                    "2xl": "16px",
+                    "3xl": "24px",
+                    "4xl": "32px"
+                }
+            }
+        }
+    };
+</script>
+
+
+<!-- Custom CSS -->
+<style>
+    body {
+        font-family: "Plus Jakarta Sans", sans-serif;
+    }
+
+    .upload-zone {
+        border: 2px dashed #dadada;
+        transition: all 0.2s ease;
+    }
+
+    .upload-zone:hover,
+    .upload-zone.dragover {
+        border-color: #0052ff;
+        background: rgba(0, 82, 255, 0.02);
+    }
+
+    .glass-sidebar {
+        border-right: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .active-nav {
+        background: rgba(0, 82, 255, 0.06);
+        color: #0052ff;
+        font-weight: 600;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #eeeeee;
+        border-radius: 10px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: #e0e0e0;
+    }
+
+    .file-success {
+        border-color: #22c55e !important;
+        background: rgba(34, 197, 94, 0.03);
+    }
+</style>
+```
+
+</head>
+
+<body class="bg-surface text-on-surface flex h-screen overflow-hidden">
+
+```
+<!-- =====================================================
+     SIDEBAR NAVIGATION
+====================================================== -->
+<aside class="w-64 glass-sidebar bg-white flex flex-col shrink-0">
+
+    <!-- Logo -->
+    <div class="p-8 pb-4">
+        <h1 class="text-2xl font-extrabold tracking-tighter text-primary">
+            RideSync
+        </h1>
+    </div>
+
+
+    <!-- Navigation -->
+    <nav class="flex-1 px-4 mt-8 space-y-1">
+
+        <!-- Dashboard -->
+        <a
+            href="#"
+            class="flex items-center px-4 py-3
+                   text-on-surface-variant
+                   hover:bg-surface-container
+                   rounded-xl transition-colors"
+        >
+            <span class="material-icons-outlined mr-3 text-lg">
+                dashboard
+            </span>
+
+            <span class="text-sm font-medium">
+                Dashboard
+            </span>
+        </a>
+
+
+        <!-- My Vehicles -->
+        <a
+            href="#"
+            class="flex items-center px-4 py-3
+                   active-nav rounded-xl"
+        >
+            <span class="material-icons-outlined mr-3 text-lg">
+                directions_car
+            </span>
+
+            <span class="text-sm">
+                My Vehicles
+            </span>
+        </a>
+
+
+        <!-- Trip History -->
+        <a
+            href="#"
+            class="flex items-center px-4 py-3
+                   text-on-surface-variant
+                   hover:bg-surface-container
+                   rounded-xl transition-colors"
+        >
+            <span class="material-icons-outlined mr-3 text-lg">
+                history
+            </span>
+
+            <span class="text-sm font-medium">
+                Trip History
+            </span>
+        </a>
+
+
+        <!-- Earnings -->
+        <a
+            href="#"
+            class="flex items-center px-4 py-3
+                   text-on-surface-variant
+                   hover:bg-surface-container
+                   rounded-xl transition-colors"
+        >
+            <span class="material-icons-outlined mr-3 text-lg">
+                payments
+            </span>
+
+            <span class="text-sm font-medium">
+                Earnings
+            </span>
+        </a>
+
+
+        <!-- Account Settings -->
+        <a
+            href="#"
+            class="flex items-center px-4 py-3
+                   text-on-surface-variant
+                   hover:bg-surface-container
+                   rounded-xl transition-colors"
+        >
+            <span class="material-icons-outlined mr-3 text-lg">
+                settings
+            </span>
+
+            <span class="text-sm font-medium">
+                Account Settings
+            </span>
+        </a>
+
+    </nav>
+
+
+    <!-- Driver Profile -->
+    <div
+        class="p-6 mt-auto border-t border-outline-variant
+               flex items-center"
+    >
+
+        <img
+            src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=100"
+            alt="Mrigank Sharma"
+            class="w-10 h-10 rounded-full object-cover mr-3"
+        >
+
+        <div class="overflow-hidden">
+
+            <p class="text-xs font-bold truncate">
+                Mrigank Sharma
+            </p>
+
+            <p
+                class="text-[10px] text-on-surface-variant
+                       font-medium uppercase tracking-wider"
+            >
+                Pro Driver
+            </p>
+
+        </div>
+
+    </div>
+
+</aside>
+
+
+<!-- =====================================================
+     MAIN CONTENT
+====================================================== -->
+<main class="flex-1 bg-white ml-1 flex flex-col">
+
+
+    <!-- =================================================
+         HEADER
+    ================================================== -->
+    <header class="px-10 py-8 shrink-0">
+
+        <!-- Back Button -->
+        <button
+            type="button"
+            onclick="goBack()"
+            class="flex items-center text-sm font-bold
+                   text-on-surface-variant
+                   hover:text-primary transition-colors
+                   mb-6 group"
+        >
+
+            <span
+                class="material-icons-outlined text-lg mr-2
+                       group-hover:-translate-x-1
+                       transition-transform"
+            >
+                arrow_back
+            </span>
+
+            Back to Vehicle Details
+
+        </button>
+
+
+        <div class="max-w-4xl">
+
+            <!-- Step Indicator -->
+            <div class="flex items-center justify-between mb-3">
+
+                <span
+                    class="text-[10px] font-black
+                           uppercase tracking-[0.2em]
+                           text-primary bg-primary/5
+                           px-3 py-1 rounded-full"
+                >
+                    Step 3 of 3
+                </span>
+
+            </div>
+
+
+            <!-- Heading -->
+            <h2
+                class="text-4xl font-extrabold
+                       tracking-tight mb-2"
+            >
+                Document Upload
+            </h2>
+
+
+            <p
+                class="text-on-surface-variant
+                       font-medium"
+            >
+                Please upload clear photos or scans of
+                the required documents for your vehicle.
+            </p>
+
+
+            <!-- Progress -->
+            <div class="flex gap-2 mt-8">
+
+                <div
+                    class="h-1.5 flex-1
+                           bg-primary rounded-full"
+                ></div>
+
+                <div
+                    class="h-1.5 flex-1
+                           bg-primary rounded-full"
+                ></div>
+
+                <div
+                    class="h-1.5 flex-1
+                           bg-primary rounded-full"
+                ></div>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- =================================================
+         SCROLLABLE UPLOAD CONTENT
+    ================================================== -->
+    <div
+        class="flex-1 px-10 py-4 overflow-y-auto
+               custom-scrollbar space-y-6"
+    >
+
+        <div class="max-w-4xl space-y-6 pb-12">
+
+
+            <!-- =================================================
+                 RC UPLOAD CARD
+            ================================================== -->
+            <div
+                class="bg-white border border-outline-variant
+                       rounded-[32px] p-8 shadow-sm
+                       hover:shadow-md transition-shadow"
+            >
+
+                <!-- Card Header -->
+                <div
+                    class="flex items-start
+                           justify-between mb-6"
+                >
+
+                    <div>
+
+                        <h3
+                            class="text-2xl font-bold
+                                   text-on-surface mb-1"
+                        >
+                            Registration Certificate (RC)
+                        </h3>
+
+                        <p
+                            class="text-sm
+                                   text-on-surface-variant
+                                   font-medium"
+                        >
+                            Official vehicle registration
+                            document provided by the RTO.
+                        </p>
+
+                    </div>
+
+
+                    <div
+                        class="w-12 h-12
+                               bg-surface-container
+                               rounded-2xl flex items-center
+                               justify-center
+                               text-on-surface-variant"
+                    >
+
+                        <span class="material-icons-outlined">
+                            description
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- RC Upload Zone -->
+                <div
+                    id="rcUploadZone"
+                    class="upload-zone rounded-3xl p-10
+                           flex flex-col items-center
+                           justify-center text-center
+                           cursor-pointer group"
+                    tabindex="0"
+                    role="button"
+                    aria-label="Upload Registration Certificate"
+                >
+
+                    <div
+                        class="w-14 h-14 bg-primary/5
+                               text-primary rounded-full
+                               flex items-center
+                               justify-center mb-4
+                               group-hover:scale-110
+                               transition-transform"
+                    >
+
+                        <span class="material-icons-outlined text-3xl">
+                            cloud_upload
+                        </span>
+
+                    </div>
+
+
+                    <p class="text-lg font-bold mb-1">
+                        Drag & drop or
+                        <span class="text-primary">
+                            browse
+                        </span>
+                    </p>
+
+
+                    <p
+                        class="text-xs
+                               text-on-surface-variant
+                               font-medium"
+                    >
+                        Supports JPG, PNG or PDF (Max 5MB)
+                    </p>
+
+
+                    <input
+                        id="rcFile"
+                        type="file"
+                        accept=".jpg,.jpeg,.png,.pdf"
+                        class="hidden"
+                    >
+
+
+                    <div
+                        id="rcFileInfo"
+                        class="hidden mt-5
+                               text-sm font-semibold
+                               text-green-600"
+                    ></div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 INSURANCE UPLOAD CARD
+            ================================================== -->
+            <div
+                class="bg-white border border-outline-variant
+                       rounded-[32px] p-8 shadow-sm
+                       hover:shadow-md transition-shadow"
+            >
+
+                <!-- Card Header -->
+                <div
+                    class="flex items-start
+                           justify-between mb-6"
+                >
+
+                    <div>
+
+                        <h3
+                            class="text-2xl font-bold
+                                   text-on-surface mb-1"
+                        >
+                            Vehicle Insurance
+                        </h3>
+
+                        <p
+                            class="text-sm
+                                   text-on-surface-variant
+                                   font-medium"
+                        >
+                            Comprehensive or Third-Party policy.
+                            Ensure policy is active.
+                        </p>
+
+                    </div>
+
+
+                    <div
+                        class="w-12 h-12
+                               bg-surface-container
+                               rounded-2xl flex items-center
+                               justify-center
+                               text-on-surface-variant"
+                    >
+
+                        <span class="material-icons-outlined">
+                            verified_user
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Insurance Upload Zone -->
+                <div
+                    id="insuranceUploadZone"
+                    class="upload-zone rounded-3xl p-10
+                           flex flex-col items-center
+                           justify-center text-center
+                           cursor-pointer group"
+                    tabindex="0"
+                    role="button"
+                    aria-label="Upload Vehicle Insurance"
+                >
+
+                    <div
+                        class="w-14 h-14 bg-primary/5
+                               text-primary rounded-full
+                               flex items-center
+                               justify-center mb-4
+                               group-hover:scale-110
+                               transition-transform"
+                    >
+
+                        <span class="material-icons-outlined text-3xl">
+                            cloud_upload
+                        </span>
+
+                    </div>
+
+
+                    <p class="text-lg font-bold mb-1">
+                        Drag & drop or
+                        <span class="text-primary">
+                            browse
+                        </span>
+                    </p>
+
+
+                    <p
+                        class="text-xs
+                               text-on-surface-variant
+                               font-medium"
+                    >
+                        Supports JPG, PNG or PDF (Max 5MB)
+                    </p>
+
+
+                    <input
+                        id="insuranceFile"
+                        type="file"
+                        accept=".jpg,.jpeg,.png,.pdf"
+                        class="hidden"
+                    >
+
+
+                    <div
+                        id="insuranceFileInfo"
+                        class="hidden mt-5
+                               text-sm font-semibold
+                               text-green-600"
+                    ></div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         FOOTER ACTIONS
+    ================================================== -->
+    <footer
+        class="px-10 py-8 border-t
+               border-outline-variant
+               bg-white flex items-center
+               justify-between shrink-0"
+    >
+
+        <!-- Save Draft -->
+        <button
+            type="button"
+            onclick="saveDraft()"
+            class="px-10 py-4 border-2 border-outline
+                   hover:border-primary/20
+                   hover:bg-surface-container
+                   rounded-2xl font-bold text-sm
+                   transition-all"
+        >
+            Save as Draft
+        </button>
+
+
+        <!-- Submit -->
+        <button
+            id="submitButton"
+            type="button"
+            onclick="submitDocuments()"
+            class="bg-primary text-white
+                   px-12 py-4 rounded-2xl
+                   font-bold text-sm
+                   flex items-center
+                   hover:opacity-90
+                   active:scale-95
+                   transition-all
+                   shadow-lg shadow-blue-500/20"
+        >
+
+            Submit for Verification
+
+            <span class="material-icons-outlined ml-2">
+                check_circle
+            </span>
+
+        </button>
+
+    </footer>
+
+</main>
+
+
+<!-- =====================================================
+     JAVASCRIPT
+====================================================== -->
+<script>
+
+    /*
+     * Maximum file size: 5 MB
+     */
+    const MAX_FILE_SIZE = 5 * 1024 * 1024;
+
+
+    /*
+     * Allowed file types
+     */
+    const ALLOWED_TYPES = [
+        "image/jpeg",
+        "image/png",
+        "application/pdf"
+    ];
+
+
+    /*
+     * Store selected files
+     */
+    const uploadedFiles = {
+        rc: null,
+        insurance: null
+    };
+
+
+    /*
+     * Setup upload zones
+     */
+    setupUpload(
+        "rcUploadZone",
+        "rcFile",
+        "rcFileInfo",
+        "rc"
+    );
+
+    setupUpload(
+        "insuranceUploadZone",
+        "insuranceFile",
+        "insuranceFileInfo",
+        "insurance"
+    );
+
+
+    /*
+     * Upload Zone Function
+     */
+    function setupUpload(
+        zoneId,
+        inputId,
+        infoId,
+        documentType
+    ) {
+
+        const zone =
+            document.getElementById(zoneId);
+
+        const input =
+            document.getElementById(inputId);
+
+        const info =
+            document.getElementById(infoId);
+
+
+        /*
+         * Click upload zone
+         */
+        zone.addEventListener("click", function (event) {
+
+            /*
+             * Prevent clicking the hidden input twice
+             */
+            if (event.target !== input) {
+                input.click();
+            }
+
+        });
+
+
+        /*
+         * Keyboard accessibility
+         */
+        zone.addEventListener("keydown", function (event) {
+
+            if (
+                event.key === "Enter" ||
+                event.key === " "
+            ) {
+
+                event.preventDefault();
+                input.click();
+
+            }
+
+        });
+
+
+        /*
+         * File selected using browse
+         */
+        input.addEventListener("change", function () {
+
+            if (input.files.length > 0) {
+
+                processFile(
+                    input.files[0],
+                    zone,
+                    info,
+                    documentType
+                );
+
+            }
+
+        });
+
+
+        /*
+         * Drag over
+         */
+        zone.addEventListener("dragover", function (event) {
+
+            event.preventDefault();
+
+            zone.classList.add("dragover");
+
+        });
+
+
+        /*
+         * Drag leave
+         */
+        zone.addEventListener("dragleave", function () {
+
+            zone.classList.remove("dragover");
+
+        });
+
+
+        /*
+         * Drop
+         */
+        zone.addEventListener("drop", function (event) {
+
+            event.preventDefault();
+
+            zone.classList.remove("dragover");
+
+
+            const files = event.dataTransfer.files;
+
+
+            if (files.length > 0) {
+
+                processFile(
+                    files[0],
+                    zone,
+                    info,
+                    documentType
+                );
+
+            }
+
+        });
+
+    }
+
+
+    /*
+     * Process Uploaded File
+     */
+    function processFile(
+        file,
+        zone,
+        info,
+        documentType
+    ) {
+
+        /*
+         * Check file type
+         */
+        if (!ALLOWED_TYPES.includes(file.type)) {
+
+            alert(
+                "Invalid file type.\n\n" +
+                "Please upload a JPG, PNG, or PDF file."
+            );
+
+            return;
+        }
+
+
+        /*
+         * Check file size
+         */
+        if (file.size > MAX_FILE_SIZE) {
+
+            alert(
+                "File is too large.\n\n" +
+                "Maximum allowed size is 5MB."
+            );
+
+            return;
+        }
+
+
+        /*
+         * Save file in memory
+         */
+        uploadedFiles[documentType] = file;
+
+
+        /*
+         * Show success state
+         */
+        zone.classList.add("file-success");
+
+
+        info.classList.remove("hidden");
+
+
+        info.innerHTML = `
+            <span class="material-icons-outlined
+                         align-middle mr-1 text-base">
+                check_circle
+            </span>
+            ${escapeHtml(file.name)}
+        `;
+
+    }
+
+
+    /*
+     * Escape HTML
+     */
+    function escapeHtml(value) {
+
+        return value
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+
+    }
+
+
+    /*
+     * Save as Draft
+     */
+    function saveDraft() {
+
+        const draft = {
+            rcUploaded: uploadedFiles.rc !== null,
+            insuranceUploaded:
+                uploadedFiles.insurance !== null,
+
+            rcFileName:
+                uploadedFiles.rc
+                    ? uploadedFiles.rc.name
+                    : null,
+
+            insuranceFileName:
+                uploadedFiles.insurance
+                    ? uploadedFiles.insurance.name
+                    : null
+        };
+
+
+        localStorage.setItem(
+            "ridesync_document_draft",
+            JSON.stringify(draft)
+        );
+
+
+        alert(
+            "Your document upload progress has been saved as a draft."
+        );
+
+    }
+
+
+    /*
+     * Submit Documents
+     */
+    function submitDocuments() {
+
+        /*
+         * Check RC
+         */
+        if (!uploadedFiles.rc) {
+
+            alert(
+                "Please upload your Registration Certificate (RC)."
+            );
+
+            return;
+        }
+
+
+        /*
+         * Check Insurance
+         */
+        if (!uploadedFiles.insurance) {
+
+            alert(
+                "Please upload your Vehicle Insurance document."
+            );
+
+            return;
+        }
+
+
+        /*
+         * In a real application,
+         * files would be sent to your backend here.
+         */
+        const submissionData = {
+            rcFileName: uploadedFiles.rc.name,
+            insuranceFileName:
+                uploadedFiles.insurance.name,
+
+            submittedAt:
+                new Date().toISOString()
+        };
+
+
+        localStorage.setItem(
+            "ridesync_document_submission",
+            JSON.stringify(submissionData)
+        );
+
+
+        alert(
+            "Documents submitted successfully!\n\n" +
+            "Your vehicle is now ready for verification."
+        );
+
+
+        /*
+         * Replace with your actual success page.
+         *
+         * Example:
+         *
+         * window.location.href =
+         *     "verification-status.html";
+         */
+
+    }
+
+
+    /*
+     * Back to Vehicle Details
+     */
+    function goBack() {
+
+        if (window.history.length > 1) {
+
+            window.history.back();
+
+        } else {
+
+            alert(
+                "No previous page is available."
+            );
+
+        }
+
+    }
+
+</script>
+```
+
+</body>
+
+</html>
