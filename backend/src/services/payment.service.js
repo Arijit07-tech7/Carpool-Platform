@@ -1,14 +1,10 @@
-
 // backend/src/services/payment.service.js
-
-const crypto = require("crypto");
 
 const paymentRepository = require("../repositories/payment.repository.js");
 const tripRepository = require("../repositories/trip.repository.js");
 const bookingRepository = require("../repositories/booking.repository.js");
 const walletService = require("./wallet.service.js");
-
-const razorpay = require("../config/razorpay.js");
+const paypal = require("../config/paypal.js");
 
 
 // ============================================================
@@ -18,7 +14,7 @@ const razorpay = require("../config/razorpay.js");
 const PAYMENT_METHODS = [
   "CASH",
   "CARD",
-  "UPI",
+  "PAYPAL",
   "WALLET",
 ];
 
@@ -39,21 +35,12 @@ const PAYMENT_STATUSES = [
 /**
  * Validate payment method.
  */
-const validatePaymentMethod = (
-  paymentMethod
-) => {
-  if (
-    !PAYMENT_METHODS.includes(
-      paymentMethod
-    )
-  ) {
+const validatePaymentMethod = (paymentMethod) => {
+  if (!PAYMENT_METHODS.includes(paymentMethod)) {
     throw new Error(
-      `Invalid payment method. Allowed methods: ${PAYMENT_METHODS.join(
-        ", "
-      )}`
+      `Invalid payment method. Allowed methods: ${PAYMENT_METHODS.join(", ")}`
     );
   }
-
   return true;
 };
 
@@ -62,91 +49,49 @@ const validatePaymentMethod = (
  * Get trip and verify that the user
  * is allowed to make/view payment.
  */
-const verifyTripAccess = async (
-  userId,
-  tripId
-) => {
-  const trip =
-    await tripRepository.findTripById(
-      tripId
-    );
+const verifyTripAccess = async (userId, tripId) => {
+  const trip = await tripRepository.findTripById(tripId);
 
   if (!trip) {
-    throw new Error(
-      "Trip not found."
-    );
+    throw new Error("Trip not found.");
   }
 
-  const isDriver =
-    trip.driverId === userId;
+  const isDriver = trip.driverId === userId;
 
-  const booking =
-    await bookingRepository.findBookingByPassengerAndRide(
-      userId,
-      trip.rideId
-    );
+  const booking = await bookingRepository.findBookingByPassengerAndRide(
+    userId,
+    trip.rideId
+  );
 
-  const isPassenger =
-    !!booking;
+  const isPassenger = !!booking;
 
-  if (
-    !isDriver &&
-    !isPassenger
-  ) {
+  if (!isDriver && !isPassenger) {
     throw new Error(
       "You are not authorized to access this trip payment."
     );
   }
 
-  return {
-    trip,
-    booking,
-    isDriver,
-    isPassenger,
-  };
+  return { trip, booking, isDriver, isPassenger };
 };
 
 
 /**
  * Get passenger booking amount.
  */
-const getBookingAmount = async (
-  userId,
-  tripId
-) => {
-  const {
-    trip,
-    booking,
-  } = await verifyTripAccess(
-    userId,
-    tripId
-  );
+const getBookingAmount = async (userId, tripId) => {
+  const { trip, booking } = await verifyTripAccess(userId, tripId);
 
   if (!booking) {
-    throw new Error(
-      "Passenger booking not found."
-    );
+    throw new Error("Passenger booking not found.");
   }
 
-  const amount =
-    Number(
-      booking.amount || 0
-    );
+  const amount = Number(booking.amount || 0);
 
-  if (
-    !Number.isFinite(amount) ||
-    amount < 0
-  ) {
-    throw new Error(
-      "Invalid booking amount."
-    );
+  if (!Number.isFinite(amount) || amount < 0) {
+    throw new Error("Invalid booking amount.");
   }
 
-  return {
-    trip,
-    booking,
-    amount,
-  };
+  return { trip, booking, amount };
 };
 
 
@@ -160,46 +105,28 @@ const getBookingAmount = async (
  * Cash:
  * - Payment can be recorded directly.
  *
- * Card / UPI:
- * - Create Razorpay order.
+ * PayPal (CARD / PAYPAL):
+ * - Create a PayPal order → return order ID + approval URL.
+ * - Frontend redirects user to PayPal approval page.
+ * - On return, call capturePaypalPayment() to finalize.
  *
  * Wallet:
  * - Check wallet balance.
  * - Deduct wallet balance.
  */
-exports.createPayment = async (
-  userId,
-  tripId,
-  paymentMethod
-) => {
-  validatePaymentMethod(
-    paymentMethod
-  );
+exports.createPayment = async (userId, tripId, paymentMethod) => {
+  validatePaymentMethod(paymentMethod);
 
-  const {
-    trip,
-    booking,
-    amount,
-  } = await getBookingAmount(
-    userId,
-    tripId
-  );
+  const { trip, booking, amount } = await getBookingAmount(userId, tripId);
 
-  if (
-    trip.status !== "COMPLETED"
-  ) {
+  if (trip.status !== "COMPLETED") {
     throw new Error(
       "Payment can only be processed after trip completion."
     );
   }
 
-  if (
-    booking.paymentStatus ===
-    "COMPLETED"
-  ) {
-    throw new Error(
-      "This booking has already been paid."
-    );
+  if (booking.paymentStatus === "COMPLETED") {
+    throw new Error("This booking has already been paid.");
   }
 
 
@@ -207,38 +134,21 @@ exports.createPayment = async (
   // CASH PAYMENT
   // ----------------------------------------------------------
 
-  if (
-    paymentMethod === "CASH"
-  ) {
-    const payment =
-      await paymentRepository.createPayment({
-        userId,
-        tripId,
-        bookingId:
-          booking.id,
+  if (paymentMethod === "CASH") {
+    const payment = await paymentRepository.createPayment({
+      userId,
+      tripId,
+      bookingId: booking.id,
+      amount,
+      paymentMethod: "CASH",
+      status: "COMPLETED",
+      currency: "USD",
+      paidAt: new Date(),
+    });
 
-        amount,
-
-        paymentMethod:
-          "CASH",
-
-        status:
-          "COMPLETED",
-
-        currency:
-          "INR",
-
-        paidAt:
-          new Date(),
-      });
-
-    await bookingRepository.updateBooking(
-      booking.id,
-      {
-        paymentStatus:
-          "COMPLETED",
-      }
-    );
+    await bookingRepository.updateBooking(booking.id, {
+      paymentStatus: "COMPLETED",
+    });
 
     return payment;
   }
@@ -248,59 +158,44 @@ exports.createPayment = async (
   // WALLET PAYMENT
   // ----------------------------------------------------------
 
-  if (
-    paymentMethod === "WALLET"
-  ) {
-    const walletPayment =
-      await processWalletPayment(
-        userId,
-        tripId,
-        booking.id,
-        amount
-      );
-
+  if (paymentMethod === "WALLET") {
+    const walletPayment = await processWalletPayment(
+      userId,
+      tripId,
+      booking.id,
+      amount
+    );
     return walletPayment;
   }
 
 
   // ----------------------------------------------------------
-  // RAZORPAY PAYMENT
-  // CARD / UPI
+  // PAYPAL PAYMENT (CARD / PAYPAL)
   // ----------------------------------------------------------
 
-  const order =
-    await createRazorpayOrder(
-      amount,
-      tripId
-    );
+  const order = await exports.createPaypalOrder(amount, tripId);
 
-  const payment =
-    await paymentRepository.createPayment({
-      userId,
-      tripId,
-      bookingId:
-        booking.id,
+  const payment = await paymentRepository.createPayment({
+    userId,
+    tripId,
+    bookingId: booking.id,
+    amount,
+    paymentMethod,
+    status: "PENDING",
+    currency: "USD",
+    gateway: "PAYPAL",
+    paypalOrderId: order.id,
+  });
 
-      amount,
-
-      paymentMethod,
-
-      status:
-        "PENDING",
-
-      currency:
-        "INR",
-
-      gateway:
-        "RAZORPAY",
-
-      gatewayOrderId:
-        order.id,
-    });
+  // Find the approval URL for the frontend redirect
+  const approvalUrl = (order.links || []).find(
+    (l) => l.rel === "approve"
+  )?.href || null;
 
   return {
     payment,
-    razorpayOrder: order,
+    paypalOrder: order,
+    approvalUrl,
   };
 };
 
@@ -318,260 +213,131 @@ const processWalletPayment = async (
   bookingId,
   amount
 ) => {
-  const wallet =
-    await walletService.getWallet(
-      userId
-    );
+  const wallet = await walletService.getWallet(userId);
+  const balance = Number(wallet.balance || 0);
 
-  const balance =
-    Number(
-      wallet.balance || 0
-    );
-
-  if (
-    balance < amount
-  ) {
+  if (balance < amount) {
     throw new Error(
-      `Insufficient wallet balance. Required ₹${amount}, available ₹${balance}.`
+      `Insufficient wallet balance. Required $${amount}, available $${balance}.`
     );
   }
 
-  /*
-   * Deduct money from wallet.
-   *
-   * walletService is responsible for
-   * maintaining wallet transaction history.
-   */
-  const transaction =
-    await walletService.payFromWallet(
-      userId,
-      amount,
-      {
-        tripId,
-        bookingId,
-        description:
-          "Carpool trip payment",
-      }
-    );
-
-  const payment =
-    await paymentRepository.createPayment({
-      userId,
-      tripId,
-      bookingId,
-
-      amount,
-
-      paymentMethod:
-        "WALLET",
-
-      status:
-        "COMPLETED",
-
-      currency:
-        "INR",
-
-      paidAt:
-        new Date(),
-
-      walletTransactionId:
-        transaction.id,
-    });
-
-  await bookingRepository.updateBooking(
+  const transaction = await walletService.payFromWallet(userId, amount, {
+    tripId,
     bookingId,
-    {
-      paymentStatus:
-        "COMPLETED",
-    }
-  );
+    description: "Carpool trip payment",
+  });
+
+  const payment = await paymentRepository.createPayment({
+    userId,
+    tripId,
+    bookingId,
+    amount,
+    paymentMethod: "WALLET",
+    status: "COMPLETED",
+    currency: "USD",
+    paidAt: new Date(),
+    walletTransactionId: transaction.id,
+  });
+
+  await bookingRepository.updateBooking(bookingId, {
+    paymentStatus: "COMPLETED",
+  });
 
   return payment;
 };
 
 
 // ============================================================
-// RAZORPAY ORDER
+// PAYPAL ORDER
 // ============================================================
 
 /**
- * Create Razorpay order.
+ * Create a PayPal order.
  *
- * Razorpay amount is stored in paise.
- *
- * Example:
- * ₹100 = 10000 paise
+ * @param {number} amount - The amount in USD
+ * @param {string} tripId - Trip reference ID
  */
-exports.createRazorpayOrder =
-  async (
-    amount,
-    tripId
-  ) => {
-    if (
-      !razorpay
-    ) {
-      throw new Error(
-        "Razorpay is not configured."
-      );
-    }
+exports.createPaypalOrder = async (amount, tripId) => {
+  const numericAmount = Number(amount);
 
-    const numericAmount =
-      Number(amount);
+  if (!Number.isFinite(numericAmount) || numericAmount <= 0) {
+    throw new Error("Payment amount must be greater than zero.");
+  }
 
-    if (
-      !Number.isFinite(
-        numericAmount
-      ) ||
-      numericAmount <= 0
-    ) {
-      throw new Error(
-        "Payment amount must be greater than zero."
-      );
-    }
-
-    const options = {
-      amount:
-        Math.round(
-          numericAmount * 100
-        ),
-
-      currency:
-        "INR",
-
-      receipt:
-        `trip_${tripId}_${Date.now()}`,
-
-      notes: {
-        tripId:
-          String(tripId),
-      },
-    };
-
-    return razorpay.orders.create(
-      options
-    );
-  };
+  return paypal.createOrder(numericAmount, "USD", tripId);
+};
 
 
 // ============================================================
-// VERIFY RAZORPAY PAYMENT
+// CAPTURE PAYPAL PAYMENT
 // ============================================================
 
 /**
- * Verify Razorpay payment signature.
+ * Capture (finalize) a PayPal payment after user approval.
+ *
+ * Called by the frontend after the user returns from PayPal.
+ *
+ * @param {object} options
+ * @param {string} options.userId
+ * @param {string} options.paymentId  - Internal payment DB record ID
+ * @param {string} options.paypalOrderId - PayPal order ID
  */
-exports.verifyRazorpayPayment =
-  async ({
-    userId,
-    paymentId,
-    razorpayOrderId,
-    razorpayPaymentId,
-    razorpaySignature,
-  }) => {
-    if (
-      !paymentId ||
-      !razorpayOrderId ||
-      !razorpayPaymentId ||
-      !razorpaySignature
-    ) {
-      throw new Error(
-        "Incomplete Razorpay payment information."
-      );
-    }
+exports.capturePaypalPayment = async ({
+  userId,
+  paymentId,
+  paypalOrderId,
+}) => {
+  if (!paymentId || !paypalOrderId) {
+    throw new Error("Payment ID and PayPal order ID are required.");
+  }
 
-    const payment =
-      await paymentRepository.findPaymentById(
-        paymentId
-      );
+  const payment = await paymentRepository.findPaymentById(paymentId);
 
-    if (!payment) {
-      throw new Error(
-        "Payment record not found."
-      );
-    }
+  if (!payment) {
+    throw new Error("Payment record not found.");
+  }
 
-    if (
-      payment.userId !== userId
-    ) {
-      throw new Error(
-        "You are not authorized to verify this payment."
-      );
-    }
+  if (payment.userId !== userId) {
+    throw new Error("You are not authorized to capture this payment.");
+  }
 
-    if (
-      payment.gatewayOrderId !==
-      razorpayOrderId
-    ) {
-      throw new Error(
-        "Razorpay order ID does not match."
-      );
-    }
+  if (payment.paypalOrderId !== paypalOrderId) {
+    throw new Error("PayPal order ID does not match payment record.");
+  }
 
-    const secret =
-      process.env.RAZORPAY_KEY_SECRET;
+  // Call PayPal to capture the order
+  let captureData;
+  try {
+    captureData = await paypal.captureOrder(paypalOrderId);
+  } catch (err) {
+    await paymentRepository.updatePayment(paymentId, { status: "FAILED" });
+    throw new Error(`PayPal capture failed: ${err.message}`);
+  }
 
-    if (!secret) {
-      throw new Error(
-        "Razorpay secret is not configured."
-      );
-    }
-
-    const generatedSignature =
-      crypto
-        .createHmac(
-          "sha256",
-          secret
-        )
-        .update(
-          `${razorpayOrderId}|${razorpayPaymentId}`
-        )
-        .digest("hex");
-
-    if (
-      generatedSignature !==
-      razorpaySignature
-    ) {
-      await paymentRepository.updatePayment(
-        paymentId,
-        {
-          status:
-            "FAILED",
-        }
-      );
-
-      throw new Error(
-        "Invalid Razorpay payment signature."
-      );
-    }
-
-    const updatedPayment =
-      await paymentRepository.updatePayment(
-        paymentId,
-        {
-          status:
-            "COMPLETED",
-
-          gatewayPaymentId:
-            razorpayPaymentId,
-
-          gatewaySignature:
-            razorpaySignature,
-
-          paidAt:
-            new Date(),
-        }
-      );
-
-    await bookingRepository.updateBooking(
-      payment.bookingId,
-      {
-        paymentStatus:
-          "COMPLETED",
-      }
+  if (captureData.status !== "COMPLETED") {
+    await paymentRepository.updatePayment(paymentId, { status: "FAILED" });
+    throw new Error(
+      `PayPal payment not completed. Status: ${captureData.status}`
     );
+  }
 
-    return updatedPayment;
-  };
+  // Extract capture ID from the response
+  const captureId =
+    captureData.purchase_units?.[0]?.payments?.captures?.[0]?.id || null;
+
+  const updatedPayment = await paymentRepository.updatePayment(paymentId, {
+    status: "COMPLETED",
+    paypalCaptureId: captureId,
+    paidAt: new Date(),
+  });
+
+  await bookingRepository.updateBooking(payment.bookingId, {
+    paymentStatus: "COMPLETED",
+  });
+
+  return updatedPayment;
+};
 
 
 // ============================================================
@@ -581,27 +347,15 @@ exports.verifyRazorpayPayment =
 /**
  * Get payment by ID.
  */
-exports.getPaymentById = async (
-  userId,
-  paymentId
-) => {
-  const payment =
-    await paymentRepository.findPaymentById(
-      paymentId
-    );
+exports.getPaymentById = async (userId, paymentId) => {
+  const payment = await paymentRepository.findPaymentById(paymentId);
 
   if (!payment) {
-    throw new Error(
-      "Payment not found."
-    );
+    throw new Error("Payment not found.");
   }
 
-  if (
-    payment.userId !== userId
-  ) {
-    throw new Error(
-      "You are not authorized to access this payment."
-    );
+  if (payment.userId !== userId) {
+    throw new Error("You are not authorized to access this payment.");
   }
 
   return payment;
@@ -611,43 +365,22 @@ exports.getPaymentById = async (
 /**
  * Get payments for a user.
  */
-exports.getMyPayments = async (
-  userId,
-  options = {}
-) => {
+exports.getMyPayments = async (userId, options = {}) => {
   if (!userId) {
-    throw new Error(
-      "User ID is required."
-    );
+    throw new Error("User ID is required.");
   }
 
-  return paymentRepository.getPaymentsByUser(
-    userId,
-    options
-  );
+  return paymentRepository.getPaymentsByUser(userId, options);
 };
 
 
 /**
  * Get payments for a trip.
  */
-exports.getTripPayments = async (
-  userId,
-  tripId
-) => {
-  const {
-    trip,
-    isDriver,
-    isPassenger,
-  } =
-    await verifyTripAccess(
-      userId,
-      tripId
-    );
+exports.getTripPayments = async (userId, tripId) => {
+  const { trip } = await verifyTripAccess(userId, tripId);
 
-  return paymentRepository.getPaymentsByTrip(
-    trip.id
-  );
+  return paymentRepository.getPaymentsByTrip(trip.id);
 };
 
 
@@ -658,111 +391,50 @@ exports.getTripPayments = async (
 /**
  * Refund a payment.
  *
- * Actual Razorpay refund integration can
- * be connected here when required.
+ * - WALLET payments: credit the wallet back.
+ * - PAYPAL payments: call PayPal refund API.
+ * - CASH payments: mark as refunded (manual process).
  */
-exports.refundPayment = async (
-  userId,
-  paymentId,
-  reason = null
-) => {
-  const payment =
-    await paymentRepository.findPaymentById(
-      paymentId
-    );
+exports.refundPayment = async (userId, paymentId, reason = null) => {
+  const payment = await paymentRepository.findPaymentById(paymentId);
 
   if (!payment) {
-    throw new Error(
-      "Payment not found."
-    );
+    throw new Error("Payment not found.");
   }
 
-  /*
-   * Normally refund authorization should
-   * be restricted to admin/authorized roles.
-   *
-   * For now, the payment owner can request
-   * a refund.
-   */
+  if (payment.userId !== userId) {
+    throw new Error("You are not authorized to refund this payment.");
+  }
+
+  if (payment.status !== "COMPLETED") {
+    throw new Error("Only completed payments can be refunded.");
+  }
+
+  // Wallet refund
+  if (payment.paymentMethod === "WALLET") {
+    await walletService.creditWallet(userId, payment.amount, {
+      tripId: payment.tripId,
+      paymentId: payment.id,
+      description: "Trip payment refund",
+    });
+  }
+
+  // PayPal refund
   if (
-    payment.userId !== userId
+    payment.gateway === "PAYPAL" &&
+    payment.paypalCaptureId
   ) {
-    throw new Error(
-      "You are not authorized to refund this payment."
+    await paypal.refundCapture(
+      payment.paypalCaptureId,
+      Number(payment.amount)
     );
   }
 
-  if (
-    payment.status !==
-    "COMPLETED"
-  ) {
-    throw new Error(
-      "Only completed payments can be refunded."
-    );
-  }
-
-  if (
-    payment.paymentMethod ===
-    "WALLET"
-  ) {
-    await walletService.creditWallet(
-      userId,
-      payment.amount,
-      {
-        tripId:
-          payment.tripId,
-
-        paymentId:
-          payment.id,
-
-        description:
-          "Trip payment refund",
-      }
-    );
-  }
-
-  /*
-   * Razorpay refund can be added when
-   * gatewayPaymentId exists.
-   */
-  if (
-    payment.gateway ===
-      "RAZORPAY" &&
-    payment.gatewayPaymentId
-  ) {
-    if (
-      !razorpay
-    ) {
-      throw new Error(
-        "Razorpay is not configured."
-      );
-    }
-
-    await razorpay.payments.refund(
-      payment.gatewayPaymentId,
-      {
-        amount:
-          Math.round(
-            Number(payment.amount) *
-              100
-          ),
-      }
-    );
-  }
-
-  return paymentRepository.updatePayment(
-    paymentId,
-    {
-      status:
-        "REFUNDED",
-
-      refundedAt:
-        new Date(),
-
-      refundReason:
-        reason,
-    }
-  );
+  return paymentRepository.updatePayment(paymentId, {
+    status: "REFUNDED",
+    refundedAt: new Date(),
+    refundReason: reason,
+  });
 };
 
 
@@ -773,34 +445,16 @@ exports.refundPayment = async (
 /**
  * Check payment status.
  */
-exports.getPaymentStatus = async (
-  userId,
-  paymentId
-) => {
-  const payment =
-    await getPaymentById(
-      userId,
-      paymentId
-    );
+exports.getPaymentStatus = async (userId, paymentId) => {
+  const payment = await exports.getPaymentById(userId, paymentId);
 
   return {
-    paymentId:
-      payment.id,
-
-    status:
-      payment.status,
-
-    paymentMethod:
-      payment.paymentMethod,
-
-    amount:
-      payment.amount,
-
-    currency:
-      payment.currency,
-
-    paidAt:
-      payment.paidAt || null,
+    paymentId: payment.id,
+    status: payment.status,
+    paymentMethod: payment.paymentMethod,
+    amount: payment.amount,
+    currency: payment.currency,
+    paidAt: payment.paidAt || null,
   };
 };
 
@@ -810,72 +464,42 @@ exports.getPaymentStatus = async (
 // ============================================================
 
 /**
- * Check whether user can make payment
- * for a trip.
+ * Check whether user can make payment for a trip.
  */
-exports.canMakePayment = async (
-  userId,
-  tripId
-) => {
+exports.canMakePayment = async (userId, tripId) => {
   try {
-    const {
-      trip,
-      booking,
-    } =
-      await getBookingAmount(
-        userId,
-        tripId
-      );
+    const { trip, booking } = await getBookingAmount(userId, tripId);
 
-    if (
-      trip.status !==
-      "COMPLETED"
-    ) {
+    if (trip.status !== "COMPLETED") {
       return {
         allowed: false,
-        reason:
-          "Trip must be completed before payment.",
+        reason: "Trip must be completed before payment.",
       };
     }
 
-    if (
-      !booking
-    ) {
+    if (!booking) {
       return {
         allowed: false,
-        reason:
-          "Passenger booking not found.",
+        reason: "Passenger booking not found.",
       };
     }
 
-    if (
-      booking.paymentStatus ===
-      "COMPLETED"
-    ) {
+    if (booking.paymentStatus === "COMPLETED") {
       return {
         allowed: false,
-        reason:
-          "Payment has already been completed.",
+        reason: "Payment has already been completed.",
       };
     }
 
     return {
       allowed: true,
-
-      amount:
-        Number(
-          booking.amount || 0
-        ),
-
-      methods:
-        PAYMENT_METHODS,
+      amount: Number(booking.amount || 0),
+      methods: PAYMENT_METHODS,
     };
-
   } catch (error) {
     return {
       allowed: false,
-      reason:
-        error.message,
+      reason: error.message,
     };
   }
 };
@@ -888,31 +512,15 @@ exports.canMakePayment = async (
 /**
  * Get payment summary for a user.
  */
-exports.getPaymentSummary = async (
-  userId
-) => {
-  const summary =
-    await paymentRepository.getPaymentSummary(
-      userId
-    );
+exports.getPaymentSummary = async (userId) => {
+  const summary = await paymentRepository.getPaymentSummary(userId);
 
   return {
-    totalPayments:
-      summary.totalPayments || 0,
-
-    totalAmount:
-      summary.totalAmount || 0,
-
-    completedPayments:
-      summary.completedPayments || 0,
-
-    pendingPayments:
-      summary.pendingPayments || 0,
-
-    failedPayments:
-      summary.failedPayments || 0,
-
-    refundedAmount:
-      summary.refundedAmount || 0,
+    totalPayments: summary.totalPayments || 0,
+    totalAmount: summary.totalAmount || 0,
+    completedPayments: summary.completedPayments || 0,
+    pendingPayments: summary.pendingPayments || 0,
+    failedPayments: summary.failedPayments || 0,
+    refundedAmount: summary.refundedAmount || 0,
   };
 };

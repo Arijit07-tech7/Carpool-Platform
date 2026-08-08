@@ -21,14 +21,11 @@ exports.createPayment = async (paymentData) => {
       transactionId:
         paymentData.transactionId || null,
 
-      razorpayOrderId:
-        paymentData.razorpayOrderId || null,
+      paypalOrderId:
+        paymentData.paypalOrderId || null,
 
-      razorpayPaymentId:
-        paymentData.razorpayPaymentId || null,
-
-      razorpaySignature:
-        paymentData.razorpaySignature || null,
+      paypalCaptureId:
+        paymentData.paypalCaptureId || null,
 
       description:
         paymentData.description || null,
@@ -175,28 +172,28 @@ exports.findPaymentByTransactionId = async (
 
 
 /**
- * Find payment by Razorpay order ID.
+ * Find payment by PayPal order ID.
  */
-exports.findPaymentByRazorpayOrderId = async (
-  razorpayOrderId
+exports.findPaymentByPaypalOrderId = async (
+  paypalOrderId
 ) => {
   return prisma.payment.findFirst({
     where: {
-      razorpayOrderId,
+      paypalOrderId,
     },
   });
 };
 
 
 /**
- * Find payment by Razorpay payment ID.
+ * Find payment by PayPal capture ID.
  */
-exports.findPaymentByRazorpayPaymentId = async (
-  razorpayPaymentId
+exports.findPaymentByPaypalCaptureId = async (
+  paypalCaptureId
 ) => {
   return prisma.payment.findFirst({
     where: {
-      razorpayPaymentId,
+      paypalCaptureId,
     },
   });
 };
@@ -237,11 +234,11 @@ exports.completePayment = async (
       transactionId:
         paymentData.transactionId || undefined,
 
-      razorpayPaymentId:
-        paymentData.razorpayPaymentId || undefined,
+      paypalOrderId:
+        paymentData.paypalOrderId || undefined,
 
-      razorpaySignature:
-        paymentData.razorpaySignature || undefined,
+      paypalCaptureId:
+        paymentData.paypalCaptureId || undefined,
 
       paidAt:
         paymentData.paidAt || new Date(),

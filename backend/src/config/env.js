@@ -10,8 +10,8 @@ dotenv.config();
 const requiredEnvVariables = [
   "DATABASE_URL",
   "JWT_SECRET",
-  "RAZORPAY_KEY_ID",
-  "RAZORPAY_KEY_SECRET",
+  "PAYPAL_CLIENT_ID",
+  "PAYPAL_CLIENT_SECRET",
 ];
 
 /**
@@ -60,15 +60,14 @@ const env = {
   jwtExpiresIn: process.env.JWT_EXPIRES_IN || "7d",
 
   // --------------------------------------------------
-  // Razorpay
+  // PayPal
   // --------------------------------------------------
 
-  razorpayKeyId: process.env.RAZORPAY_KEY_ID,
+  paypalClientId: process.env.PAYPAL_CLIENT_ID,
 
-  razorpayKeySecret: process.env.RAZORPAY_KEY_SECRET,
+  paypalClientSecret: process.env.PAYPAL_CLIENT_SECRET,
 
-  razorpayWebhookSecret:
-    process.env.RAZORPAY_WEBHOOK_SECRET || "",
+  paypalMode: process.env.PAYPAL_MODE || "sandbox",
 
   // --------------------------------------------------
   // Maps

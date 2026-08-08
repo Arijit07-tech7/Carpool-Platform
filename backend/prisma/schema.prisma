@@ -60,7 +60,7 @@ enum TripStatus {
 enum PaymentMethod {
   CASH
   CARD
-  UPI
+  PAYPAL
   WALLET
 }
 
@@ -160,8 +160,8 @@ model User {
 
   organizationId String
   organization   Organization @relation(
-    fields: [organizationId],
-    references: [id],
+    fields: [organizationId] 
+    references: [id] 
     onDelete: Cascade
   )
 
@@ -211,14 +211,14 @@ model OrganizationMember {
   updatedAt      DateTime @updatedAt
 
   user           User @relation(
-    fields: [userId],
-    references: [id],
+    fields: [userId] 
+    references: [id] 
     onDelete: Cascade
   )
 
   organization   Organization @relation(
-    fields: [organizationId],
-    references: [id],
+    fields: [organizationId] 
+    references: [id] 
     onDelete: Cascade
   )
 
@@ -251,14 +251,14 @@ model Vehicle {
   updatedAt          DateTime @updatedAt
 
   owner              User @relation(
-    fields: [ownerId],
-    references: [id],
+    fields: [ownerId] 
+    references: [id] 
     onDelete: Cascade
   )
 
   organization       Organization @relation(
-    fields: [organizationId],
-    references: [id],
+    fields: [organizationId] 
+    references: [id] 
     onDelete: Cascade
   )
 
@@ -296,7 +296,7 @@ model Ride {
   totalSeats     Int
   availableSeats Int
 
-  farePerSeat    Decimal @db.Decimal(10, 2)
+  farePerSeat    Decimal @db.Decimal(10  2)
 
   distanceKm     Float?
   estimatedMinutes Int?
@@ -307,21 +307,21 @@ model Ride {
   updatedAt      DateTime @updatedAt
 
   driver         User @relation(
-    "RideDriver",
-    fields: [driverId],
-    references: [id],
+    "RideDriver" 
+    fields: [driverId] 
+    references: [id] 
     onDelete: Cascade
   )
 
   vehicle        Vehicle @relation(
-    fields: [vehicleId],
-    references: [id],
+    fields: [vehicleId] 
+    references: [id] 
     onDelete: Restrict
   )
 
   organization   Organization @relation(
-    fields: [organizationId],
-    references: [id],
+    fields: [organizationId] 
+    references: [id] 
     onDelete: Cascade
   )
 
@@ -350,7 +350,7 @@ model Booking {
 
   seats          Int           @default(1)
 
-  fareAmount     Decimal       @db.Decimal(10, 2)
+  fareAmount     Decimal       @db.Decimal(10  2)
 
   status         BookingStatus @default(PENDING)
 
@@ -358,14 +358,14 @@ model Booking {
   updatedAt      DateTime      @updatedAt
 
   ride           Ride @relation(
-    fields: [rideId],
-    references: [id],
+    fields: [rideId] 
+    references: [id] 
     onDelete: Cascade
   )
 
   passenger      User @relation(
-    fields: [passengerId],
-    references: [id],
+    fields: [passengerId] 
+    references: [id] 
     onDelete: Cascade
   )
 
@@ -405,21 +405,21 @@ model Trip {
   updatedAt      DateTime   @updatedAt
 
   ride           Ride @relation(
-    fields: [rideId],
-    references: [id],
+    fields: [rideId] 
+    references: [id] 
     onDelete: Cascade
   )
 
   booking        Booking @relation(
-    fields: [bookingId],
-    references: [id],
+    fields: [bookingId] 
+    references: [id] 
     onDelete: Cascade
   )
 
   driver         User @relation(
-    "TripDriver",
-    fields: [driverId],
-    references: [id],
+    "TripDriver" 
+    fields: [driverId] 
+    references: [id] 
     onDelete: Cascade
   )
 
@@ -452,14 +452,14 @@ model TrackingLocation {
   recordedAt  DateTime @default(now())
 
   trip        Trip @relation(
-    fields: [tripId],
-    references: [id],
+    fields: [tripId] 
+    references: [id] 
     onDelete: Cascade
   )
 
   driver      User @relation(
-    fields: [driverId],
-    references: [id],
+    fields: [driverId] 
+    references: [id] 
     onDelete: Cascade
   )
 
@@ -484,14 +484,14 @@ model ChatMessage {
   createdAt   DateTime        @default(now())
 
   trip        Trip @relation(
-    fields: [tripId],
-    references: [id],
+    fields: [tripId] 
+    references: [id] 
     onDelete: Cascade
   )
 
   sender      User @relation(
-    fields: [senderId],
-    references: [id],
+    fields: [senderId] 
+    references: [id] 
     onDelete: Cascade
   )
 
@@ -518,6 +518,8 @@ model Payment {
   razorpayOrderId String?
   razorpayPaymentId String?
   razorpaySignature String?
+  paypalOrderId     String?
+  paypalCaptureId   String?
 
   transactionId   String?       @unique
 
@@ -527,14 +529,14 @@ model Payment {
   updatedAt       DateTime      @updatedAt
 
   booking         Booking @relation(
-    fields: [bookingId],
-    references: [id],
+    fields: [bookingId] 
+    references: [id] 
     onDelete: Cascade
   )
 
   user            User @relation(
-    fields: [userId],
-    references: [id],
+    fields: [userId] 
+    references: [id] 
     onDelete: Cascade
   )
 
@@ -552,14 +554,14 @@ model Wallet {
 
   userId      String   @unique
 
-  balance     Decimal  @default(0) @db.Decimal(12, 2)
+  balance     Decimal  @default(0) @db.Decimal(12  2)
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
   user        User @relation(
-    fields: [userId],
-    references: [id],
+    fields: [userId] 
+    references: [id] 
     onDelete: Cascade
   )
 
@@ -579,7 +581,7 @@ model WalletTransaction {
   type            WalletTransactionType
   status          WalletTransactionStatus @default(PENDING)
 
-  amount          Decimal                 @db.Decimal(12, 2)
+  amount          Decimal                 @db.Decimal(12  2)
 
   referenceId     String?
   description     String?
@@ -588,14 +590,14 @@ model WalletTransaction {
   updatedAt       DateTime                @updatedAt
 
   wallet          Wallet @relation(
-    fields: [walletId],
-    references: [id],
+    fields: [walletId] 
+    references: [id] 
     onDelete: Cascade
   )
 
   user            User @relation(
-    fields: [userId],
-    references: [id],
+    fields: [userId] 
+    references: [id] 
     onDelete: Cascade
   )
 
@@ -617,7 +619,7 @@ model RideHistory {
 
   status      HistoryStatus
 
-  fareAmount  Decimal       @db.Decimal(10, 2)
+  fareAmount  Decimal       @db.Decimal(10  2)
 
   distanceKm  Float?
 
@@ -626,14 +628,14 @@ model RideHistory {
   createdAt   DateTime      @default(now())
 
   ride        Ride @relation(
-    fields: [rideId],
-    references: [id],
+    fields: [rideId] 
+    references: [id] 
     onDelete: Cascade
   )
 
   user        User @relation(
-    fields: [userId],
-    references: [id],
+    fields: [userId] 
+    references: [id] 
     onDelete: Cascade
   )
 
@@ -661,8 +663,8 @@ model Notification {
   createdAt   DateTime         @default(now())
 
   user        User @relation(
-    fields: [userId],
-    references: [id],
+    fields: [userId] 
+    references: [id] 
     onDelete: Cascade
   )
 
@@ -690,14 +692,14 @@ model Settings {
   updatedAt      DateTime @updatedAt
 
   user           User? @relation(
-    fields: [userId],
-    references: [id],
+    fields: [userId] 
+    references: [id] 
     onDelete: Cascade
   )
 
   organization   Organization? @relation(
-    fields: [organizationId],
-    references: [id],
+    fields: [organizationId] 
+    references: [id] 
     onDelete: Cascade
   )
 }

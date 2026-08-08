@@ -1,3 +1,5 @@
+// backend/src/controllers/payment.controller.js
+
 const paymentService = require("../services/payment.service.js");
 
 
@@ -7,15 +9,18 @@ const paymentService = require("../services/payment.service.js");
 
 const createPayment = async (req, res, next) => {
   try {
+    const { tripId, paymentMethod } = req.body;
+
     const result = await paymentService.createPayment(
       req.user.id,
-      req.body
+      tripId,
+      paymentMethod
     );
 
     return res.status(201).json({
       success: true,
-      message: "Payment created successfully",
-      data: result
+      message: "Payment initiated successfully",
+      data: result,
     });
   } catch (error) {
     next(error);
@@ -24,20 +29,48 @@ const createPayment = async (req, res, next) => {
 
 
 // ============================================================
-// GET PAYMENT BY ID
+// PAYPAL – CREATE ORDER
 // ============================================================
 
-const getPaymentById = async (req, res, next) => {
+const createPaypalOrder = async (req, res, next) => {
   try {
-    const result = await paymentService.getPaymentById(
-      req.params.paymentId,
-      req.user.id
-    );
+    const { tripId, amount } = req.body;
+
+    const order = await paymentService.createPaypalOrder(amount, tripId);
+
+    return res.status(201).json({
+      success: true,
+      message: "PayPal order created successfully",
+      data: {
+        orderId: order.id,
+        status: order.status,
+        approvalUrl: (order.links || []).find((l) => l.rel === "approve")?.href || null,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+// ============================================================
+// PAYPAL – CAPTURE PAYMENT
+// ============================================================
+
+const capturePaypalPayment = async (req, res, next) => {
+  try {
+    const { paymentId, paypalOrderId } = req.body;
+
+    const result = await paymentService.capturePaypalPayment({
+      userId: req.user.id,
+      paymentId,
+      paypalOrderId,
+    });
 
     return res.status(200).json({
       success: true,
-      message: "Payment details fetched successfully",
-      data: result
+      message: "PayPal payment captured successfully",
+      data: result,
     });
   } catch (error) {
     next(error);
@@ -46,42 +79,45 @@ const getPaymentById = async (req, res, next) => {
 
 
 // ============================================================
-// GET PAYMENT STATUS
+// PAYPAL WEBHOOK
 // ============================================================
 
-const getPaymentStatus = async (req, res, next) => {
+const handlePaypalWebhook = async (req, res) => {
   try {
-    const result = await paymentService.getPaymentStatus(
-      req.params.paymentId,
-      req.user.id
-    );
+    // Log the event for now; wire up full verification as needed
+    const { event_type, resource } = req.body;
+    console.log(`[PayPal Webhook] ${event_type}`, resource?.id || "");
 
-    return res.status(200).json({
-      success: true,
-      message: "Payment status fetched successfully",
-      data: result
-    });
+    if (event_type === "CHECKOUT.ORDER.APPROVED") {
+      // Optionally auto-capture here
+    }
+
+    return res.status(200).json({ received: true });
   } catch (error) {
-    next(error);
+    console.error("[PayPal Webhook Error]", error.message);
+    return res.status(200).json({ received: true }); // Always 200 to PayPal
   }
 };
 
 
 // ============================================================
-// VERIFY PAYMENT
+// WALLET PAYMENT
 // ============================================================
 
-const verifyPayment = async (req, res, next) => {
+const processWalletPayment = async (req, res, next) => {
   try {
-    const result = await paymentService.verifyPayment(
+    const { tripId } = req.body;
+
+    const result = await paymentService.createPayment(
       req.user.id,
-      req.body
+      tripId,
+      "WALLET"
     );
 
     return res.status(200).json({
       success: true,
-      message: "Payment verified successfully",
-      data: result
+      message: "Wallet payment processed successfully",
+      data: result,
     });
   } catch (error) {
     next(error);
@@ -90,21 +126,23 @@ const verifyPayment = async (req, res, next) => {
 
 
 // ============================================================
-// PROCESS REFUND
+// REFUND
 // ============================================================
 
-const processRefund = async (req, res, next) => {
+const refundPayment = async (req, res, next) => {
   try {
-    const result = await paymentService.processRefund(
+    const { reason } = req.body;
+
+    const result = await paymentService.refundPayment(
       req.user.id,
       req.params.paymentId,
-      req.body
+      reason || null
     );
 
     return res.status(200).json({
       success: true,
       message: "Refund processed successfully",
-      data: result
+      data: result,
     });
   } catch (error) {
     next(error);
@@ -126,7 +164,51 @@ const getMyPayments = async (req, res, next) => {
     return res.status(200).json({
       success: true,
       message: "Payment history fetched successfully",
-      data: result
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+// ============================================================
+// GET PAYMENT BY ID
+// ============================================================
+
+const getPaymentById = async (req, res, next) => {
+  try {
+    const result = await paymentService.getPaymentById(
+      req.user.id,
+      req.params.paymentId
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: "Payment details fetched successfully",
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+// ============================================================
+// GET PAYMENT STATUS
+// ============================================================
+
+const getPaymentStatus = async (req, res, next) => {
+  try {
+    const result = await paymentService.getPaymentStatus(
+      req.user.id,
+      req.params.paymentId
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: "Payment status fetched successfully",
+      data: result,
     });
   } catch (error) {
     next(error);
@@ -141,15 +223,14 @@ const getMyPayments = async (req, res, next) => {
 const getTripPayments = async (req, res, next) => {
   try {
     const result = await paymentService.getTripPayments(
-      req.params.tripId,
       req.user.id,
-      req.query
+      req.params.tripId
     );
 
     return res.status(200).json({
       success: true,
       message: "Trip payments fetched successfully",
-      data: result
+      data: result,
     });
   } catch (error) {
     next(error);
@@ -158,46 +239,19 @@ const getTripPayments = async (req, res, next) => {
 
 
 // ============================================================
-// GET BOOKING PAYMENT
+// GET PAYMENT METHODS
 // ============================================================
 
-const getBookingPayment = async (req, res, next) => {
-  try {
-    const result = await paymentService.getBookingPayment(
-      req.params.bookingId,
-      req.user.id
-    );
-
-    return res.status(200).json({
-      success: true,
-      message: "Booking payment fetched successfully",
-      data: result
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
-
-// ============================================================
-// PAYMENT WEBHOOK
-// ============================================================
-
-const paymentWebhook = async (req, res, next) => {
-  try {
-    const result = await paymentService.handleWebhook(
-      req.body,
-      req.headers
-    );
-
-    return res.status(200).json({
-      success: true,
-      message: "Payment webhook processed successfully",
-      data: result
-    });
-  } catch (error) {
-    next(error);
-  }
+const getPaymentMethods = async (_req, res) => {
+  return res.status(200).json({
+    success: true,
+    message: "Supported payment methods",
+    data: {
+      methods: ["CASH", "CARD", "PAYPAL", "WALLET"],
+      gateway: "PayPal",
+      currencies: ["USD"],
+    },
+  });
 };
 
 
@@ -207,12 +261,14 @@ const paymentWebhook = async (req, res, next) => {
 
 module.exports = {
   createPayment,
+  createPaypalOrder,
+  capturePaypalPayment,
+  handlePaypalWebhook,
+  processWalletPayment,
+  refundPayment,
+  getMyPayments,
   getPaymentById,
   getPaymentStatus,
-  verifyPayment,
-  processRefund,
-  getMyPayments,
   getTripPayments,
-  getBookingPayment,
-  paymentWebhook
+  getPaymentMethods,
 };

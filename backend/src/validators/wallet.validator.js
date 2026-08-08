@@ -19,14 +19,12 @@ const rechargeWalletSchema = Joi.object({
 
   paymentMethod: Joi.string()
     .valid(
-      "RAZORPAY",
-      "UPI",
-      "CARD",
-      "NET_BANKING"
+      "PAYPAL",
+      "CARD"
     )
     .required()
     .messages({
-      "any.only": "Invalid payment method",
+      "any.only": "Invalid payment method. Use PAYPAL or CARD",
       "any.required": "Payment method is required",
     }),
 });

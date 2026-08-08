@@ -25,9 +25,7 @@ const router = express.Router();
 // AUTHENTICATION
 // ============================================================
 
-router.use(
-  authMiddleware.authenticate
-);
+router.use(authMiddleware.authenticate);
 
 
 // ============================================================
@@ -39,30 +37,11 @@ router.use(
  *
  * Get supported payment methods.
  *
- * CASH
- * CARD
- * UPI
- * WALLET
+ * CASH | CARD | PAYPAL | WALLET
  */
 router.get(
   "/methods",
   paymentController.getPaymentMethods
-);
-
-
-// ============================================================
-// PAYMENT CALCULATION
-// ============================================================
-
-/**
- * GET /api/payments/trip/:tripId/fare
- *
- * Get the final fare for a trip.
- */
-router.get(
-  "/trip/:tripId/fare",
-  organizationMiddleware.verifyCurrentUserMembership,
-  paymentController.getTripFare
 );
 
 
@@ -73,115 +52,82 @@ router.get(
 /**
  * POST /api/payments
  *
- * Create a payment for a completed trip.
+ * Initiate a payment for a completed trip.
  *
- * Example:
+ * Body: { tripId, paymentMethod }
  *
- * {
- *   "tripId": "trip-id",
- *   "method": "UPI"
- * }
+ * - CASH → recorded immediately as COMPLETED.
+ * - WALLET → deducted from wallet immediately.
+ * - PAYPAL / CARD → creates a PayPal order and returns
+ *   an approvalUrl. Frontend must redirect the user there,
+ *   then call /paypal/capture once approved.
  */
 router.post(
   "/",
   organizationMiddleware.verifyCurrentUserMembership,
   validationMiddleware.validate(
-    paymentValidator.createPayment
+    paymentValidator.createPaymentSchema
   ),
   paymentController.createPayment
 );
 
 
 // ============================================================
-// CASH PAYMENT
+// PAYPAL – CREATE ORDER
 // ============================================================
 
 /**
- * POST /api/payments/:paymentId/cash
+ * POST /api/payments/paypal/order
  *
- * Confirm cash payment.
+ * Create a standalone PayPal order.
+ *
+ * Body: { tripId, amount, currency? }
  */
 router.post(
-  "/:paymentId/cash",
-  organizationMiddleware.verifyCurrentUserMembership,
-  paymentController.processCashPayment
-);
-
-
-// ============================================================
-// RAZORPAY PAYMENT
-// ============================================================
-
-/**
- * POST /api/payments/:paymentId/razorpay/order
- *
- * Create Razorpay order.
- */
-router.post(
-  "/:paymentId/razorpay/order",
-  organizationMiddleware.verifyCurrentUserMembership,
-  paymentController.createRazorpayOrder
-);
-
-
-// ============================================================
-// RAZORPAY VERIFICATION
-// ============================================================
-
-/**
- * POST /api/payments/:paymentId/razorpay/verify
- *
- * Verify Razorpay payment.
- */
-router.post(
-  "/:paymentId/razorpay/verify",
+  "/paypal/order",
   organizationMiddleware.verifyCurrentUserMembership,
   validationMiddleware.validate(
-    paymentValidator.verifyRazorpayPayment
+    paymentValidator.createPaypalOrderSchema
   ),
-  paymentController.verifyRazorpayPayment
+  paymentController.createPaypalOrder
 );
 
 
 // ============================================================
-// UPI PAYMENT
+// PAYPAL – CAPTURE PAYMENT
 // ============================================================
 
 /**
- * POST /api/payments/:paymentId/upi
+ * POST /api/payments/paypal/capture
  *
- * Process UPI payment.
+ * Capture (finalize) a PayPal payment after user approval.
  *
- * Razorpay sandbox/test mode can be
- * used for the actual gateway flow.
+ * Body: { paymentId, paypalOrderId }
  */
 router.post(
-  "/:paymentId/upi",
+  "/paypal/capture",
   organizationMiddleware.verifyCurrentUserMembership,
   validationMiddleware.validate(
-    paymentValidator.upiPayment
+    paymentValidator.capturePaypalPaymentSchema
   ),
-  paymentController.processUpiPayment
+  paymentController.capturePaypalPayment
 );
 
 
 // ============================================================
-// CARD PAYMENT
+// PAYPAL WEBHOOK
 // ============================================================
 
 /**
- * POST /api/payments/:paymentId/card
+ * POST /api/payments/paypal/webhook
  *
- * Process card payment through
- * the configured payment gateway.
+ * PayPal IPN/Webhook endpoint.
+ * No JWT auth — PayPal calls this directly.
+ * Verification happens inside the controller.
  */
 router.post(
-  "/:paymentId/card",
-  organizationMiddleware.verifyCurrentUserMembership,
-  validationMiddleware.validate(
-    paymentValidator.cardPayment
-  ),
-  paymentController.processCardPayment
+  "/paypal/webhook",
+  paymentController.handlePaypalWebhook
 );
 
 
@@ -190,88 +136,14 @@ router.post(
 // ============================================================
 
 /**
- * POST /api/payments/:paymentId/wallet
+ * POST /api/payments/wallet
  *
- * Pay using the user's wallet.
- *
- * The service must check wallet
- * balance before deducting money.
+ * Pay using the user's wallet balance.
  */
 router.post(
-  "/:paymentId/wallet",
+  "/wallet",
   organizationMiddleware.verifyCurrentUserMembership,
   paymentController.processWalletPayment
-);
-
-
-// ============================================================
-// PAYMENT DETAILS
-// ============================================================
-
-/**
- * GET /api/payments/:paymentId
- *
- * Get payment details.
- */
-router.get(
-  "/:paymentId",
-  organizationMiddleware.verifyCurrentUserMembership,
-  paymentController.getPaymentById
-);
-
-
-// ============================================================
-// PAYMENT STATUS
-// ============================================================
-
-/**
- * GET /api/payments/:paymentId/status
- *
- * Get current payment status.
- */
-router.get(
-  "/:paymentId/status",
-  organizationMiddleware.verifyCurrentUserMembership,
-  paymentController.getPaymentStatus
-);
-
-
-// ============================================================
-// PAYMENT HISTORY
-// ============================================================
-
-/**
- * GET /api/payments
- *
- * Get current user's payments.
- */
-router.get(
-  "/",
-  organizationMiddleware.verifyCurrentUserMembership,
-  paymentController.getMyPayments
-);
-
-
-// ============================================================
-// PAYMENT WEBHOOK
-// ============================================================
-
-/**
- * POST /api/payments/webhook
- *
- * Razorpay webhook endpoint.
- *
- * IMPORTANT:
- * This endpoint normally should NOT use
- * normal JWT authentication because
- * Razorpay calls it directly.
- *
- * Signature verification must happen
- * inside the controller/service.
- */
-router.post(
-  "/webhook",
-  paymentController.handleWebhook
 );
 
 
@@ -282,15 +154,57 @@ router.post(
 /**
  * POST /api/payments/:paymentId/refund
  *
- * Process refund when applicable.
+ * Refund a completed payment.
  */
 router.post(
   "/:paymentId/refund",
   organizationMiddleware.verifyCurrentUserMembership,
   validationMiddleware.validate(
-    paymentValidator.refundPayment
+    paymentValidator.refundPaymentSchema
   ),
   paymentController.refundPayment
+);
+
+
+// ============================================================
+// PAYMENT STATUS
+// ============================================================
+
+/**
+ * GET /api/payments/:paymentId/status
+ */
+router.get(
+  "/:paymentId/status",
+  organizationMiddleware.verifyCurrentUserMembership,
+  paymentController.getPaymentStatus
+);
+
+
+// ============================================================
+// PAYMENT DETAILS
+// ============================================================
+
+/**
+ * GET /api/payments/:paymentId
+ */
+router.get(
+  "/:paymentId",
+  organizationMiddleware.verifyCurrentUserMembership,
+  paymentController.getPaymentById
+);
+
+
+// ============================================================
+// PAYMENT HISTORY
+// ============================================================
+
+/**
+ * GET /api/payments
+ */
+router.get(
+  "/",
+  organizationMiddleware.verifyCurrentUserMembership,
+  paymentController.getMyPayments
 );
 
 

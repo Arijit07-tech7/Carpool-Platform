@@ -7,12 +7,34 @@ const Joi = require("joi");
 // ============================================================
 
 const createPaymentSchema = Joi.object({
-  bookingId: Joi.string()
+  tripId: Joi.string()
     .uuid()
     .required()
     .messages({
-      "string.guid": "Invalid booking ID",
-      "any.required": "Booking ID is required",
+      "string.guid": "Invalid trip ID",
+      "any.required": "Trip ID is required",
+    }),
+
+  paymentMethod: Joi.string()
+    .valid("CASH", "CARD", "PAYPAL", "WALLET")
+    .required()
+    .messages({
+      "any.only": "Payment method must be one of: CASH, CARD, PAYPAL, WALLET",
+      "any.required": "Payment method is required",
+    }),
+});
+
+// ============================================================
+// CREATE PAYPAL ORDER
+// ============================================================
+
+const createPaypalOrderSchema = Joi.object({
+  tripId: Joi.string()
+    .uuid()
+    .required()
+    .messages({
+      "string.guid": "Invalid trip ID",
+      "any.required": "Trip ID is required",
     }),
 
   amount: Joi.number()
@@ -29,69 +51,31 @@ const createPaymentSchema = Joi.object({
     .trim()
     .uppercase()
     .length(3)
-    .default("INR")
+    .default("USD")
     .messages({
-      "string.length": "Currency must be a 3-letter currency code",
+      "string.length": "Currency must be a 3-letter ISO currency code (e.g. USD)",
     }),
 });
 
 // ============================================================
-// CREATE RAZORPAY ORDER
+// CAPTURE PAYPAL PAYMENT
 // ============================================================
 
-const createPaymentOrderSchema = Joi.object({
-  bookingId: Joi.string()
+const capturePaypalPaymentSchema = Joi.object({
+  paymentId: Joi.string()
     .uuid()
     .required()
     .messages({
-      "string.guid": "Invalid booking ID",
-      "any.required": "Booking ID is required",
+      "string.guid": "Invalid payment ID",
+      "any.required": "Payment ID is required",
     }),
 
-  amount: Joi.number()
-    .positive()
-    .precision(2)
-    .required()
-    .messages({
-      "number.base": "Payment amount must be a number",
-      "number.positive": "Payment amount must be greater than zero",
-      "any.required": "Payment amount is required",
-    }),
-
-  currency: Joi.string()
-    .trim()
-    .uppercase()
-    .length(3)
-    .default("INR"),
-});
-
-// ============================================================
-// VERIFY PAYMENT
-// ============================================================
-
-const verifyPaymentSchema = Joi.object({
-  razorpayOrderId: Joi.string()
+  paypalOrderId: Joi.string()
     .trim()
     .required()
     .messages({
-      "string.empty": "Razorpay order ID is required",
-      "any.required": "Razorpay order ID is required",
-    }),
-
-  razorpayPaymentId: Joi.string()
-    .trim()
-    .required()
-    .messages({
-      "string.empty": "Razorpay payment ID is required",
-      "any.required": "Razorpay payment ID is required",
-    }),
-
-  razorpaySignature: Joi.string()
-    .trim()
-    .required()
-    .messages({
-      "string.empty": "Razorpay signature is required",
-      "any.required": "Razorpay signature is required",
+      "string.empty": "PayPal order ID is required",
+      "any.required": "PayPal order ID is required",
     }),
 });
 
@@ -134,7 +118,8 @@ const updatePaymentStatusSchema = Joi.object({
   status: Joi.string()
     .valid(
       "PENDING",
-      "SUCCESS",
+      "PROCESSING",
+      "COMPLETED",
       "FAILED",
       "REFUNDED",
       "CANCELLED"
@@ -193,7 +178,8 @@ const listPaymentsSchema = Joi.object({
   status: Joi.string()
     .valid(
       "PENDING",
-      "SUCCESS",
+      "PROCESSING",
+      "COMPLETED",
       "FAILED",
       "REFUNDED",
       "CANCELLED"
@@ -216,24 +202,30 @@ const listPaymentsSchema = Joi.object({
 });
 
 // ============================================================
-// RAZORPAY WEBHOOK
+// PAYPAL WEBHOOK
 // ============================================================
 
-const razorpayWebhookSchema = Joi.object({
-  event: Joi.string()
+const paypalWebhookSchema = Joi.object({
+  event_type: Joi.string()
     .trim()
     .required()
     .messages({
-      "string.empty": "Webhook event is required",
-      "any.required": "Webhook event is required",
+      "string.empty": "Webhook event type is required",
+      "any.required": "Webhook event type is required",
     }),
 
-  payload: Joi.object()
+  resource: Joi.object()
     .required()
     .messages({
-      "any.required": "Webhook payload is required",
+      "any.required": "Webhook resource is required",
     }),
-});
+
+  resource_type: Joi.string()
+    .optional(),
+
+  summary: Joi.string()
+    .optional(),
+}).unknown(true); // Allow additional PayPal webhook fields
 
 // ============================================================
 // EXPORTS
@@ -241,12 +233,12 @@ const razorpayWebhookSchema = Joi.object({
 
 module.exports = {
   createPaymentSchema,
-  createPaymentOrderSchema,
-  verifyPaymentSchema,
+  createPaypalOrderSchema,
+  capturePaypalPaymentSchema,
   refundPaymentSchema,
   updatePaymentStatusSchema,
   paymentIdParamSchema,
   bookingPaymentParamSchema,
   listPaymentsSchema,
-  razorpayWebhookSchema,
+  paypalWebhookSchema,
 };
