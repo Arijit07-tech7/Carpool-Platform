@@ -1,286 +1,70 @@
 // backend/src/routes/admin.routes.js
 
 const express = require("express");
-
-const adminController =
-  require("../controllers/admin.controller.js");
-
-const authMiddleware =
-  require("../middleware/auth.middleware.js");
-
-const organizationMiddleware =
-  require("../middleware/organization.middleware.js");
-
-const roleMiddleware =
-  require("../middleware/role.middleware.js");
-
-const validationMiddleware =
-  require("../middleware/validation.middleware.js");
-
-const adminValidator =
-  require("../validators/admin.validator.js");
-
+const adminController = require("../controllers/admin.controller.js");
+const authMiddleware = require("../middleware/auth.middleware.js");
+const organizationMiddleware = require("../middleware/organization.middleware.js");
+const roleMiddleware = require("../middleware/role.middleware.js");
+const validationMiddleware = require("../middleware/validation.middleware.js");
+const adminValidator = require("../validators/admin.validator.js");
 
 const router = express.Router();
 
+router.use(authMiddleware.authenticate);
+router.use(organizationMiddleware.requireOrganization);
+router.use(roleMiddleware.isCompanyAdmin);
 
-// ============================================================
-// AUTHENTICATION
-// ============================================================
+// GET /api/admin/overview
+router.get("/overview", adminController.getOrganizationDetails);
 
-router.use(
-  authMiddleware.authenticate
-);
+// GET /api/admin/employees
+router.get("/employees", adminController.getEmployees);
 
+// GET /api/admin/employees/:employeeId
+router.get("/employees/:employeeId", adminController.getEmployeeById);
 
-// ============================================================
-// COMPANY ADMIN ACCESS
-// ============================================================
+// PATCH /api/admin/employees/:employeeId/status
+router.patch("/employees/:employeeId/status",
+  validationMiddleware.validate(adminValidator.updateEmployeeStatus),
+  adminController.updateEmployeeStatus);
 
-router.use(
-  organizationMiddleware.verifyCurrentUserMembership
-);
+// GET /api/admin/vehicles
+router.get("/vehicles", adminController.getOrganizationVehicles);
 
-router.use(
-  roleMiddleware.requireRole("COMPANY_ADMIN")
-);
+// GET /api/admin/vehicles/:vehicleId
+router.get("/vehicles/:vehicleId", adminController.verifyEmployeeVehicle);
 
+// GET /api/admin/rides
+router.get("/rides", adminController.getOrganizationReport);
 
-// ============================================================
-// ORGANIZATION OVERVIEW
-// ============================================================
+// GET /api/admin/rides/:rideId
+router.get("/rides/:rideId", adminController.getOrganizationReport);
 
-/**
- * GET /api/admin/overview
- *
- * Get organization overview.
- */
-router.get(
-  "/overview",
-  adminController.getOverview
-);
+// GET /api/admin/bookings
+router.get("/bookings", adminController.getOrganizationReport);
 
+// GET /api/admin/trips
+router.get("/trips", adminController.getOrganizationReport);
 
-// ============================================================
-// EMPLOYEE MANAGEMENT
-// ============================================================
+// GET /api/admin/payments
+router.get("/payments", adminController.getOrganizationCosts);
 
-/**
- * GET /api/admin/employees
- *
- * Get employees belonging to
- * the administrator's organization.
- */
-router.get(
-  "/employees",
-  adminController.getEmployees
-);
+// GET /api/admin/settings
+router.get("/settings", adminController.getOrganizationDetails);
 
+// PUT /api/admin/settings
+router.put("/settings",
+  validationMiddleware.validate(adminValidator.updateSettings),
+  adminController.updateOrganizationSettings);
 
-/**
- * GET /api/admin/employees/:employeeId
- *
- * Get employee details.
- */
-router.get(
-  "/employees/:employeeId",
-  adminController.getEmployeeById
-);
+// GET /api/admin/participation
+router.get("/participation", adminController.getParticipationStatistics);
 
+// GET /api/admin/dashboard
+router.get("/dashboard", adminController.getDashboard);
 
-/**
- * PATCH /api/admin/employees/:employeeId/status
- *
- * Activate/deactivate employee
- * organization membership.
- */
-router.patch(
-  "/employees/:employeeId/status",
-  validationMiddleware.validate(
-    adminValidator.updateEmployeeStatus
-  ),
-  adminController.updateEmployeeStatus
-);
-
-
-// ============================================================
-// VEHICLE MANAGEMENT
-// ============================================================
-
-/**
- * GET /api/admin/vehicles
- *
- * View vehicles registered by
- * organization employees.
- */
-router.get(
-  "/vehicles",
-  adminController.getVehicles
-);
-
-
-/**
- * GET /api/admin/vehicles/:vehicleId
- *
- * Get vehicle details.
- */
-router.get(
-  "/vehicles/:vehicleId",
-  adminController.getVehicleById
-);
-
-
-// ============================================================
-// RIDE OVERSIGHT
-// ============================================================
-
-/**
- * GET /api/admin/rides
- *
- * View organization ride activity.
- */
-router.get(
-  "/rides",
-  adminController.getRides
-);
-
-
-/**
- * GET /api/admin/rides/:rideId
- *
- * Get ride details for oversight.
- */
-router.get(
-  "/rides/:rideId",
-  adminController.getRideById
-);
-
-
-// ============================================================
-// BOOKING OVERSIGHT
-// ============================================================
-
-/**
- * GET /api/admin/bookings
- *
- * View organization booking activity.
- */
-router.get(
-  "/bookings",
-  adminController.getBookings
-);
-
-
-// ============================================================
-// TRIP OVERSIGHT
-// ============================================================
-
-/**
- * GET /api/admin/trips
- *
- * View organization trip activity.
- */
-router.get(
-  "/trips",
-  adminController.getTrips
-);
-
-
-// ============================================================
-// PAYMENT OVERSIGHT
-// ============================================================
-
-/**
- * GET /api/admin/payments
- *
- * View organization payment activity.
- */
-router.get(
-  "/payments",
-  adminController.getPayments
-);
-
-
-// ============================================================
-// ORGANIZATION SETTINGS
-// ============================================================
-
-/**
- * GET /api/admin/settings
- *
- * Get organization configuration.
- */
-router.get(
-  "/settings",
-  adminController.getSettings
-);
-
-
-/**
- * PUT /api/admin/settings
- *
- * Update organization configuration.
- */
-router.put(
-  "/settings",
-  validationMiddleware.validate(
-    adminValidator.updateSettings
-  ),
-  adminController.updateSettings
-);
-
-
-// ============================================================
-// PARTICIPATION
-// ============================================================
-
-/**
- * GET /api/admin/participation
- *
- * Get employee participation data.
- */
-router.get(
-  "/participation",
-  adminController.getParticipation
-);
-
-
-// ============================================================
-// DASHBOARD
-// ============================================================
-
-/**
- * GET /api/admin/dashboard
- *
- * Get complete administrator dashboard.
- */
-router.get(
-  "/dashboard",
-  adminController.getDashboard
-);
-
-
-// ============================================================
-// EXPORT DATA
-// ============================================================
-
-/**
- * GET /api/admin/export
- *
- * Export organization data/report.
- *
- * Example:
- *
- * /api/admin/export?type=rides&format=csv
- */
-router.get(
-  "/export",
-  adminController.exportData
-);
-
-
-// ============================================================
-// EXPORT
-// ============================================================
+// GET /api/admin/export
+router.get("/export", adminController.getOrganizationReport);
 
 module.exports = router;
+

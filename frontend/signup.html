@@ -1759,6 +1759,8 @@
 </div>
 
 
+<script src="api.js"></script>
+
 <script>
 
     /* =====================================================
@@ -1967,154 +1969,74 @@
         .getElementById("signupForm")
         .addEventListener(
             "submit",
-            event => {
+            async event => {
 
                 event.preventDefault();
 
+                const name = document.getElementById("fullName").value.trim();
+                const email = document.getElementById("email").value.trim();
+                const pass = password.value;
+                const confirm = document.getElementById("confirmPassword").value;
+                const terms = document.getElementById("terms").checked;
 
-                const name =
-                    document
-                        .getElementById(
-                            "fullName"
-                        )
-                        .value
-                        .trim();
+                // Read phone, stripping formatting
+                const rawPhone = (phone.value || "").replace(/[^\d+]/g, "");
 
+                // Organization code (optional field)
+                const orgCodeEl = document.getElementById("organizationCode");
+                const organizationCode = orgCodeEl ? orgCodeEl.value.trim() : "";
 
-                const email =
-                    document
-                        .getElementById(
-                            "email"
-                        )
-                        .value
-                        .trim();
-
-
-                const pass =
-                    password.value;
-
-
-                const confirm =
-                    document
-                        .getElementById(
-                            "confirmPassword"
-                        )
-                        .value;
-
-
-                const terms =
-                    document
-                        .getElementById(
-                            "terms"
-                        )
-                        .checked;
-
-
-                if (
-                    name.length < 3
-                ) {
-
-                    alert(
-                        "Please enter your full name."
-                    );
-
+                // Validations
+                if (name.length < 3) {
+                    API.toast("Please enter your full name.", "warning");
                     return;
                 }
 
-
-                if (
-                    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/
-                        .test(email)
-                ) {
-
-                    alert(
-                        "Please enter a valid email address."
-                    );
-
+                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                    API.toast("Please enter a valid email address.", "warning");
                     return;
                 }
 
-
-                if (
-                    pass.length < 8
-                ) {
-
-                    alert(
-                        "Password must contain at least 8 characters."
-                    );
-
+                if (pass.length < 8) {
+                    API.toast("Password must be at least 8 characters.", "warning");
                     return;
                 }
 
-
-                if (
-                    pass !== confirm
-                ) {
-
-                    alert(
-                        "Passwords do not match."
-                    );
-
+                if (pass !== confirm) {
+                    API.toast("Passwords do not match.", "warning");
                     return;
                 }
-
 
                 if (!terms) {
-
-                    alert(
-                        "Please accept the RideSync Terms and Privacy Policy."
-                    );
-
+                    API.toast("Please accept the Terms and Privacy Policy.", "warning");
                     return;
                 }
 
+                if (!organizationCode) {
+                    API.toast("Please enter your organization code.", "warning");
+                    return;
+                }
 
-                /* Demo account */
+                // Submit to backend
+                const submitBtn = event.target.querySelector("button[type=submit]");
+                if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = "Creating account..."; }
 
-                const user = {
+                try {
+                    await API.auth.register({
+                        name,
+                        email,
+                        password: pass,
+                        phone: rawPhone || undefined,
+                        organizationCode,
+                    });
 
-                    id:
-                        "EMP-" +
-                        Date.now(),
+                    API.toast("Account created successfully! Redirecting...", "success");
+                    setTimeout(() => { window.location.href = "user-dashboard.html"; }, 1200);
 
-                    name,
-
-                    email,
-
-                    phone:
-                        phone.value,
-
-                    role:
-                        "employee"
-
-                };
-
-
-                const users =
-                    JSON.parse(
-                        localStorage.getItem(
-                            "ridesync_users"
-                        ) || "[]"
-                    );
-
-
-                users.push(user);
-
-
-                localStorage.setItem(
-                    "ridesync_users",
-                    JSON.stringify(users)
-                );
-
-
-                alert(
-                    "RideSync account created successfully!"
-                );
-
-
-                window.location.href =
-                    "login.html";
-
+                } catch (err) {
+                    API.toast(err.message || "Registration failed. Please try again.", "error");
+                    if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = "Create Account"; }
+                }
             }
         );
 

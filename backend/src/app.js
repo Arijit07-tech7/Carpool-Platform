@@ -1,5 +1,7 @@
 const express = require("express");
 
+const cors = require("cors");
+
 const {
   apiLimiter
 } = require("./middleware/rate-limit.middleware.js");
@@ -16,6 +18,13 @@ const app = express();
 // ============================================================
 // GLOBAL MIDDLEWARE
 // ============================================================
+
+app.use(cors({
+  origin: process.env.CLIENT_URL || "*",
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+}));
 
 app.use(express.json());
 

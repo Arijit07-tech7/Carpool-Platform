@@ -1,273 +1,59 @@
 // backend/src/routes/report.routes.js
 
 const express = require("express");
-
-const reportController =
-  require("../controllers/report.controller.js");
-
-const authMiddleware =
-  require("../middleware/auth.middleware.js");
-
-const organizationMiddleware =
-  require("../middleware/organization.middleware.js");
-
-const roleMiddleware =
-  require("../middleware/role.middleware.js");
-
+const reportController = require("../controllers/report.controller.js");
+const authMiddleware = require("../middleware/auth.middleware.js");
+const organizationMiddleware = require("../middleware/organization.middleware.js");
+const roleMiddleware = require("../middleware/role.middleware.js");
 
 const router = express.Router();
 
+router.use(authMiddleware.authenticate);
 
-// ============================================================
-// AUTHENTICATION
-// ============================================================
+// GET /api/reports/summary
+router.get("/summary", organizationMiddleware.requireOrganization, reportController.getReportSummary);
 
-router.use(
-  authMiddleware.authenticate
-);
+// GET /api/reports/rides
+router.get("/rides", organizationMiddleware.requireOrganization, reportController.getRideReport);
 
+// GET /api/reports/payments
+router.get("/payments", organizationMiddleware.requireOrganization, reportController.getPaymentReport);
 
-// ============================================================
-// PERSONAL SUMMARY
-// ============================================================
+// GET /api/reports/wallet
+router.get("/wallet", organizationMiddleware.requireOrganization, reportController.getWalletReport);
 
-/**
- * GET /api/reports/summary
- *
- * Get the logged-in employee's
- * personal ride/payment summary.
- *
- * Example:
- *
- * {
- *   "totalRides": 25,
- *   "offeredRides": 10,
- *   "bookedRides": 15,
- *   "completedRides": 22,
- *   "cancelledRides": 3,
- *   "totalSpent": 2500
- * }
- */
-router.get(
-  "/summary",
-  organizationMiddleware.verifyCurrentUserMembership,
-  reportController.getPersonalSummary
-);
+// GET /api/reports/monthly
+router.get("/monthly", organizationMiddleware.requireOrganization, reportController.getOverviewReport);
 
+// GET /api/reports/organization
+router.get("/organization", organizationMiddleware.requireOrganization,
+  roleMiddleware.isCompanyAdmin, reportController.getOrganizationReport);
 
-// ============================================================
-// PERSONAL RIDE ANALYTICS
-// ============================================================
+// GET /api/reports/organization/rides
+router.get("/organization/rides", organizationMiddleware.requireOrganization,
+  roleMiddleware.isCompanyAdmin, reportController.getRideReport);
 
-/**
- * GET /api/reports/rides
- *
- * Get personal ride statistics.
- */
-router.get(
-  "/rides",
-  organizationMiddleware.verifyCurrentUserMembership,
-  reportController.getRideAnalytics
-);
+// GET /api/reports/organization/payments
+router.get("/organization/payments", organizationMiddleware.requireOrganization,
+  roleMiddleware.isCompanyAdmin, reportController.getPaymentReport);
 
+// GET /api/reports/organization/participation
+router.get("/organization/participation", organizationMiddleware.requireOrganization,
+  roleMiddleware.isCompanyAdmin, reportController.getPassengerReport);
 
-// ============================================================
-// PERSONAL PAYMENT ANALYTICS
-// ============================================================
+// GET /api/reports/export
+router.get("/export", organizationMiddleware.requireOrganization, reportController.exportReport);
 
-/**
- * GET /api/reports/payments
- *
- * Get personal payment statistics.
- */
-router.get(
-  "/payments",
-  organizationMiddleware.verifyCurrentUserMembership,
-  reportController.getPaymentAnalytics
-);
+// GET /api/reports/organization/export
+router.get("/organization/export", organizationMiddleware.requireOrganization,
+  roleMiddleware.isCompanyAdmin, reportController.exportReport);
 
+// GET /api/reports/dashboard
+router.get("/dashboard", organizationMiddleware.requireOrganization, reportController.getOverviewReport);
 
-// ============================================================
-// PERSONAL WALLET ANALYTICS
-// ============================================================
-
-/**
- * GET /api/reports/wallet
- *
- * Get wallet usage statistics.
- */
-router.get(
-  "/wallet",
-  organizationMiddleware.verifyCurrentUserMembership,
-  reportController.getWalletAnalytics
-);
-
-
-// ============================================================
-// MONTHLY REPORT
-// ============================================================
-
-/**
- * GET /api/reports/monthly
- *
- * Get monthly ride/payment statistics.
- *
- * Optional query:
- *
- * ?month=8&year=2026
- */
-router.get(
-  "/monthly",
-  organizationMiddleware.verifyCurrentUserMembership,
-  reportController.getMonthlyReport
-);
-
-
-// ============================================================
-// ORGANIZATION OVERVIEW
-// ============================================================
-
-/**
- * GET /api/reports/organization
- *
- * Organization-level analytics.
- *
- * Restricted to Company Administrator.
- */
-router.get(
-  "/organization",
-  organizationMiddleware.verifyCurrentUserMembership,
-  roleMiddleware.requireRole("COMPANY_ADMIN"),
-  reportController.getOrganizationReport
-);
-
-
-// ============================================================
-// ORGANIZATION RIDES
-// ============================================================
-
-/**
- * GET /api/reports/organization/rides
- *
- * Organization-wide ride analytics.
- */
-router.get(
-  "/organization/rides",
-  organizationMiddleware.verifyCurrentUserMembership,
-  roleMiddleware.requireRole("COMPANY_ADMIN"),
-  reportController.getOrganizationRideAnalytics
-);
-
-
-// ============================================================
-// ORGANIZATION PAYMENTS
-// ============================================================
-
-/**
- * GET /api/reports/organization/payments
- *
- * Organization-wide payment analytics.
- */
-router.get(
-  "/organization/payments",
-  organizationMiddleware.verifyCurrentUserMembership,
-  roleMiddleware.requireRole("COMPANY_ADMIN"),
-  reportController.getOrganizationPaymentAnalytics
-);
-
-
-// ============================================================
-// PARTICIPATION ANALYTICS
-// ============================================================
-
-/**
- * GET /api/reports/organization/participation
- *
- * Employee participation statistics.
- */
-router.get(
-  "/organization/participation",
-  organizationMiddleware.verifyCurrentUserMembership,
-  roleMiddleware.requireRole("COMPANY_ADMIN"),
-  reportController.getParticipationAnalytics
-);
-
-
-// ============================================================
-// EXPORT REPORT
-// ============================================================
-
-/**
- * GET /api/reports/export
- *
- * Export report data.
- *
- * Example:
- *
- * /api/reports/export?type=rides&format=csv
- */
-router.get(
-  "/export",
-  organizationMiddleware.verifyCurrentUserMembership,
-  reportController.exportReport
-);
-
-
-// ============================================================
-// EXPORT ORGANIZATION REPORT
-// ============================================================
-
-/**
- * GET /api/reports/organization/export
- *
- * Export organization-level report.
- *
- * Restricted to Company Administrator.
- */
-router.get(
-  "/organization/export",
-  organizationMiddleware.verifyCurrentUserMembership,
-  roleMiddleware.requireRole("COMPANY_ADMIN"),
-  reportController.exportOrganizationReport
-);
-
-
-// ============================================================
-// DASHBOARD
-// ============================================================
-
-/**
- * GET /api/reports/dashboard
- *
- * Combined dashboard data for
- * the logged-in employee.
- */
-router.get(
-  "/dashboard",
-  organizationMiddleware.verifyCurrentUserMembership,
-  reportController.getDashboardReport
-);
-
-
-// ============================================================
-// ADMIN DASHBOARD
-// ============================================================
-
-/**
- * GET /api/reports/organization/dashboard
- *
- * Organization administrator dashboard.
- */
-router.get(
-  "/organization/dashboard",
-  organizationMiddleware.verifyCurrentUserMembership,
-  roleMiddleware.requireRole("COMPANY_ADMIN"),
-  reportController.getOrganizationDashboard
-);
-
-
-// ============================================================
-// EXPORT
-// ============================================================
+// GET /api/reports/organization/dashboard
+router.get("/organization/dashboard", organizationMiddleware.requireOrganization,
+  roleMiddleware.isCompanyAdmin, reportController.getOrganizationReport);
 
 module.exports = router;
+

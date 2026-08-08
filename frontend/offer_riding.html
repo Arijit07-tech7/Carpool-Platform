@@ -684,6 +684,7 @@
     <!-- =========================================
          JAVASCRIPT
     ========================================== -->
+    <script src="api.js"></script>
     <script>
 
 
@@ -703,7 +704,7 @@
             );
         }
 
-        function offerRide() {
+           function offerRide() {
 
             const pickup =
                 document.getElementById("pickup").value.trim();
@@ -718,7 +719,11 @@
                 document.getElementById("rideTime").value;
 
             const seats =
-                document.getElementById("seats").value;
+                parseInt(document.getElementById("seats").value, 10) || 1;
+
+            const fare =
+                document.getElementById("fare") ?
+                parseFloat(document.getElementById("fare").value) || 0 : 0;
 
             const successMessage =
                 document.getElementById("successMessage");
@@ -726,36 +731,52 @@
 
             // Validation
             if (!pickup) {
-                alert("Please enter your pickup location.");
+                API.toast("Please enter your pickup location.", "warning");
                 return;
             }
 
             if (!destination) {
-                alert("Please enter your destination.");
+                API.toast("Please enter your destination.", "warning");
                 return;
             }
 
             if (!date) {
-                alert("Please select the ride date.");
+                API.toast("Please select the ride date.", "warning");
                 return;
             }
 
             if (!time) {
-                alert("Please select the ride time.");
+                API.toast("Please select the ride time.", "warning");
                 return;
             }
 
+            if (!API.isLoggedIn()) {
+                API.toast("Please log in before offering a ride.", "error");
+                setTimeout(() => { window.location.href = "login.html"; }, 1500);
+                return;
+            }
 
-            // Show success message
-            successMessage.classList.remove("hidden");
+            // Build rideDate ISO string combining date + time
+            const rideDateTime = new Date(`${date}T${time}:00`).toISOString();
 
-            // Console output for testing
-            console.log("Ride Details:");
-            console.log("Pickup:", pickup);
-            console.log("Destination:", destination);
-            console.log("Date:", date);
-            console.log("Time:", time);
-            console.log("Seats:", seats);
+            const rideData = {
+                pickupLocation: pickup,
+                destination:    destination,
+                rideDate:       rideDateTime,
+                rideTime:       rideDateTime,
+                totalSeats:     seats,
+                availableSeats: seats,
+                farePerSeat:    fare || 0,
+            };
+
+            API.rides.create(rideData)
+                .then(() => {
+                    if (successMessage) successMessage.classList.remove("hidden");
+                    API.toast("Ride offered successfully!", "success");
+                })
+                .catch(err => {
+                    API.toast(err.message || "Failed to offer ride. Please try again.", "error");
+                });
         }
 
     </script>

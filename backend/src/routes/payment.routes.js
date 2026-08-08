@@ -64,7 +64,7 @@ router.get(
  */
 router.post(
   "/",
-  organizationMiddleware.verifyCurrentUserMembership,
+  organizationMiddleware.requireOrganization,
   validationMiddleware.validate(
     paymentValidator.createPaymentSchema
   ),
@@ -85,7 +85,7 @@ router.post(
  */
 router.post(
   "/paypal/order",
-  organizationMiddleware.verifyCurrentUserMembership,
+  organizationMiddleware.requireOrganization,
   validationMiddleware.validate(
     paymentValidator.createPaypalOrderSchema
   ),
@@ -106,7 +106,7 @@ router.post(
  */
 router.post(
   "/paypal/capture",
-  organizationMiddleware.verifyCurrentUserMembership,
+  organizationMiddleware.requireOrganization,
   validationMiddleware.validate(
     paymentValidator.capturePaypalPaymentSchema
   ),
@@ -142,7 +142,7 @@ router.post(
  */
 router.post(
   "/wallet",
-  organizationMiddleware.verifyCurrentUserMembership,
+  organizationMiddleware.requireOrganization,
   paymentController.processWalletPayment
 );
 
@@ -158,7 +158,7 @@ router.post(
  */
 router.post(
   "/:paymentId/refund",
-  organizationMiddleware.verifyCurrentUserMembership,
+  organizationMiddleware.requireOrganization,
   validationMiddleware.validate(
     paymentValidator.refundPaymentSchema
   ),
@@ -175,7 +175,7 @@ router.post(
  */
 router.get(
   "/:paymentId/status",
-  organizationMiddleware.verifyCurrentUserMembership,
+  organizationMiddleware.requireOrganization,
   paymentController.getPaymentStatus
 );
 
@@ -189,7 +189,7 @@ router.get(
  */
 router.get(
   "/:paymentId",
-  organizationMiddleware.verifyCurrentUserMembership,
+  organizationMiddleware.requireOrganization,
   paymentController.getPaymentById
 );
 
@@ -203,7 +203,7 @@ router.get(
  */
 router.get(
   "/",
-  organizationMiddleware.verifyCurrentUserMembership,
+  organizationMiddleware.requireOrganization,
   paymentController.getMyPayments
 );
 
@@ -213,3 +213,4 @@ router.get(
 // ============================================================
 
 module.exports = router;
+

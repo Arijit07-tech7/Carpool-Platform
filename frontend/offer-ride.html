@@ -890,6 +890,8 @@ h1{
 ></div>
 
 
+<script src="api.js"></script>
+
 <script>
 /* =========================================================
    RIDESYNC SHARED LOCATION DATA
@@ -1626,58 +1628,49 @@ document.getElementById("offer")
         }
 
 
-        const rideData = {
+        // Convert to ISO string by assuming a standard time or grabbing actual time
+        // The form has "date" and "time".
+        const dateVal = document.getElementById("date").value;
+        const timeVal = document.getElementById("time").value;
+        const rideDateTime = new Date(`${dateVal}T${timeVal}:00`).toISOString();
 
-            start:startLocation,
-
-            destination:destinationLocation,
-
-            date:
-                document.getElementById("date").value,
-
-            time:
-                document.getElementById("time").value,
-
-            seats:
-                document.getElementById("seats").value,
-
-            vehicle:vehicle,
-
-            fare:Number(fare),
-
-            status:"OFFERED"
-
+        const submitRideData = {
+            pickupLocation: startLocation.name + ", " + startLocation.address,
+            destination: destinationLocation.name + ", " + destinationLocation.address,
+            pickupLatitude: startLocation.lat,
+            pickupLongitude: startLocation.lng,
+            destinationLatitude: destinationLocation.lat,
+            destinationLongitude: destinationLocation.lng,
+            rideDate: rideDateTime,
+            rideTime: rideDateTime,
+            totalSeats: parseInt(document.getElementById("seats").value, 10) || 1,
+            availableSeats: parseInt(document.getElementById("seats").value, 10) || 1,
+            farePerSeat: Number(fare),
+            vehicleId: vehicle // Make sure vehicle select stores vehicleId
         };
 
+        if (!API.isLoggedIn()) {
+            API.toast("Please log in before offering a ride.", "error");
+            setTimeout(() => { window.location.href = "login.html"; }, 1500);
+            return;
+        }
 
-        /*
-         Future backend/API integration:
+        const btn = document.getElementById("submit");
+        const origText = btn.textContent;
+        btn.textContent = "Offering...";
+        btn.disabled = true;
 
-         rideData.start.lat
-         rideData.start.lng
-         rideData.destination.lat
-         rideData.destination.lng
-
-         Google Maps can later consume these
-         exact same fields.
-        */
-
-
-        localStorage.setItem(
-            "ridesync_offered_ride",
-            JSON.stringify(rideData)
-        );
-
-
-        showToast(
-            "Ride successfully prepared for publishing."
-        );
-
-
-        console.log(
-            "RideSync Offer Ride:",
-            rideData
-        );
+        API.rides.create(submitRideData)
+            .then(res => {
+                showToast("Ride successfully prepared and published.");
+                console.log("RideSync API Offer Ride Success:", res);
+                setTimeout(() => { window.location.href = "user-dashboard.html"; }, 1500);
+            })
+            .catch(err => {
+                API.toast(err.message || "Failed to publish ride.", "error");
+                btn.textContent = origText;
+                btn.disabled = false;
+            });
 
     }
 );

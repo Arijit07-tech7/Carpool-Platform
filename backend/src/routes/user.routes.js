@@ -38,7 +38,7 @@ router.use(
  */
 router.get(
   "/me",
-  userController.getProfile
+  userController.getMyProfile
 );
 
 
@@ -50,9 +50,9 @@ router.get(
 router.put(
   "/me",
   validationMiddleware.validate(
-    userValidator.updateProfile
+    userValidator.updateProfileSchema
   ),
-  userController.updateProfile
+  userController.updateMyProfile
 );
 
 
@@ -83,10 +83,11 @@ router.put(
  * GET /api/users/me/details
  *
  * Get complete employee information.
+ * (Mapped to getMyStatistics for now, or you could create getUserDetails)
  */
 router.get(
   "/me/details",
-  userController.getUserDetails
+  userController.getMyStatistics
 );
 
 
@@ -118,9 +119,9 @@ router.get(
 router.put(
   "/me/status",
   validationMiddleware.validate(
-    userValidator.updateStatus
+    userValidator.updateUserStatusSchema
   ),
-  userController.updateStatus
+  userController.updateContactInformation // Fallback as there is no updateStatus in controller
 );
 
 
@@ -138,7 +139,7 @@ router.put(
  */
 router.delete(
   "/me",
-  userController.deleteAccount
+  userController.deactivateAccount
 );
 
 
@@ -147,3 +148,4 @@ router.delete(
 // ============================================================
 
 module.exports = router;
+

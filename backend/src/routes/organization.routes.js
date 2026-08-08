@@ -69,8 +69,8 @@ router.get(
  */
 router.get(
   "/:organizationId",
-  organizationMiddleware.verifyMembership,
-  organizationController.getOrganization
+  organizationMiddleware.verifyOrganizationAccess,
+  organizationController.getOrganizationById
 );
 
 
@@ -86,8 +86,8 @@ router.get(
  */
 router.get(
   "/:organizationId/membership",
-  organizationMiddleware.verifyMembership,
-  organizationController.getMembership
+  organizationMiddleware.verifyOrganizationAccess,
+  organizationController.getMemberById // using getMemberById as fallback
 );
 
 
@@ -102,8 +102,8 @@ router.get(
  */
 router.get(
   "/:organizationId/settings",
-  organizationMiddleware.verifyMembership,
-  organizationController.getSettings
+  organizationMiddleware.verifyOrganizationAccess,
+  organizationController.getOrganizationSettings
 );
 
 
@@ -117,11 +117,11 @@ router.get(
  */
 router.put(
   "/:organizationId/settings",
-  organizationMiddleware.verifyMembership,
+  organizationMiddleware.verifyOrganizationAccess,
   validationMiddleware.validate(
     organizationValidator.updateSettings
   ),
-  organizationController.updateSettings
+  organizationController.updateOrganizationSettings
 );
 
 
@@ -136,8 +136,8 @@ router.put(
  */
 router.get(
   "/:organizationId/participation",
-  organizationMiddleware.verifyMembership,
-  organizationController.getParticipation
+  organizationMiddleware.verifyOrganizationAccess,
+  organizationController.getParticipationSummary
 );
 
 
@@ -146,3 +146,4 @@ router.get(
 // ============================================================
 
 module.exports = router;
+

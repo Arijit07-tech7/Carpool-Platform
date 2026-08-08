@@ -42,7 +42,7 @@ router.use(
  */
 router.post(
   "/:tripId/start",
-  organizationMiddleware.verifyCurrentUserMembership,
+  organizationMiddleware.requireOrganization,
   validationMiddleware.validate(
     trackingValidator.startTracking
   ),
@@ -74,7 +74,7 @@ router.post(
  */
 router.post(
   "/:tripId/location",
-  organizationMiddleware.verifyCurrentUserMembership,
+  organizationMiddleware.requireOrganization,
   validationMiddleware.validate(
     trackingValidator.updateLocation
   ),
@@ -94,7 +94,7 @@ router.post(
  */
 router.get(
   "/:tripId/location",
-  organizationMiddleware.verifyCurrentUserMembership,
+  organizationMiddleware.requireOrganization,
   trackingController.getCurrentLocation
 );
 
@@ -111,7 +111,7 @@ router.get(
  */
 router.get(
   "/:tripId/status",
-  organizationMiddleware.verifyCurrentUserMembership,
+  organizationMiddleware.requireOrganization,
   trackingController.getTrackingStatus
 );
 
@@ -128,7 +128,7 @@ router.get(
  */
 router.get(
   "/:tripId/history",
-  organizationMiddleware.verifyCurrentUserMembership,
+  organizationMiddleware.requireOrganization,
   trackingController.getLocationHistory
 );
 
@@ -147,7 +147,7 @@ router.get(
  */
 router.post(
   "/:tripId/stop",
-  organizationMiddleware.verifyCurrentUserMembership,
+  organizationMiddleware.requireOrganization,
   trackingController.stopTracking
 );
 
@@ -157,3 +157,4 @@ router.post(
 // ============================================================
 
 module.exports = router;
+

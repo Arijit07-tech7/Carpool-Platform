@@ -1,4 +1,4 @@
-const prisma = require("../config/prisma.js");
+const prisma = require("../config/database.js");
 
 const requireOrganization = async (req, res, next) => {
   try {

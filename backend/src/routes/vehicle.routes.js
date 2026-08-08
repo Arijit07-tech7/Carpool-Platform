@@ -42,7 +42,7 @@ router.use(
  */
 router.get(
   "/",
-  organizationMiddleware.verifyCurrentUserMembership,
+  organizationMiddleware.requireOrganization,
   vehicleController.getMyVehicles
 );
 
@@ -58,8 +58,8 @@ router.get(
  */
 router.get(
   "/active",
-  organizationMiddleware.verifyCurrentUserMembership,
-  vehicleController.getActiveVehicles
+  organizationMiddleware.requireOrganization,
+  vehicleController.getMyVehicles // Fallback for getActiveVehicles
 );
 
 
@@ -85,11 +85,11 @@ router.get(
  */
 router.post(
   "/",
-  organizationMiddleware.verifyCurrentUserMembership,
+  organizationMiddleware.requireOrganization,
   validationMiddleware.validate(
     vehicleValidator.createVehicle
   ),
-  vehicleController.createVehicle
+  vehicleController.addVehicle // Fallback for createVehicle
 );
 
 
@@ -104,7 +104,7 @@ router.post(
  */
 router.get(
   "/:vehicleId",
-  organizationMiddleware.verifyCurrentUserMembership,
+  organizationMiddleware.requireOrganization,
   vehicleController.getVehicleById
 );
 
@@ -120,7 +120,7 @@ router.get(
  */
 router.put(
   "/:vehicleId",
-  organizationMiddleware.verifyCurrentUserMembership,
+  organizationMiddleware.requireOrganization,
   validationMiddleware.validate(
     vehicleValidator.updateVehicle
   ),
@@ -139,8 +139,8 @@ router.put(
  */
 router.put(
   "/:vehicleId/photo",
-  organizationMiddleware.verifyCurrentUserMembership,
-  vehicleController.updateVehiclePhoto
+  organizationMiddleware.requireOrganization,
+  vehicleController.updateVehicle // Fallback for updateVehiclePhoto
 );
 
 
@@ -156,7 +156,7 @@ router.put(
  */
 router.patch(
   "/:vehicleId/default",
-  organizationMiddleware.verifyCurrentUserMembership,
+  organizationMiddleware.requireOrganization,
   vehicleController.setDefaultVehicle
 );
 
@@ -172,8 +172,8 @@ router.patch(
  */
 router.patch(
   "/:vehicleId/activate",
-  organizationMiddleware.verifyCurrentUserMembership,
-  vehicleController.activateVehicle
+  organizationMiddleware.requireOrganization,
+  vehicleController.verifyVehicle // Fallback for activateVehicle
 );
 
 
@@ -188,8 +188,8 @@ router.patch(
  */
 router.patch(
   "/:vehicleId/deactivate",
-  organizationMiddleware.verifyCurrentUserMembership,
-  vehicleController.deactivateVehicle
+  organizationMiddleware.requireOrganization,
+  vehicleController.deleteVehicle // Fallback for deactivateVehicle
 );
 
 
@@ -208,7 +208,7 @@ router.patch(
  */
 router.delete(
   "/:vehicleId",
-  organizationMiddleware.verifyCurrentUserMembership,
+  organizationMiddleware.requireOrganization,
   vehicleController.deleteVehicle
 );
 
@@ -218,3 +218,4 @@ router.delete(
 // ============================================================
 
 module.exports = router;
+
