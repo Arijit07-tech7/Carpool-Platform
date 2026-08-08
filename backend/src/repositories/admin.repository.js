@@ -1,11 +1,11 @@
 // backend/src/repositories/admin.repository.js
 
-import prisma from "../config/database.js";
+const prisma = require("../config/database.js");
 
 /**
  * Get all users.
  */
-export const getAllUsers = async (options = {}) => {
+exports.getAllUsers = async (options = {}) => {
   const {
     page = 1,
     limit = 20,
@@ -86,7 +86,7 @@ export const getAllUsers = async (options = {}) => {
 /**
  * Find a user by ID.
  */
-export const findUserById = async (userId) => {
+exports.findUserById = async (userId) => {
   return prisma.user.findUnique({
     where: {
       id: userId,
@@ -109,7 +109,7 @@ export const findUserById = async (userId) => {
 /**
  * Update user information.
  */
-export const updateUser = async (
+exports.updateUser = async (
   userId,
   updateData
 ) => {
@@ -136,7 +136,7 @@ export const updateUser = async (
 /**
  * Delete a user.
  */
-export const deleteUser = async (userId) => {
+exports.deleteUser = async (userId) => {
   return prisma.user.delete({
     where: {
       id: userId,
@@ -148,7 +148,7 @@ export const deleteUser = async (userId) => {
 /**
  * Get all organizations.
  */
-export const getAllOrganizations = async (
+exports.getAllOrganizations = async (
   options = {}
 ) => {
   const {
@@ -209,7 +209,7 @@ export const getAllOrganizations = async (
 /**
  * Get organization details.
  */
-export const getOrganizationDetails = async (
+exports.getOrganizationDetails = async (
   organizationId
 ) => {
   return prisma.organization.findUnique({
@@ -236,7 +236,7 @@ export const getOrganizationDetails = async (
 /**
  * Get all rides for admin.
  */
-export const getAllRides = async (
+exports.getAllRides = async (
   options = {}
 ) => {
   const {
@@ -308,7 +308,7 @@ export const getAllRides = async (
 /**
  * Get all trips for admin.
  */
-export const getAllTrips = async (
+exports.getAllTrips = async (
   options = {}
 ) => {
   const {
@@ -375,7 +375,7 @@ export const getAllTrips = async (
 /**
  * Get all payments for admin.
  */
-export const getAllPayments = async (
+exports.getAllPayments = async (
   options = {}
 ) => {
   const {
@@ -461,7 +461,7 @@ export const getAllPayments = async (
 /**
  * Get platform-wide statistics.
  */
-export const getPlatformStatistics = async () => {
+exports.getPlatformStatistics = async () => {
   const [
     users,
     organizations,
@@ -513,7 +513,7 @@ export const getPlatformStatistics = async () => {
 /**
  * Get active trips.
  */
-export const getActiveTrips = async (
+exports.getActiveTrips = async (
   organizationId = null
 ) => {
   return prisma.trip.findMany({
@@ -549,7 +549,7 @@ export const getActiveTrips = async (
 /**
  * Get recently registered users.
  */
-export const getRecentUsers = async (
+exports.getRecentUsers = async (
   limit = 10
 ) => {
   return prisma.user.findMany({
@@ -573,7 +573,7 @@ export const getRecentUsers = async (
 /**
  * Get recently created rides.
  */
-export const getRecentRides = async (
+exports.getRecentRides = async (
   limit = 10
 ) => {
   return prisma.ride.findMany({
@@ -598,7 +598,7 @@ export const getRecentRides = async (
 /**
  * Get system activity summary.
  */
-export const getActivitySummary = async () => {
+exports.getActivitySummary = async () => {
   const [
     recentUsers,
     recentRides,
@@ -620,7 +620,7 @@ export const getActivitySummary = async () => {
 /**
  * Get organization user count.
  */
-export const getOrganizationUserCount = async (
+exports.getOrganizationUserCount = async (
   organizationId
 ) => {
   return prisma.user.count({
@@ -634,7 +634,7 @@ export const getOrganizationUserCount = async (
 /**
  * Get organization vehicle count.
  */
-export const getOrganizationVehicleCount =
+exports.getOrganizationVehicleCount =
   async (organizationId) => {
     return prisma.vehicle.count({
       where: {
@@ -647,7 +647,7 @@ export const getOrganizationVehicleCount =
 /**
  * Get organization ride count.
  */
-export const getOrganizationRideCount =
+exports.getOrganizationRideCount =
   async (organizationId) => {
     return prisma.ride.count({
       where: {
@@ -660,7 +660,7 @@ export const getOrganizationRideCount =
 /**
  * Get organization statistics.
  */
-export const getOrganizationStatistics =
+exports.getOrganizationStatistics =
   async (organizationId) => {
     const [
       users,

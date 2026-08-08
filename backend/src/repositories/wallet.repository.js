@@ -1,11 +1,11 @@
 // backend/src/repositories/wallet.repository.js
 
-import prisma from "../config/database.js";
+const prisma = require("../config/database.js");
 
 /**
  * Create a wallet for a user.
  */
-export const createWallet = async (userId) => {
+exports.createWallet = async (userId) => {
   return prisma.wallet.create({
     data: {
       userId,
@@ -28,7 +28,7 @@ export const createWallet = async (userId) => {
 /**
  * Find wallet by user ID.
  */
-export const findWalletByUserId = async (userId) => {
+exports.findWalletByUserId = async (userId) => {
   return prisma.wallet.findUnique({
     where: {
       userId,
@@ -50,7 +50,7 @@ export const findWalletByUserId = async (userId) => {
 /**
  * Find wallet by wallet ID.
  */
-export const findWalletById = async (walletId) => {
+exports.findWalletById = async (walletId) => {
   return prisma.wallet.findUnique({
     where: {
       id: walletId,
@@ -73,7 +73,7 @@ export const findWalletById = async (walletId) => {
 /**
  * Get wallet balance.
  */
-export const getWalletBalance = async (userId) => {
+exports.getWalletBalance = async (userId) => {
   const wallet = await prisma.wallet.findUnique({
     where: {
       userId,
@@ -91,7 +91,7 @@ export const getWalletBalance = async (userId) => {
 /**
  * Update wallet balance.
  */
-export const updateWalletBalance = async (
+exports.updateWalletBalance = async (
   userId,
   amount
 ) => {
@@ -110,7 +110,7 @@ export const updateWalletBalance = async (
 /**
  * Add money to wallet.
  */
-export const creditWallet = async (
+exports.creditWallet = async (
   userId,
   amount
 ) => {
@@ -134,7 +134,7 @@ export const creditWallet = async (
  * The service layer should check the balance
  * before calling this function.
  */
-export const debitWallet = async (
+exports.debitWallet = async (
   userId,
   amount
 ) => {
@@ -159,7 +159,7 @@ export const debitWallet = async (
 /**
  * Check whether wallet has enough balance.
  */
-export const hasSufficientBalance = async (
+exports.hasSufficientBalance = async (
   userId,
   amount
 ) => {
@@ -184,7 +184,7 @@ export const hasSufficientBalance = async (
 /**
  * Create a wallet transaction.
  */
-export const createWalletTransaction = async (
+exports.createWalletTransaction = async (
   transactionData
 ) => {
   return prisma.walletTransaction.create({
@@ -218,7 +218,7 @@ export const createWalletTransaction = async (
 /**
  * Find wallet transaction by ID.
  */
-export const findWalletTransactionById = async (
+exports.findWalletTransactionById = async (
   transactionId
 ) => {
   return prisma.walletTransaction.findUnique({
@@ -246,7 +246,7 @@ export const findWalletTransactionById = async (
 /**
  * Find wallet transactions for a user.
  */
-export const findWalletTransactionsByUser = async (
+exports.findWalletTransactionsByUser = async (
   userId,
   options = {}
 ) => {
@@ -304,7 +304,7 @@ export const findWalletTransactionsByUser = async (
 /**
  * Find wallet transactions by wallet ID.
  */
-export const findWalletTransactionsByWallet = async (
+exports.findWalletTransactionsByWallet = async (
   walletId,
   options = {}
 ) => {
@@ -350,7 +350,7 @@ export const findWalletTransactionsByWallet = async (
 /**
  * Find transaction by reference ID.
  */
-export const findTransactionByReferenceId =
+exports.findTransactionByReferenceId =
   async (referenceId) => {
     return prisma.walletTransaction.findFirst({
       where: {
@@ -363,7 +363,7 @@ export const findTransactionByReferenceId =
 /**
  * Find transaction by payment ID.
  */
-export const findTransactionByPaymentId =
+exports.findTransactionByPaymentId =
   async (paymentId) => {
     return prisma.walletTransaction.findFirst({
       where: {
@@ -376,7 +376,7 @@ export const findTransactionByPaymentId =
 /**
  * Update wallet transaction.
  */
-export const updateWalletTransaction = async (
+exports.updateWalletTransaction = async (
   transactionId,
   updateData
 ) => {
@@ -393,7 +393,7 @@ export const updateWalletTransaction = async (
 /**
  * Mark wallet transaction as completed.
  */
-export const completeWalletTransaction = async (
+exports.completeWalletTransaction = async (
   transactionId
 ) => {
   return prisma.walletTransaction.update({
@@ -411,7 +411,7 @@ export const completeWalletTransaction = async (
 /**
  * Mark wallet transaction as failed.
  */
-export const failWalletTransaction = async (
+exports.failWalletTransaction = async (
   transactionId
 ) => {
   return prisma.walletTransaction.update({
@@ -429,7 +429,7 @@ export const failWalletTransaction = async (
 /**
  * Get wallet statistics.
  */
-export const getWalletStatistics = async (
+exports.getWalletStatistics = async (
   userId
 ) => {
   const wallet = await prisma.wallet.findUnique({
@@ -493,7 +493,7 @@ export const getWalletStatistics = async (
 /**
  * Delete wallet.
  */
-export const deleteWallet = async (userId) => {
+exports.deleteWallet = async (userId) => {
   return prisma.wallet.delete({
     where: {
       userId,

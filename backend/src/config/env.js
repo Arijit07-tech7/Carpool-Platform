@@ -1,6 +1,6 @@
 // backend/src/config/env.js
 
-import dotenv from "dotenv";
+const dotenv = require("dotenv");
 
 dotenv.config();
 
@@ -118,4 +118,4 @@ const env = {
  */
 Object.freeze(env);
 
-export default env;
+module.exports = env;

@@ -1,11 +1,11 @@
 // backend/src/repositories/booking.repository.js
 
-import prisma from "../config/database.js";
+const prisma = require("../config/database.js");
 
 /**
  * Create a new booking
  */
-export const createBooking = async (bookingData) => {
+exports.createBooking = async (bookingData) => {
   return prisma.booking.create({
     data: {
       rideId: bookingData.rideId,
@@ -47,7 +47,7 @@ export const createBooking = async (bookingData) => {
 /**
  * Find booking by ID
  */
-export const findBookingById = async (bookingId) => {
+exports.findBookingById = async (bookingId) => {
   return prisma.booking.findUnique({
     where: {
       id: bookingId,
@@ -86,7 +86,7 @@ export const findBookingById = async (bookingId) => {
 /**
  * Find a booking by passenger and ride
  */
-export const findBookingByPassengerAndRide = async (
+exports.findBookingByPassengerAndRide = async (
   passengerId,
   rideId
 ) => {
@@ -101,7 +101,7 @@ export const findBookingByPassengerAndRide = async (
 /**
  * Check whether passenger already has an active booking
  */
-export const hasActiveBooking = async (
+exports.hasActiveBooking = async (
   passengerId,
   rideId
 ) => {
@@ -127,7 +127,7 @@ export const hasActiveBooking = async (
 /**
  * Get all bookings made by a passenger
  */
-export const findBookingsByPassenger = async (
+exports.findBookingsByPassenger = async (
   passengerId,
   options = {}
 ) => {
@@ -193,7 +193,7 @@ export const findBookingsByPassenger = async (
 /**
  * Get all bookings for a ride
  */
-export const findBookingsByRide = async (rideId) => {
+exports.findBookingsByRide = async (rideId) => {
   return prisma.booking.findMany({
     where: {
       rideId,
@@ -220,7 +220,7 @@ export const findBookingsByRide = async (rideId) => {
 /**
  * Get confirmed bookings for a ride
  */
-export const findConfirmedBookingsByRide = async (
+exports.findConfirmedBookingsByRide = async (
   rideId
 ) => {
   return prisma.booking.findMany({
@@ -251,7 +251,7 @@ export const findConfirmedBookingsByRide = async (
 /**
  * Update booking
  */
-export const updateBooking = async (
+exports.updateBooking = async (
   bookingId,
   updateData
 ) => {
@@ -281,7 +281,7 @@ export const updateBooking = async (
 /**
  * Update booking status
  */
-export const updateBookingStatus = async (
+exports.updateBookingStatus = async (
   bookingId,
   status
 ) => {
@@ -299,7 +299,7 @@ export const updateBookingStatus = async (
 /**
  * Cancel booking
  */
-export const cancelBooking = async (bookingId) => {
+exports.cancelBooking = async (bookingId) => {
   return prisma.booking.update({
     where: {
       id: bookingId,
@@ -314,7 +314,7 @@ export const cancelBooking = async (bookingId) => {
 /**
  * Confirm booking
  */
-export const confirmBooking = async (bookingId) => {
+exports.confirmBooking = async (bookingId) => {
   return prisma.booking.update({
     where: {
       id: bookingId,
@@ -329,7 +329,7 @@ export const confirmBooking = async (bookingId) => {
 /**
  * Reject booking
  */
-export const rejectBooking = async (bookingId) => {
+exports.rejectBooking = async (bookingId) => {
   return prisma.booking.update({
     where: {
       id: bookingId,
@@ -344,7 +344,7 @@ export const rejectBooking = async (bookingId) => {
 /**
  * Mark booking as completed
  */
-export const completeBooking = async (bookingId) => {
+exports.completeBooking = async (bookingId) => {
   return prisma.booking.update({
     where: {
       id: bookingId,
@@ -359,7 +359,7 @@ export const completeBooking = async (bookingId) => {
 /**
  * Count bookings for a ride
  */
-export const countBookingsByRide = async (rideId) => {
+exports.countBookingsByRide = async (rideId) => {
   return prisma.booking.count({
     where: {
       rideId,
@@ -370,7 +370,7 @@ export const countBookingsByRide = async (rideId) => {
 /**
  * Count confirmed seats for a ride
  */
-export const countConfirmedSeats = async (rideId) => {
+exports.countConfirmedSeats = async (rideId) => {
   const result = await prisma.booking.aggregate({
     where: {
       rideId,
@@ -389,7 +389,7 @@ export const countConfirmedSeats = async (rideId) => {
 /**
  * Get booking count for a passenger
  */
-export const countPassengerBookings = async (
+exports.countPassengerBookings = async (
   passengerId
 ) => {
   return prisma.booking.count({
@@ -402,7 +402,7 @@ export const countPassengerBookings = async (
 /**
  * Get bookings for an organization
  */
-export const findOrganizationBookings = async (
+exports.findOrganizationBookings = async (
   organizationId,
   options = {}
 ) => {
@@ -475,7 +475,7 @@ export const findOrganizationBookings = async (
 /**
  * Delete booking
  */
-export const deleteBooking = async (bookingId) => {
+exports.deleteBooking = async (bookingId) => {
   return prisma.booking.delete({
     where: {
       id: bookingId,

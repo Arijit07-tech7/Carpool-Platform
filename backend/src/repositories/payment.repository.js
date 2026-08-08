@@ -1,11 +1,11 @@
 // backend/src/repositories/payment.repository.js
 
-import prisma from "../config/database.js";
+const prisma = require("../config/database.js");
 
 /**
  * Create a payment record.
  */
-export const createPayment = async (paymentData) => {
+exports.createPayment = async (paymentData) => {
   return prisma.payment.create({
     data: {
       tripId: paymentData.tripId,
@@ -64,7 +64,7 @@ export const createPayment = async (paymentData) => {
 /**
  * Find payment by ID.
  */
-export const findPaymentById = async (paymentId) => {
+exports.findPaymentById = async (paymentId) => {
   return prisma.payment.findUnique({
     where: {
       id: paymentId,
@@ -102,7 +102,7 @@ export const findPaymentById = async (paymentId) => {
 /**
  * Find payment for a trip.
  */
-export const findPaymentByTripId = async (tripId) => {
+exports.findPaymentByTripId = async (tripId) => {
   return prisma.payment.findFirst({
     where: {
       tripId,
@@ -144,7 +144,7 @@ export const findPaymentByTripId = async (tripId) => {
 /**
  * Check whether a trip already has a completed payment.
  */
-export const hasCompletedPayment = async (tripId) => {
+exports.hasCompletedPayment = async (tripId) => {
   const payment = await prisma.payment.findFirst({
     where: {
       tripId,
@@ -163,7 +163,7 @@ export const hasCompletedPayment = async (tripId) => {
 /**
  * Find payment by transaction ID.
  */
-export const findPaymentByTransactionId = async (
+exports.findPaymentByTransactionId = async (
   transactionId
 ) => {
   return prisma.payment.findUnique({
@@ -177,7 +177,7 @@ export const findPaymentByTransactionId = async (
 /**
  * Find payment by Razorpay order ID.
  */
-export const findPaymentByRazorpayOrderId = async (
+exports.findPaymentByRazorpayOrderId = async (
   razorpayOrderId
 ) => {
   return prisma.payment.findFirst({
@@ -191,7 +191,7 @@ export const findPaymentByRazorpayOrderId = async (
 /**
  * Find payment by Razorpay payment ID.
  */
-export const findPaymentByRazorpayPaymentId = async (
+exports.findPaymentByRazorpayPaymentId = async (
   razorpayPaymentId
 ) => {
   return prisma.payment.findFirst({
@@ -205,7 +205,7 @@ export const findPaymentByRazorpayPaymentId = async (
 /**
  * Update payment.
  */
-export const updatePayment = async (
+exports.updatePayment = async (
   paymentId,
   updateData
 ) => {
@@ -222,7 +222,7 @@ export const updatePayment = async (
 /**
  * Mark payment as completed.
  */
-export const completePayment = async (
+exports.completePayment = async (
   paymentId,
   paymentData = {}
 ) => {
@@ -253,7 +253,7 @@ export const completePayment = async (
 /**
  * Mark payment as failed.
  */
-export const failPayment = async (
+exports.failPayment = async (
   paymentId,
   reason = null
 ) => {
@@ -274,7 +274,7 @@ export const failPayment = async (
 /**
  * Mark payment as refunded.
  */
-export const refundPayment = async (
+exports.refundPayment = async (
   paymentId
 ) => {
   return prisma.payment.update({
@@ -292,7 +292,7 @@ export const refundPayment = async (
 /**
  * Get payments made by a user.
  */
-export const findPaymentsByPayer = async (
+exports.findPaymentsByPayer = async (
   payerId,
   options = {}
 ) => {
@@ -370,7 +370,7 @@ export const findPaymentsByPayer = async (
 /**
  * Get payments received by a driver.
  */
-export const findPaymentsByReceiver = async (
+exports.findPaymentsByReceiver = async (
   receiverId,
   options = {}
 ) => {
@@ -443,7 +443,7 @@ export const findPaymentsByReceiver = async (
 /**
  * Get payments by payment method.
  */
-export const findPaymentsByMethod = async (
+exports.findPaymentsByMethod = async (
   method,
   options = {}
 ) => {
@@ -489,7 +489,7 @@ export const findPaymentsByMethod = async (
 /**
  * Get completed payments within a date range.
  */
-export const findPaymentsByDateRange = async (
+exports.findPaymentsByDateRange = async (
   startDate,
   endDate,
   organizationId = null
@@ -545,7 +545,7 @@ export const findPaymentsByDateRange = async (
  * Calculate total completed payment amount
  * for a user.
  */
-export const getTotalPaidByUser = async (
+exports.getTotalPaidByUser = async (
   payerId
 ) => {
   const result = await prisma.payment.aggregate({
@@ -566,7 +566,7 @@ export const getTotalPaidByUser = async (
 /**
  * Calculate total amount received by a driver.
  */
-export const getTotalReceivedByUser = async (
+exports.getTotalReceivedByUser = async (
   receiverId
 ) => {
   const result = await prisma.payment.aggregate({
@@ -587,7 +587,7 @@ export const getTotalReceivedByUser = async (
 /**
  * Count completed payments.
  */
-export const countCompletedPayments = async (
+exports.countCompletedPayments = async (
   organizationId = null
 ) => {
   return prisma.payment.count({
@@ -609,7 +609,7 @@ export const countCompletedPayments = async (
 /**
  * Get payment statistics.
  */
-export const getPaymentStatistics = async (
+exports.getPaymentStatistics = async (
   organizationId = null
 ) => {
   const where = {
@@ -682,7 +682,7 @@ export const getPaymentStatistics = async (
  * Normally this should be restricted to
  * administrative/cleanup operations.
  */
-export const deletePayment = async (
+exports.deletePayment = async (
   paymentId
 ) => {
   return prisma.payment.delete({

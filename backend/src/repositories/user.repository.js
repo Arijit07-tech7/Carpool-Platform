@@ -1,11 +1,11 @@
 // backend/src/repositories/user.repository.js
 
-import prisma from "../config/database.js";
+const prisma = require("../config/database.js");
 
 /**
  * Find a user by ID
  */
-export const findUserById = async (userId) => {
+exports.findUserById = async (userId) => {
   return prisma.user.findUnique({
     where: {
       id: userId,
@@ -23,7 +23,7 @@ export const findUserById = async (userId) => {
 /**
  * Find a user by email
  */
-export const findUserByEmail = async (email) => {
+exports.findUserByEmail = async (email) => {
   return prisma.user.findUnique({
     where: {
       email: email.toLowerCase(),
@@ -40,7 +40,7 @@ export const findUserByEmail = async (email) => {
 /**
  * Find a user by ID without sensitive information
  */
-export const findPublicUserById = async (userId) => {
+exports.findPublicUserById = async (userId) => {
   return prisma.user.findUnique({
     where: {
       id: userId,
@@ -63,7 +63,7 @@ export const findPublicUserById = async (userId) => {
 /**
  * Create a new user
  */
-export const createUser = async (userData) => {
+exports.createUser = async (userData) => {
   return prisma.user.create({
     data: {
       name: userData.name,
@@ -81,7 +81,7 @@ export const createUser = async (userData) => {
 /**
  * Update user profile
  */
-export const updateUser = async (userId, updateData) => {
+exports.updateUser = async (userId, updateData) => {
   return prisma.user.update({
     where: {
       id: userId,
@@ -105,7 +105,7 @@ export const updateUser = async (userId, updateData) => {
 /**
  * Update user password
  */
-export const updateUserPassword = async (userId, hashedPassword) => {
+exports.updateUserPassword = async (userId, hashedPassword) => {
   return prisma.user.update({
     where: {
       id: userId,
@@ -119,7 +119,7 @@ export const updateUserPassword = async (userId, hashedPassword) => {
 /**
  * Update user status
  */
-export const updateUserStatus = async (userId, status) => {
+exports.updateUserStatus = async (userId, status) => {
   return prisma.user.update({
     where: {
       id: userId,
@@ -141,7 +141,7 @@ export const updateUserStatus = async (userId, status) => {
 /**
  * Update profile image
  */
-export const updateProfileImage = async (userId, profileImage) => {
+exports.updateProfileImage = async (userId, profileImage) => {
   return prisma.user.update({
     where: {
       id: userId,
@@ -164,7 +164,7 @@ export const updateProfileImage = async (userId, profileImage) => {
 /**
  * Get users belonging to an organization
  */
-export const findUsersByOrganization = async (
+exports.findUsersByOrganization = async (
   organizationId,
   options = {}
 ) => {
@@ -251,7 +251,7 @@ export const findUsersByOrganization = async (
 /**
  * Count users in an organization
  */
-export const countUsersByOrganization = async (organizationId) => {
+exports.countUsersByOrganization = async (organizationId) => {
   return prisma.user.count({
     where: {
       organizationId,
@@ -262,7 +262,7 @@ export const countUsersByOrganization = async (organizationId) => {
 /**
  * Check whether an email already exists
  */
-export const emailExists = async (email) => {
+exports.emailExists = async (email) => {
   const user = await prisma.user.findUnique({
     where: {
       email: email.toLowerCase(),
@@ -281,7 +281,7 @@ export const emailExists = async (email) => {
  * Use carefully because related records may be
  * deleted depending on Prisma relation settings.
  */
-export const deleteUser = async (userId) => {
+exports.deleteUser = async (userId) => {
   return prisma.user.delete({
     where: {
       id: userId,

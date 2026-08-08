@@ -1,11 +1,11 @@
 // backend/src/repositories/organization.repository.js
 
-import prisma from "../config/database.js";
+const prisma = require("../config/database.js");
 
 /**
  * Find organization by ID
  */
-export const findOrganizationById = async (organizationId) => {
+exports.findOrganizationById = async (organizationId) => {
   return prisma.organization.findUnique({
     where: {
       id: organizationId,
@@ -19,7 +19,7 @@ export const findOrganizationById = async (organizationId) => {
 /**
  * Find organization by unique organization code
  */
-export const findOrganizationByCode = async (code) => {
+exports.findOrganizationByCode = async (code) => {
   return prisma.organization.findUnique({
     where: {
       code: code.toUpperCase(),
@@ -30,7 +30,7 @@ export const findOrganizationByCode = async (code) => {
 /**
  * Find organization by email
  */
-export const findOrganizationByEmail = async (email) => {
+exports.findOrganizationByEmail = async (email) => {
   return prisma.organization.findFirst({
     where: {
       email: email.toLowerCase(),
@@ -41,7 +41,7 @@ export const findOrganizationByEmail = async (email) => {
 /**
  * Create a new organization
  */
-export const createOrganization = async (organizationData) => {
+exports.createOrganization = async (organizationData) => {
   return prisma.organization.create({
     data: {
       name: organizationData.name,
@@ -60,7 +60,7 @@ export const createOrganization = async (organizationData) => {
 /**
  * Update organization information
  */
-export const updateOrganization = async (
+exports.updateOrganization = async (
   organizationId,
   updateData
 ) => {
@@ -75,7 +75,7 @@ export const updateOrganization = async (
 /**
  * Activate or deactivate organization
  */
-export const updateOrganizationStatus = async (
+exports.updateOrganizationStatus = async (
   organizationId,
   isActive
 ) => {
@@ -92,7 +92,7 @@ export const updateOrganizationStatus = async (
 /**
  * Check whether organization code already exists
  */
-export const organizationCodeExists = async (code) => {
+exports.organizationCodeExists = async (code) => {
   const organization = await prisma.organization.findUnique({
     where: {
       code: code.toUpperCase(),
@@ -108,7 +108,7 @@ export const organizationCodeExists = async (code) => {
 /**
  * Get organization with its employees
  */
-export const getOrganizationWithUsers = async (
+exports.getOrganizationWithUsers = async (
   organizationId
 ) => {
   return prisma.organization.findUnique({
@@ -137,7 +137,7 @@ export const getOrganizationWithUsers = async (
 /**
  * Get organization statistics
  */
-export const getOrganizationStats = async (
+exports.getOrganizationStats = async (
   organizationId
 ) => {
   const [
@@ -185,7 +185,7 @@ export const getOrganizationStats = async (
  *
  * Mainly useful for SUPER_ADMIN.
  */
-export const findAllOrganizations = async ({
+exports.findAllOrganizations = async ({
   page = 1,
   limit = 20,
   search = "",
@@ -247,7 +247,7 @@ export const findAllOrganizations = async ({
  * Use carefully because related records may be
  * deleted through Prisma cascade relations.
  */
-export const deleteOrganization = async (organizationId) => {
+exports.deleteOrganization = async (organizationId) => {
   return prisma.organization.delete({
     where: {
       id: organizationId,

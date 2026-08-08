@@ -1,9 +1,9 @@
 // backend/src/services/trip.service.js
 
-import * as tripRepository from "../repositories/trip.repository.js";
-import * as rideRepository from "../repositories/ride.repository.js";
-import * as bookingRepository from "../repositories/booking.repository.js";
-import * as organizationRepository from "../repositories/organization.repository.js";
+const tripRepository = require("../repositories/trip.repository.js");
+const rideRepository = require("../repositories/ride.repository.js");
+const bookingRepository = require("../repositories/booking.repository.js");
+const organizationRepository = require("../repositories/organization.repository.js");
 
 
 /**
@@ -63,7 +63,7 @@ const verifyRideDriver = async (
 /**
  * Create a trip from a confirmed ride.
  */
-export const createTrip = async (
+exports.createTrip = async (
   userId,
   rideId,
   organizationId
@@ -155,7 +155,7 @@ export const createTrip = async (
 /**
  * Get trip by ID.
  */
-export const getTripById = async (
+exports.getTripById = async (
   userId,
   tripId
 ) => {
@@ -201,7 +201,7 @@ export const getTripById = async (
 /**
  * Get driver's trips.
  */
-export const getDriverTrips = async (
+exports.getDriverTrips = async (
   userId,
   options = {}
 ) => {
@@ -221,7 +221,7 @@ export const getDriverTrips = async (
 /**
  * Get passenger's trips.
  */
-export const getPassengerTrips = async (
+exports.getPassengerTrips = async (
   userId,
   options = {}
 ) => {
@@ -241,7 +241,7 @@ export const getPassengerTrips = async (
 /**
  * Start a trip.
  */
-export const startTrip = async (
+exports.startTrip = async (
   userId,
   tripId
 ) => {
@@ -321,7 +321,7 @@ export const startTrip = async (
 /**
  * Complete a trip.
  */
-export const completeTrip = async (
+exports.completeTrip = async (
   userId,
   tripId
 ) => {
@@ -390,7 +390,7 @@ export const completeTrip = async (
 /**
  * Cancel a trip.
  */
-export const cancelTrip = async (
+exports.cancelTrip = async (
   userId,
   tripId,
   reason = null
@@ -452,7 +452,7 @@ export const cancelTrip = async (
 /**
  * Get active trip for a user.
  */
-export const getActiveTrip = async (
+exports.getActiveTrip = async (
   userId
 ) => {
   if (!userId) {
@@ -470,7 +470,7 @@ export const getActiveTrip = async (
 /**
  * Get upcoming trips.
  */
-export const getUpcomingTrips = async (
+exports.getUpcomingTrips = async (
   userId,
   options = {}
 ) => {
@@ -484,7 +484,7 @@ export const getUpcomingTrips = async (
 /**
  * Get completed trips.
  */
-export const getCompletedTrips = async (
+exports.getCompletedTrips = async (
   userId,
   options = {}
 ) => {
@@ -498,7 +498,7 @@ export const getCompletedTrips = async (
 /**
  * Get trip passengers.
  */
-export const getTripPassengers = async (
+exports.getTripPassengers = async (
   userId,
   tripId
 ) => {
@@ -530,7 +530,7 @@ export const getTripPassengers = async (
 /**
  * Get trip status.
  */
-export const getTripStatus = async (
+exports.getTripStatus = async (
   userId,
   tripId
 ) => {
@@ -554,7 +554,7 @@ export const getTripStatus = async (
 /**
  * Check whether trip can be started.
  */
-export const canStartTrip = async (
+exports.canStartTrip = async (
   userId,
   tripId
 ) => {
@@ -607,7 +607,7 @@ export const canStartTrip = async (
 /**
  * Check whether trip can be completed.
  */
-export const canCompleteTrip = async (
+exports.canCompleteTrip = async (
   userId,
   tripId
 ) => {

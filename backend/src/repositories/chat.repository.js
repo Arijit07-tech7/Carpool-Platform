@@ -1,11 +1,11 @@
 // backend/src/repositories/chat.repository.js
 
-import prisma from "../config/database.js";
+const prisma = require("../config/database.js");
 
 /**
  * Create a new chat message.
  */
-export const createMessage = async (messageData) => {
+exports.createMessage = async (messageData) => {
   return prisma.chat.create({
     data: {
       tripId: messageData.tripId,
@@ -44,7 +44,7 @@ export const createMessage = async (messageData) => {
 /**
  * Find a message by ID.
  */
-export const findMessageById = async (messageId) => {
+exports.findMessageById = async (messageId) => {
   return prisma.chat.findUnique({
     where: {
       id: messageId,
@@ -82,7 +82,7 @@ export const findMessageById = async (messageId) => {
 /**
  * Get messages for a trip.
  */
-export const getTripMessages = async (
+exports.getTripMessages = async (
   tripId,
   options = {}
 ) => {
@@ -147,7 +147,7 @@ export const getTripMessages = async (
  * Get conversation between two users
  * inside a particular trip.
  */
-export const getConversation = async (
+exports.getConversation = async (
   tripId,
   userOneId,
   userTwoId,
@@ -225,7 +225,7 @@ export const getConversation = async (
 /**
  * Get unread messages for a user.
  */
-export const getUnreadMessages = async (
+exports.getUnreadMessages = async (
   userId,
   tripId = null
 ) => {
@@ -266,7 +266,7 @@ export const getUnreadMessages = async (
 /**
  * Mark a single message as read.
  */
-export const markMessageAsRead = async (
+exports.markMessageAsRead = async (
   messageId
 ) => {
   return prisma.chat.update({
@@ -285,7 +285,7 @@ export const markMessageAsRead = async (
 /**
  * Mark all messages from a sender as read.
  */
-export const markMessagesAsRead = async (
+exports.markMessagesAsRead = async (
   receiverId,
   senderId,
   tripId
@@ -309,7 +309,7 @@ export const markMessagesAsRead = async (
 /**
  * Count unread messages.
  */
-export const countUnreadMessages = async (
+exports.countUnreadMessages = async (
   userId,
   tripId = null
 ) => {
@@ -329,7 +329,7 @@ export const countUnreadMessages = async (
 /**
  * Get latest message of a trip.
  */
-export const getLatestTripMessage = async (
+exports.getLatestTripMessage = async (
   tripId
 ) => {
   return prisma.chat.findFirst({
@@ -365,7 +365,7 @@ export const getLatestTripMessage = async (
 /**
  * Count messages in a trip.
  */
-export const countTripMessages = async (
+exports.countTripMessages = async (
   tripId
 ) => {
   return prisma.chat.count({
@@ -379,7 +379,7 @@ export const countTripMessages = async (
 /**
  * Delete a message.
  */
-export const deleteMessage = async (
+exports.deleteMessage = async (
   messageId
 ) => {
   return prisma.chat.delete({
@@ -395,7 +395,7 @@ export const deleteMessage = async (
  *
  * Normally useful for cleanup/admin operations.
  */
-export const deleteTripMessages = async (
+exports.deleteTripMessages = async (
   tripId
 ) => {
   return prisma.chat.deleteMany({

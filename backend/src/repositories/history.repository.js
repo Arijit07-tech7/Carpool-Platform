@@ -1,11 +1,11 @@
 // backend/src/repositories/history.repository.js
 
-import prisma from "../config/database.js";
+const prisma = require("../config/database.js");
 
 /**
  * Create a ride history record.
  */
-export const createHistory = async (historyData) => {
+exports.createHistory = async (historyData) => {
   return prisma.history.create({
     data: {
       userId: historyData.userId,
@@ -48,7 +48,7 @@ export const createHistory = async (historyData) => {
 /**
  * Find history record by ID.
  */
-export const findHistoryById = async (historyId) => {
+exports.findHistoryById = async (historyId) => {
   return prisma.history.findUnique({
     where: {
       id: historyId,
@@ -78,7 +78,7 @@ export const findHistoryById = async (historyId) => {
 /**
  * Find history for a specific trip.
  */
-export const findHistoryByTripId = async (tripId) => {
+exports.findHistoryByTripId = async (tripId) => {
   return prisma.history.findMany({
     where: {
       tripId,
@@ -108,7 +108,7 @@ export const findHistoryByTripId = async (tripId) => {
  * Check whether history already exists
  * for a user and trip.
  */
-export const historyExists = async (
+exports.historyExists = async (
   userId,
   tripId
 ) => {
@@ -130,7 +130,7 @@ export const historyExists = async (
 /**
  * Get ride history of a user.
  */
-export const getUserHistory = async (
+exports.getUserHistory = async (
   userId,
   options = {}
 ) => {
@@ -207,7 +207,7 @@ export const getUserHistory = async (
 /**
  * Get rides where the user was the driver.
  */
-export const getDriverHistory = async (
+exports.getDriverHistory = async (
   userId,
   options = {}
 ) => {
@@ -273,7 +273,7 @@ export const getDriverHistory = async (
 /**
  * Get rides where the user was a passenger.
  */
-export const getPassengerHistory = async (
+exports.getPassengerHistory = async (
   userId,
   options = {}
 ) => {
@@ -337,7 +337,7 @@ export const getPassengerHistory = async (
 /**
  * Get history between two dates.
  */
-export const getHistoryByDateRange = async (
+exports.getHistoryByDateRange = async (
   userId,
   startDate,
   endDate
@@ -367,7 +367,7 @@ export const getHistoryByDateRange = async (
 /**
  * Get recent ride history.
  */
-export const getRecentHistory = async (
+exports.getRecentHistory = async (
   userId,
   limit = 10
 ) => {
@@ -407,7 +407,7 @@ export const getRecentHistory = async (
 /**
  * Get total completed rides of a user.
  */
-export const countCompletedRides = async (
+exports.countCompletedRides = async (
   userId
 ) => {
   return prisma.history.count({
@@ -422,7 +422,7 @@ export const countCompletedRides = async (
 /**
  * Get total amount spent by a passenger.
  */
-export const getTotalSpent = async (
+exports.getTotalSpent = async (
   userId
 ) => {
   const result = await prisma.history.aggregate({
@@ -444,7 +444,7 @@ export const getTotalSpent = async (
 /**
  * Get total earnings of a driver.
  */
-export const getTotalEarnings = async (
+exports.getTotalEarnings = async (
   userId
 ) => {
   const result = await prisma.history.aggregate({
@@ -466,7 +466,7 @@ export const getTotalEarnings = async (
 /**
  * Get history statistics for a user.
  */
-export const getHistoryStatistics = async (
+exports.getHistoryStatistics = async (
   userId
 ) => {
   const [
@@ -538,7 +538,7 @@ export const getHistoryStatistics = async (
 /**
  * Update a history record.
  */
-export const updateHistory = async (
+exports.updateHistory = async (
   historyId,
   updateData
 ) => {
@@ -555,7 +555,7 @@ export const updateHistory = async (
 /**
  * Delete a history record.
  */
-export const deleteHistory = async (
+exports.deleteHistory = async (
   historyId
 ) => {
   return prisma.history.delete({

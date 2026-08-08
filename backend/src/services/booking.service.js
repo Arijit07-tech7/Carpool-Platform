@@ -1,8 +1,8 @@
 // backend/src/services/booking.service.js
 
-import * as bookingRepository from "../repositories/booking.repository.js";
-import * as rideRepository from "../repositories/ride.repository.js";
-import * as organizationRepository from "../repositories/organization.repository.js";
+const bookingRepository = require("../repositories/booking.repository.js");
+const rideRepository = require("../repositories/ride.repository.js");
+const organizationRepository = require("../repositories/organization.repository.js");
 
 
 /**
@@ -32,7 +32,7 @@ const verifyOrganizationMembership = async (
 /**
  * Book seats on a ride.
  */
-export const createBooking = async (
+exports.createBooking = async (
   userId,
   organizationId,
   bookingData
@@ -174,7 +174,7 @@ export const createBooking = async (
 /**
  * Get booking by ID.
  */
-export const getBookingById = async (
+exports.getBookingById = async (
   bookingId,
   userId,
   organizationId
@@ -228,7 +228,7 @@ export const getBookingById = async (
 /**
  * Get passenger's bookings.
  */
-export const getMyBookings = async (
+exports.getMyBookings = async (
   userId,
   options = {}
 ) => {
@@ -248,7 +248,7 @@ export const getMyBookings = async (
 /**
  * Get bookings for a driver's ride.
  */
-export const getRideBookings = async (
+exports.getRideBookings = async (
   userId,
   rideId
 ) => {
@@ -280,7 +280,7 @@ export const getRideBookings = async (
 /**
  * Cancel a passenger booking.
  */
-export const cancelBooking = async (
+exports.cancelBooking = async (
   userId,
   bookingId
 ) => {
@@ -337,7 +337,7 @@ export const cancelBooking = async (
  * Useful if the platform later supports
  * driver approval.
  */
-export const confirmBooking = async (
+exports.confirmBooking = async (
   userId,
   bookingId
 ) => {
@@ -381,7 +381,7 @@ export const confirmBooking = async (
 /**
  * Reject a booking.
  */
-export const rejectBooking = async (
+exports.rejectBooking = async (
   userId,
   bookingId
 ) => {
@@ -436,7 +436,7 @@ export const rejectBooking = async (
 /**
  * Get active bookings for passenger.
  */
-export const getActiveBookings = async (
+exports.getActiveBookings = async (
   userId
 ) => {
   return bookingRepository.getActiveBookingsByPassenger(
@@ -448,7 +448,7 @@ export const getActiveBookings = async (
 /**
  * Get completed bookings for passenger.
  */
-export const getCompletedBookings = async (
+exports.getCompletedBookings = async (
   userId
 ) => {
   return bookingRepository.getCompletedBookingsByPassenger(
@@ -461,7 +461,7 @@ export const getCompletedBookings = async (
  * Check whether passenger can book
  * a particular ride.
  */
-export const canBookRide = async (
+exports.canBookRide = async (
   userId,
   organizationId,
   rideId,
@@ -561,7 +561,7 @@ export const canBookRide = async (
 /**
  * Get booking statistics for a passenger.
  */
-export const getBookingStatistics = async (
+exports.getBookingStatistics = async (
   userId
 ) => {
   if (!userId) {

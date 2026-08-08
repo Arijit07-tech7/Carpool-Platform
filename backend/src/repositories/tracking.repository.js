@@ -1,11 +1,11 @@
 // backend/src/repositories/tracking.repository.js
 
-import prisma from "../config/database.js";
+const prisma = require("../config/database.js");
 
 /**
  * Create a new tracking/location record.
  */
-export const createTrackingRecord = async (trackingData) => {
+exports.createTrackingRecord = async (trackingData) => {
   return prisma.tracking.create({
     data: {
       tripId: trackingData.tripId,
@@ -25,7 +25,7 @@ export const createTrackingRecord = async (trackingData) => {
 /**
  * Get the latest location of a trip.
  */
-export const getLatestLocation = async (tripId) => {
+exports.getLatestLocation = async (tripId) => {
   return prisma.tracking.findFirst({
     where: {
       tripId,
@@ -41,7 +41,7 @@ export const getLatestLocation = async (tripId) => {
 /**
  * Get complete location history of a trip.
  */
-export const getTripLocationHistory = async (
+exports.getTripLocationHistory = async (
   tripId
 ) => {
   return prisma.tracking.findMany({
@@ -59,7 +59,7 @@ export const getTripLocationHistory = async (
 /**
  * Get recent tracking records.
  */
-export const getRecentTrackingRecords = async (
+exports.getRecentTrackingRecords = async (
   tripId,
   limit = 50
 ) => {
@@ -80,7 +80,7 @@ export const getRecentTrackingRecords = async (
 /**
  * Check whether tracking data exists for a trip.
  */
-export const trackingDataExists = async (
+exports.trackingDataExists = async (
   tripId
 ) => {
   const record = await prisma.tracking.findFirst({
@@ -100,7 +100,7 @@ export const trackingDataExists = async (
 /**
  * Delete tracking records for a trip.
  */
-export const deleteTripTracking = async (
+exports.deleteTripTracking = async (
   tripId
 ) => {
   return prisma.tracking.deleteMany({
@@ -114,7 +114,7 @@ export const deleteTripTracking = async (
 /**
  * Count tracking records for a trip.
  */
-export const countTripTrackingRecords = async (
+exports.countTripTrackingRecords = async (
   tripId
 ) => {
   return prisma.tracking.count({
@@ -128,7 +128,7 @@ export const countTripTrackingRecords = async (
 /**
  * Get tracking records within a time range.
  */
-export const getTrackingByTimeRange = async (
+exports.getTrackingByTimeRange = async (
   tripId,
   startTime,
   endTime
@@ -155,7 +155,7 @@ export const getTrackingByTimeRange = async (
  *
  * Useful for admin/organization monitoring.
  */
-export const getLatestLocationsForTrips = async (
+exports.getLatestLocationsForTrips = async (
   tripIds
 ) => {
   const records = [];
@@ -177,7 +177,7 @@ export const getLatestLocationsForTrips = async (
  *
  * Useful for detecting inactive GPS updates.
  */
-export const hasRecentLocation = async (
+exports.hasRecentLocation = async (
   tripId,
   seconds = 60
 ) => {

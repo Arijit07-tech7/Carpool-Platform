@@ -1,14 +1,14 @@
 
 // backend/src/services/payment.service.js
 
-import crypto from "crypto";
+const crypto = require("crypto");
 
-import * as paymentRepository from "../repositories/payment.repository.js";
-import * as tripRepository from "../repositories/trip.repository.js";
-import * as bookingRepository from "../repositories/booking.repository.js";
-import * as walletService from "./wallet.service.js";
+const paymentRepository = require("../repositories/payment.repository.js");
+const tripRepository = require("../repositories/trip.repository.js");
+const bookingRepository = require("../repositories/booking.repository.js");
+const walletService = require("./wallet.service.js");
 
-import razorpay from "../config/razorpay.js";
+const razorpay = require("../config/razorpay.js");
 
 
 // ============================================================
@@ -167,7 +167,7 @@ const getBookingAmount = async (
  * - Check wallet balance.
  * - Deduct wallet balance.
  */
-export const createPayment = async (
+exports.createPayment = async (
   userId,
   tripId,
   paymentMethod
@@ -402,7 +402,7 @@ const processWalletPayment = async (
  * Example:
  * ₹100 = 10000 paise
  */
-export const createRazorpayOrder =
+exports.createRazorpayOrder =
   async (
     amount,
     tripId
@@ -460,7 +460,7 @@ export const createRazorpayOrder =
 /**
  * Verify Razorpay payment signature.
  */
-export const verifyRazorpayPayment =
+exports.verifyRazorpayPayment =
   async ({
     userId,
     paymentId,
@@ -581,7 +581,7 @@ export const verifyRazorpayPayment =
 /**
  * Get payment by ID.
  */
-export const getPaymentById = async (
+exports.getPaymentById = async (
   userId,
   paymentId
 ) => {
@@ -611,7 +611,7 @@ export const getPaymentById = async (
 /**
  * Get payments for a user.
  */
-export const getMyPayments = async (
+exports.getMyPayments = async (
   userId,
   options = {}
 ) => {
@@ -631,7 +631,7 @@ export const getMyPayments = async (
 /**
  * Get payments for a trip.
  */
-export const getTripPayments = async (
+exports.getTripPayments = async (
   userId,
   tripId
 ) => {
@@ -661,7 +661,7 @@ export const getTripPayments = async (
  * Actual Razorpay refund integration can
  * be connected here when required.
  */
-export const refundPayment = async (
+exports.refundPayment = async (
   userId,
   paymentId,
   reason = null
@@ -773,7 +773,7 @@ export const refundPayment = async (
 /**
  * Check payment status.
  */
-export const getPaymentStatus = async (
+exports.getPaymentStatus = async (
   userId,
   paymentId
 ) => {
@@ -813,7 +813,7 @@ export const getPaymentStatus = async (
  * Check whether user can make payment
  * for a trip.
  */
-export const canMakePayment = async (
+exports.canMakePayment = async (
   userId,
   tripId
 ) => {
@@ -888,7 +888,7 @@ export const canMakePayment = async (
 /**
  * Get payment summary for a user.
  */
-export const getPaymentSummary = async (
+exports.getPaymentSummary = async (
   userId
 ) => {
   const summary =

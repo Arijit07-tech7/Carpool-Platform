@@ -1,4 +1,4 @@
-import * as userRepository from "../repositories/user.repository.js";
+const userRepository = require("../repositories/user.repository.js");
 
 /**
  * Remove sensitive fields before returning user data.
@@ -21,7 +21,7 @@ const sanitizeUser = (user) => {
 /**
  * Get user profile.
  */
-export const getProfile = async (userId) => {
+exports.getProfile = async (userId) => {
   const user =
     await userRepository.findUserById(userId);
 
@@ -36,7 +36,7 @@ export const getProfile = async (userId) => {
 /**
  * Update user profile.
  */
-export const updateProfile = async (
+exports.updateProfile = async (
   userId,
   updateData
 ) => {
@@ -80,7 +80,7 @@ export const updateProfile = async (
 /**
  * Get user by ID.
  */
-export const getUserById = async (
+exports.getUserById = async (
   userId
 ) => {
   const user =
@@ -99,7 +99,7 @@ export const getUserById = async (
 /**
  * Get user by email.
  */
-export const getUserByEmail = async (
+exports.getUserByEmail = async (
   email
 ) => {
   const user =
@@ -119,7 +119,7 @@ export const getUserByEmail = async (
  * Get employees belonging to
  * an organization.
  */
-export const getOrganizationEmployees =
+exports.getOrganizationEmployees =
   async (
     organizationId,
     options = {}
@@ -140,7 +140,7 @@ export const getOrganizationEmployees =
 /**
  * Search users inside an organization.
  */
-export const searchOrganizationUsers =
+exports.searchOrganizationUsers =
   async (
     organizationId,
     search
@@ -168,7 +168,7 @@ export const searchOrganizationUsers =
  * Check whether an email is already
  * registered.
  */
-export const checkEmail = async (
+exports.checkEmail = async (
   email
 ) => {
   if (!email) {
@@ -191,7 +191,7 @@ export const checkEmail = async (
 /**
  * Delete user account.
  */
-export const deleteAccount = async (
+exports.deleteAccount = async (
   userId
 ) => {
   const user =
@@ -218,7 +218,7 @@ export const deleteAccount = async (
 /**
  * Get basic user statistics.
  */
-export const getUserStatistics = async (
+exports.getUserStatistics = async (
   userId
 ) => {
   const user =

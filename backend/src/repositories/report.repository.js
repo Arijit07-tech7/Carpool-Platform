@@ -1,11 +1,11 @@
 // backend/src/repositories/report.repository.js
 
-import prisma from "../config/database.js";
+const prisma = require("../config/database.js");
 
 /**
  * Get overall ride statistics.
  */
-export const getRideStatistics = async (
+exports.getRideStatistics = async (
   organizationId = null
 ) => {
   const where = {
@@ -62,7 +62,7 @@ export const getRideStatistics = async (
 /**
  * Get booking statistics.
  */
-export const getBookingStatistics = async (
+exports.getBookingStatistics = async (
   organizationId = null
 ) => {
   const where = {
@@ -117,7 +117,7 @@ export const getBookingStatistics = async (
 /**
  * Get trip statistics.
  */
-export const getTripStatistics = async (
+exports.getTripStatistics = async (
   organizationId = null
 ) => {
   const where = {
@@ -172,7 +172,7 @@ export const getTripStatistics = async (
 /**
  * Get payment statistics.
  */
-export const getPaymentStatistics = async (
+exports.getPaymentStatistics = async (
   organizationId = null
 ) => {
   const where = {
@@ -242,7 +242,7 @@ export const getPaymentStatistics = async (
 /**
  * Get vehicle statistics.
  */
-export const getVehicleStatistics = async (
+exports.getVehicleStatistics = async (
   organizationId = null
 ) => {
   const where = {
@@ -277,7 +277,7 @@ export const getVehicleStatistics = async (
 /**
  * Get employee statistics.
  */
-export const getEmployeeStatistics = async (
+exports.getEmployeeStatistics = async (
   organizationId = null
 ) => {
   const where = {
@@ -300,7 +300,7 @@ export const getEmployeeStatistics = async (
 /**
  * Get dashboard summary.
  */
-export const getDashboardSummary = async (
+exports.getDashboardSummary = async (
   organizationId = null
 ) => {
   const [
@@ -333,7 +333,7 @@ export const getDashboardSummary = async (
 /**
  * Get revenue grouped by payment method.
  */
-export const getRevenueByPaymentMethod = async (
+exports.getRevenueByPaymentMethod = async (
   organizationId = null
 ) => {
   const where = {
@@ -376,7 +376,7 @@ export const getRevenueByPaymentMethod = async (
 /**
  * Get rides grouped by status.
  */
-export const getRidesByStatus = async (
+exports.getRidesByStatus = async (
   organizationId = null
 ) => {
   const where = {
@@ -405,7 +405,7 @@ export const getRidesByStatus = async (
 /**
  * Get bookings grouped by status.
  */
-export const getBookingsByStatus = async (
+exports.getBookingsByStatus = async (
   organizationId = null
 ) => {
   const where = {
@@ -436,7 +436,7 @@ export const getBookingsByStatus = async (
 /**
  * Get trips grouped by status.
  */
-export const getTripsByStatus = async (
+exports.getTripsByStatus = async (
   organizationId = null
 ) => {
   const where = {
@@ -467,7 +467,7 @@ export const getTripsByStatus = async (
 /**
  * Get recent completed trips.
  */
-export const getRecentCompletedTrips = async (
+exports.getRecentCompletedTrips = async (
   organizationId = null,
   limit = 10
 ) => {
@@ -512,7 +512,7 @@ export const getRecentCompletedTrips = async (
 /**
  * Get report data for a date range.
  */
-export const getDateRangeReport = async (
+exports.getDateRangeReport = async (
   startDate,
   endDate,
   organizationId = null
@@ -602,7 +602,7 @@ export const getDateRangeReport = async (
 /**
  * Get top drivers by completed trips.
  */
-export const getTopDrivers = async (
+exports.getTopDrivers = async (
   organizationId = null,
   limit = 10
 ) => {
@@ -663,7 +663,7 @@ export const getTopDrivers = async (
 /**
  * Get top users by number of completed rides.
  */
-export const getTopPassengers = async (
+exports.getTopPassengers = async (
   organizationId = null,
   limit = 10
 ) => {
@@ -724,7 +724,7 @@ export const getTopPassengers = async (
 /**
  * Get cancellation statistics.
  */
-export const getCancellationStatistics = async (
+exports.getCancellationStatistics = async (
   organizationId = null
 ) => {
   const [

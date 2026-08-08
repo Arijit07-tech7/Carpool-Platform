@@ -1,10 +1,10 @@
 // backend/src/services/auth.service.js
 
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
-import * as userRepository from "../repositories/user.repository.js";
-import { JWT_SECRET, JWT_EXPIRES_IN } from "../config/jwt.js";
+const userRepository = require("../repositories/user.repository.js");
+const { JWT_SECRET, JWT_EXPIRES_IN } = require("../config/jwt.js");
 
 
 /**
@@ -47,7 +47,7 @@ const sanitizeUser = (user) => {
 /**
  * Register a new user.
  */
-export const register = async (userData) => {
+exports.register = async (userData) => {
   const {
     name,
     email,
@@ -93,7 +93,7 @@ export const register = async (userData) => {
 /**
  * Login user.
  */
-export const login = async (
+exports.login = async (
   email,
   password
 ) => {
@@ -139,7 +139,7 @@ export const login = async (
 /**
  * Verify JWT token.
  */
-export const verifyToken = (token) => {
+exports.verifyToken = (token) => {
   try {
     return jwt.verify(
       token,
@@ -156,7 +156,7 @@ export const verifyToken = (token) => {
 /**
  * Get authenticated user.
  */
-export const getAuthenticatedUser = async (
+exports.getAuthenticatedUser = async (
   userId
 ) => {
   const user =
@@ -175,7 +175,7 @@ export const getAuthenticatedUser = async (
 /**
  * Change user password.
  */
-export const changePassword = async (
+exports.changePassword = async (
   userId,
   currentPassword,
   newPassword
@@ -230,7 +230,7 @@ export const changePassword = async (
 /**
  * Check whether email is available.
  */
-export const isEmailAvailable = async (
+exports.isEmailAvailable = async (
   email
 ) => {
   const user =
@@ -245,7 +245,7 @@ export const isEmailAvailable = async (
 /**
  * Get user information from token.
  */
-export const authenticateToken = async (
+exports.authenticateToken = async (
   token
 ) => {
   const decoded =

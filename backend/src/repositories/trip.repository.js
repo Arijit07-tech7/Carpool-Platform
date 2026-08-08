@@ -1,11 +1,11 @@
 // backend/src/repositories/trip.repository.js
 
-import prisma from "../config/database.js";
+const prisma = require("../config/database.js");
 
 /**
  * Create a trip from a confirmed ride/booking.
  */
-export const createTrip = async (tripData) => {
+exports.createTrip = async (tripData) => {
   return prisma.trip.create({
     data: {
       rideId: tripData.rideId,
@@ -46,7 +46,7 @@ export const createTrip = async (tripData) => {
 /**
  * Find trip by ID.
  */
-export const findTripById = async (tripId) => {
+exports.findTripById = async (tripId) => {
   return prisma.trip.findUnique({
     where: {
       id: tripId,
@@ -104,7 +104,7 @@ export const findTripById = async (tripId) => {
 /**
  * Find trip by ride ID.
  */
-export const findTripByRideId = async (rideId) => {
+exports.findTripByRideId = async (rideId) => {
   return prisma.trip.findUnique({
     where: {
       rideId,
@@ -152,7 +152,7 @@ export const findTripByRideId = async (rideId) => {
 /**
  * Check whether a trip already exists for a ride.
  */
-export const tripExistsForRide = async (rideId) => {
+exports.tripExistsForRide = async (rideId) => {
   const trip = await prisma.trip.findUnique({
     where: {
       rideId,
@@ -170,7 +170,7 @@ export const tripExistsForRide = async (rideId) => {
 /**
  * Start a trip.
  */
-export const startTrip = async (
+exports.startTrip = async (
   tripId,
   startData = {}
 ) => {
@@ -201,7 +201,7 @@ export const startTrip = async (
 /**
  * Complete a trip.
  */
-export const completeTrip = async (
+exports.completeTrip = async (
   tripId,
   endData = {}
 ) => {
@@ -233,7 +233,7 @@ export const completeTrip = async (
 /**
  * Cancel a trip.
  */
-export const cancelTrip = async (tripId) => {
+exports.cancelTrip = async (tripId) => {
   return prisma.trip.update({
     where: {
       id: tripId,
@@ -253,7 +253,7 @@ export const cancelTrip = async (tripId) => {
 /**
  * Update trip status.
  */
-export const updateTripStatus = async (
+exports.updateTripStatus = async (
   tripId,
   status
 ) => {
@@ -272,7 +272,7 @@ export const updateTripStatus = async (
 /**
  * Update trip information.
  */
-export const updateTrip = async (
+exports.updateTrip = async (
   tripId,
   updateData
 ) => {
@@ -289,7 +289,7 @@ export const updateTrip = async (
 /**
  * Find trips belonging to a driver.
  */
-export const findTripsByDriver = async (
+exports.findTripsByDriver = async (
   driverId,
   options = {}
 ) => {
@@ -364,7 +364,7 @@ export const findTripsByDriver = async (
  * Passenger is connected to a trip
  * through the ride -> booking relationship.
  */
-export const findTripsByPassenger = async (
+exports.findTripsByPassenger = async (
   passengerId,
   options = {}
 ) => {
@@ -443,7 +443,7 @@ export const findTripsByPassenger = async (
  *
  * Used for live trip tracking.
  */
-export const findActiveTrips = async (
+exports.findActiveTrips = async (
   organizationId
 ) => {
   return prisma.trip.findMany({
@@ -482,7 +482,7 @@ export const findActiveTrips = async (
 /**
  * Get trip count for an organization.
  */
-export const countOrganizationTrips = async (
+exports.countOrganizationTrips = async (
   organizationId
 ) => {
   return prisma.trip.count({
@@ -498,7 +498,7 @@ export const countOrganizationTrips = async (
 /**
  * Get completed trips for an organization.
  */
-export const findCompletedTripsByOrganization =
+exports.findCompletedTripsByOrganization =
   async (
     organizationId,
     options = {}
@@ -564,7 +564,7 @@ export const findCompletedTripsByOrganization =
 /**
  * Check whether trip belongs to driver.
  */
-export const tripBelongsToDriver = async (
+exports.tripBelongsToDriver = async (
   tripId,
   driverId
 ) => {
@@ -586,7 +586,7 @@ export const tripBelongsToDriver = async (
 /**
  * Delete a trip.
  */
-export const deleteTrip = async (tripId) => {
+exports.deleteTrip = async (tripId) => {
   return prisma.trip.delete({
     where: {
       id: tripId,

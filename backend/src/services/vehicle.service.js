@@ -1,7 +1,7 @@
 // backend/src/services/vehicle.service.js
 
-import * as vehicleRepository from "../repositories/vehicle.repository.js";
-import * as organizationRepository from "../repositories/organization.repository.js";
+const vehicleRepository = require("../repositories/vehicle.repository.js");
+const organizationRepository = require("../repositories/organization.repository.js");
 
 
 /**
@@ -31,7 +31,7 @@ const verifyOrganizationMembership = async (
 /**
  * Register a new vehicle.
  */
-export const registerVehicle = async (
+exports.registerVehicle = async (
   userId,
   organizationId,
   vehicleData
@@ -145,7 +145,7 @@ export const registerVehicle = async (
 /**
  * Get one vehicle.
  */
-export const getVehicleById = async (
+exports.getVehicleById = async (
   userId,
   vehicleId
 ) => {
@@ -178,7 +178,7 @@ export const getVehicleById = async (
  * Get all vehicles belonging
  * to the current user.
  */
-export const getMyVehicles = async (
+exports.getMyVehicles = async (
   userId
 ) => {
   if (!userId) {
@@ -196,7 +196,7 @@ export const getMyVehicles = async (
 /**
  * Get organization vehicles.
  */
-export const getOrganizationVehicles =
+exports.getOrganizationVehicles =
   async (
     userId,
     organizationId
@@ -224,7 +224,7 @@ export const getOrganizationVehicles =
 /**
  * Update vehicle details.
  */
-export const updateVehicle = async (
+exports.updateVehicle = async (
   userId,
   vehicleId,
   updateData
@@ -329,7 +329,7 @@ export const updateVehicle = async (
 /**
  * Delete a vehicle.
  */
-export const deleteVehicle = async (
+exports.deleteVehicle = async (
   userId,
   vehicleId
 ) => {
@@ -382,7 +382,7 @@ export const deleteVehicle = async (
 /**
  * Activate a vehicle.
  */
-export const activateVehicle = async (
+exports.activateVehicle = async (
   userId,
   vehicleId
 ) => {
@@ -417,7 +417,7 @@ export const activateVehicle = async (
 /**
  * Deactivate a vehicle.
  */
-export const deactivateVehicle = async (
+exports.deactivateVehicle = async (
   userId,
   vehicleId
 ) => {
@@ -466,7 +466,7 @@ export const deactivateVehicle = async (
  * Check whether a driver has
  * a usable registered vehicle.
  */
-export const hasRegisteredVehicle =
+exports.hasRegisteredVehicle =
   async (userId) => {
     const vehicles =
       await vehicleRepository.getVehiclesByUser(
@@ -493,7 +493,7 @@ export const hasRegisteredVehicle =
  * Validate vehicle before publishing
  * a ride.
  */
-export const validateVehicleForRide =
+exports.validateVehicleForRide =
   async (
     userId,
     vehicleId
@@ -552,7 +552,7 @@ export const validateVehicleForRide =
 /**
  * Get vehicle capacity.
  */
-export const getVehicleCapacity = async (
+exports.getVehicleCapacity = async (
   userId,
   vehicleId
 ) => {

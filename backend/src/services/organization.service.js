@@ -1,12 +1,12 @@
 // backend/src/services/organization.service.js
 
-import * as organizationRepository from "../repositories/organization.repository.js";
+const organizationRepository = require("../repositories/organization.repository.js");
 
 
 /**
  * Create a new organization.
  */
-export const createOrganization = async (
+exports.createOrganization = async (
   organizationData
 ) => {
   const {
@@ -52,7 +52,7 @@ export const createOrganization = async (
 /**
  * Get organization by ID.
  */
-export const getOrganizationById = async (
+exports.getOrganizationById = async (
   organizationId
 ) => {
   if (!organizationId) {
@@ -80,7 +80,7 @@ export const getOrganizationById = async (
  * Get organization details with
  * employees and vehicles.
  */
-export const getOrganizationDetails =
+exports.getOrganizationDetails =
   async (organizationId) => {
     if (!organizationId) {
       throw new Error(
@@ -106,7 +106,7 @@ export const getOrganizationDetails =
 /**
  * Update organization information.
  */
-export const updateOrganization = async (
+exports.updateOrganization = async (
   organizationId,
   updateData
 ) => {
@@ -186,7 +186,7 @@ export const updateOrganization = async (
 /**
  * Delete an organization.
  */
-export const deleteOrganization = async (
+exports.deleteOrganization = async (
   organizationId
 ) => {
   if (!organizationId) {
@@ -222,7 +222,7 @@ export const deleteOrganization = async (
  * Get employees belonging to
  * an organization.
  */
-export const getEmployees = async (
+exports.getEmployees = async (
   organizationId,
   options = {}
 ) => {
@@ -242,7 +242,7 @@ export const getEmployees = async (
 /**
  * Get organization statistics.
  */
-export const getStatistics = async (
+exports.getStatistics = async (
   organizationId
 ) => {
   if (!organizationId) {
@@ -271,7 +271,7 @@ export const getStatistics = async (
 /**
  * Add an employee to an organization.
  */
-export const addEmployee = async (
+exports.addEmployee = async (
   organizationId,
   userId
 ) => {
@@ -321,7 +321,7 @@ export const addEmployee = async (
 /**
  * Remove an employee from an organization.
  */
-export const removeEmployee = async (
+exports.removeEmployee = async (
   organizationId,
   userId
 ) => {
@@ -360,7 +360,7 @@ export const removeEmployee = async (
  * Check whether a user belongs
  * to an organization.
  */
-export const isOrganizationMember = async (
+exports.isOrganizationMember = async (
   organizationId,
   userId
 ) => {
@@ -378,7 +378,7 @@ export const isOrganizationMember = async (
 /**
  * Get organization vehicles.
  */
-export const getVehicles = async (
+exports.getVehicles = async (
   organizationId,
   options = {}
 ) => {
@@ -398,7 +398,7 @@ export const getVehicles = async (
 /**
  * Get organization rides.
  */
-export const getRides = async (
+exports.getRides = async (
   organizationId,
   options = {}
 ) => {

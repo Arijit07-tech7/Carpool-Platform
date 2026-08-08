@@ -1,8 +1,8 @@
 // backend/src/services/chat.service.js
 
-import * as chatRepository from "../repositories/chat.repository.js";
-import * as tripRepository from "../repositories/trip.repository.js";
-import * as bookingRepository from "../repositories/booking.repository.js";
+const chatRepository = require("../repositories/chat.repository.js");
+const tripRepository = require("../repositories/trip.repository.js");
+const bookingRepository = require("../repositories/booking.repository.js");
 
 
 /**
@@ -64,7 +64,7 @@ const verifyTripParticipant = async (
 /**
  * Get or create a chat room for a trip.
  */
-export const getOrCreateTripChat = async (
+exports.getOrCreateTripChat = async (
   userId,
   tripId
 ) => {
@@ -93,7 +93,7 @@ export const getOrCreateTripChat = async (
 /**
  * Send a message inside a trip chat.
  */
-export const sendMessage = async (
+exports.sendMessage = async (
   userId,
   tripId,
   messageData
@@ -178,7 +178,7 @@ export const sendMessage = async (
 /**
  * Get messages from a trip chat.
  */
-export const getMessages = async (
+exports.getMessages = async (
   userId,
   tripId,
   options = {}
@@ -235,7 +235,7 @@ export const getMessages = async (
 /**
  * Mark a message as read.
  */
-export const markMessageAsRead = async (
+exports.markMessageAsRead = async (
   userId,
   messageId
 ) => {
@@ -283,7 +283,7 @@ export const markMessageAsRead = async (
  * Mark all messages in a trip chat
  * as read for the current user.
  */
-export const markAllMessagesAsRead =
+exports.markAllMessagesAsRead =
   async (
     userId,
     tripId
@@ -317,7 +317,7 @@ export const markAllMessagesAsRead =
  * Normally the sender should only be able
  * to delete their own message.
  */
-export const deleteMessage = async (
+exports.deleteMessage = async (
   userId,
   messageId
 ) => {
@@ -349,7 +349,7 @@ export const deleteMessage = async (
 /**
  * Get unread message count.
  */
-export const getUnreadCount = async (
+exports.getUnreadCount = async (
   userId,
   tripId
 ) => {
@@ -384,7 +384,7 @@ export const getUnreadCount = async (
 /**
  * Close trip chat after trip completion.
  */
-export const closeTripChat = async (
+exports.closeTripChat = async (
   userId,
   tripId
 ) => {
@@ -430,7 +430,7 @@ export const closeTripChat = async (
  * Check whether the user can send
  * a message to a trip.
  */
-export const canSendMessage = async (
+exports.canSendMessage = async (
   userId,
   tripId
 ) => {

@@ -1,8 +1,7 @@
+// backend/src/config/socket.js
 
-
-import { Server } from "socket.io";
-import env from "./env.js";
-
+const { Server } = require("socket.io");
+const env = require("./env.js");
 
 let io = null;
 
@@ -12,7 +11,7 @@ let io = null;
  * @param {Object} httpServer - Node.js HTTP server
  * @returns {Server}
  */
-export const initializeSocket = (httpServer) => {
+const initializeSocket = (httpServer) => {
   io = new Server(httpServer, {
     cors: {
       origin: env.corsOrigin,
@@ -34,12 +33,9 @@ export const initializeSocket = (httpServer) => {
 /**
  * Get Socket.IO instance.
  *
- * This can be used from services, socket handlers,
- * notifications, etc.
- *
  * @returns {Server}
  */
-export const getIO = () => {
+const getIO = () => {
   if (!io) {
     throw new Error(
       "Socket.IO has not been initialized. Call initializeSocket() first."
@@ -56,7 +52,7 @@ export const getIO = () => {
  * @param {string} event
  * @param {*} data
  */
-export const emitToRoom = (room, event, data) => {
+const emitToRoom = (room, event, data) => {
   const socket = getIO();
 
   socket.to(room).emit(event, data);
@@ -69,7 +65,7 @@ export const emitToRoom = (room, event, data) => {
  * @param {string} event
  * @param {*} data
  */
-export const emitToSocket = (socketId, event, data) => {
+const emitToSocket = (socketId, event, data) => {
   const socket = getIO();
 
   socket.to(socketId).emit(event, data);
@@ -81,13 +77,13 @@ export const emitToSocket = (socketId, event, data) => {
  * @param {string} event
  * @param {*} data
  */
-export const broadcastEvent = (event, data) => {
+const broadcastEvent = (event, data) => {
   const socket = getIO();
 
   socket.emit(event, data);
 };
 
-export default {
+module.exports = {
   initializeSocket,
   getIO,
   emitToRoom,

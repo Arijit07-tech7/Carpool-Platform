@@ -1,16 +1,16 @@
 // backend/src/services/ride.service.js
 
-import * as rideRepository from "../repositories/ride.repository.js";
-import * as vehicleRepository from "../repositories/vehicle.repository.js";
-import * as organizationRepository from "../repositories/organization.repository.js";
+const rideRepository = require("../repositories/ride.repository.js");
+const vehicleRepository = require("../repositories/vehicle.repository.js");
+const organizationRepository = require("../repositories/organization.repository.js");
 
-import {
+const {
   calculateFare,
-} from "../utils/calculate-fare.js";
+} = require("../utils/calculate-fare.js");
 
-import {
+const {
   calculateDistance,
-} from "../utils/calculate-distance.js";
+} = require("../utils/calculate-distance.js");
 
 
 /**
@@ -23,7 +23,7 @@ import {
  * - provide source and destination
  * - have available seats
  */
-export const createRide = async (
+exports.createRide = async (
   userId,
   organizationId,
   rideData
@@ -237,7 +237,7 @@ export const createRide = async (
 /**
  * Find available rides.
  */
-export const findRides = async (
+exports.findRides = async (
   organizationId,
   searchData = {}
 ) => {
@@ -298,7 +298,7 @@ export const findRides = async (
 /**
  * Get ride by ID.
  */
-export const getRideById = async (
+exports.getRideById = async (
   rideId,
   organizationId
 ) => {
@@ -336,7 +336,7 @@ export const getRideById = async (
 /**
  * Get rides offered by a driver.
  */
-export const getDriverRides = async (
+exports.getDriverRides = async (
   userId,
   options = {}
 ) => {
@@ -356,7 +356,7 @@ export const getDriverRides = async (
 /**
  * Update a ride.
  */
-export const updateRide = async (
+exports.updateRide = async (
   userId,
   rideId,
   updateData
@@ -490,7 +490,7 @@ export const updateRide = async (
 /**
  * Cancel a ride.
  */
-export const cancelRide = async (
+exports.cancelRide = async (
   userId,
   rideId
 ) => {
@@ -534,7 +534,7 @@ export const cancelRide = async (
 /**
  * Get available seats.
  */
-export const getAvailableSeats = async (
+exports.getAvailableSeats = async (
   rideId
 ) => {
   const ride =
@@ -559,7 +559,7 @@ export const getAvailableSeats = async (
 /**
  * Confirm route information.
  */
-export const confirmRoute = async (
+exports.confirmRoute = async (
   userId,
   rideId,
   routeData
@@ -615,7 +615,7 @@ export const confirmRoute = async (
  * Check whether a user can publish
  * a ride.
  */
-export const canPublishRide = async (
+exports.canPublishRide = async (
   userId,
   organizationId,
   vehicleId
@@ -678,7 +678,7 @@ export const canPublishRide = async (
 /**
  * Get upcoming rides created by driver.
  */
-export const getUpcomingRides = async (
+exports.getUpcomingRides = async (
   userId
 ) => {
   return rideRepository.getUpcomingRidesByDriver(
@@ -690,7 +690,7 @@ export const getUpcomingRides = async (
 /**
  * Get completed rides created by driver.
  */
-export const getCompletedRides = async (
+exports.getCompletedRides = async (
   userId
 ) => {
   return rideRepository.getCompletedRidesByDriver(

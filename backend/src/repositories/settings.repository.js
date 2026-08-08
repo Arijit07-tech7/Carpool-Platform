@@ -1,11 +1,11 @@
 // backend/src/repositories/settings.repository.js
 
-import prisma from "../config/database.js";
+const prisma = require("../config/database.js");
 
 /**
  * Get settings for an organization.
  */
-export const getOrganizationSettings = async (
+exports.getOrganizationSettings = async (
   organizationId
 ) => {
   return prisma.settings.findUnique({
@@ -19,7 +19,7 @@ export const getOrganizationSettings = async (
 /**
  * Create organization settings.
  */
-export const createOrganizationSettings = async (
+exports.createOrganizationSettings = async (
   organizationId,
   settingsData = {}
 ) => {
@@ -36,7 +36,7 @@ export const createOrganizationSettings = async (
 /**
  * Update organization settings.
  */
-export const updateOrganizationSettings = async (
+exports.updateOrganizationSettings = async (
   organizationId,
   settingsData
 ) => {
@@ -61,7 +61,7 @@ export const updateOrganizationSettings = async (
 /**
  * Delete organization settings.
  */
-export const deleteOrganizationSettings = async (
+exports.deleteOrganizationSettings = async (
   organizationId
 ) => {
   return prisma.settings.delete({
@@ -75,7 +75,7 @@ export const deleteOrganizationSettings = async (
 /**
  * Get user settings.
  */
-export const getUserSettings = async (
+exports.getUserSettings = async (
   userId
 ) => {
   return prisma.userSettings.findUnique({
@@ -89,7 +89,7 @@ export const getUserSettings = async (
 /**
  * Create user settings.
  */
-export const createUserSettings = async (
+exports.createUserSettings = async (
   userId,
   settingsData = {}
 ) => {
@@ -106,7 +106,7 @@ export const createUserSettings = async (
 /**
  * Update user settings.
  */
-export const updateUserSettings = async (
+exports.updateUserSettings = async (
   userId,
   settingsData
 ) => {
@@ -131,7 +131,7 @@ export const updateUserSettings = async (
 /**
  * Delete user settings.
  */
-export const deleteUserSettings = async (
+exports.deleteUserSettings = async (
   userId
 ) => {
   return prisma.userSettings.delete({
@@ -145,7 +145,7 @@ export const deleteUserSettings = async (
 /**
  * Update notification preferences.
  */
-export const updateNotificationSettings = async (
+exports.updateNotificationSettings = async (
   userId,
   notificationData
 ) => {
@@ -165,7 +165,7 @@ export const updateNotificationSettings = async (
 /**
  * Get notification preferences.
  */
-export const getNotificationSettings = async (
+exports.getNotificationSettings = async (
   userId
 ) => {
   return prisma.userSettings.findUnique({
@@ -187,7 +187,7 @@ export const getNotificationSettings = async (
 /**
  * Update ride preferences.
  */
-export const updateRidePreferences = async (
+exports.updateRidePreferences = async (
   userId,
   ridePreferences
 ) => {
@@ -207,7 +207,7 @@ export const updateRidePreferences = async (
 /**
  * Get ride preferences.
  */
-export const getRidePreferences = async (
+exports.getRidePreferences = async (
   userId
 ) => {
   return prisma.userSettings.findUnique({
@@ -227,7 +227,7 @@ export const getRidePreferences = async (
 /**
  * Check whether organization settings exist.
  */
-export const organizationSettingsExist =
+exports.organizationSettingsExist =
   async (organizationId) => {
     const settings =
       await prisma.settings.findUnique({
@@ -247,7 +247,7 @@ export const organizationSettingsExist =
 /**
  * Check whether user settings exist.
  */
-export const userSettingsExist =
+exports.userSettingsExist =
   async (userId) => {
     const settings =
       await prisma.userSettings.findUnique({

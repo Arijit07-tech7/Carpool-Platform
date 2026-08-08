@@ -1,11 +1,11 @@
 // backend/src/repositories/vehicle.repository.js
 
-import prisma from "../config/database.js";
+const prisma = require("../config/database.js");
 
 /**
  * Create a vehicle
  */
-export const createVehicle = async (vehicleData) => {
+exports.createVehicle = async (vehicleData) => {
   return prisma.vehicle.create({
     data: {
       ownerId: vehicleData.ownerId,
@@ -40,7 +40,7 @@ export const createVehicle = async (vehicleData) => {
 /**
  * Find vehicle by ID
  */
-export const findVehicleById = async (vehicleId) => {
+exports.findVehicleById = async (vehicleId) => {
   return prisma.vehicle.findUnique({
     where: {
       id: vehicleId,
@@ -81,7 +81,7 @@ export const findVehicleById = async (vehicleId) => {
 /**
  * Find vehicle by registration number
  */
-export const findVehicleByRegistrationNumber = async (
+exports.findVehicleByRegistrationNumber = async (
   registrationNumber
 ) => {
   return prisma.vehicle.findUnique({
@@ -95,7 +95,7 @@ export const findVehicleByRegistrationNumber = async (
 /**
  * Check whether registration number already exists
  */
-export const registrationNumberExists = async (
+exports.registrationNumberExists = async (
   registrationNumber
 ) => {
   const vehicle = await prisma.vehicle.findUnique({
@@ -115,7 +115,7 @@ export const registrationNumberExists = async (
 /**
  * Get vehicles belonging to a user
  */
-export const findVehiclesByOwner = async (
+exports.findVehiclesByOwner = async (
   ownerId,
   options = {}
 ) => {
@@ -164,7 +164,7 @@ export const findVehiclesByOwner = async (
 /**
  * Get vehicles belonging to an organization
  */
-export const findVehiclesByOrganization = async (
+exports.findVehiclesByOrganization = async (
   organizationId,
   options = {}
 ) => {
@@ -224,7 +224,7 @@ export const findVehiclesByOrganization = async (
 /**
  * Update vehicle information
  */
-export const updateVehicle = async (
+exports.updateVehicle = async (
   vehicleId,
   updateData
 ) => {
@@ -251,7 +251,7 @@ export const updateVehicle = async (
 /**
  * Update vehicle status
  */
-export const updateVehicleStatus = async (
+exports.updateVehicleStatus = async (
   vehicleId,
   status
 ) => {
@@ -269,7 +269,7 @@ export const updateVehicleStatus = async (
 /**
  * Verify a vehicle
  */
-export const verifyVehicle = async (vehicleId) => {
+exports.verifyVehicle = async (vehicleId) => {
   return prisma.vehicle.update({
     where: {
       id: vehicleId,
@@ -284,7 +284,7 @@ export const verifyVehicle = async (vehicleId) => {
 /**
  * Reject a vehicle
  */
-export const rejectVehicle = async (vehicleId) => {
+exports.rejectVehicle = async (vehicleId) => {
   return prisma.vehicle.update({
     where: {
       id: vehicleId,
@@ -299,7 +299,7 @@ export const rejectVehicle = async (vehicleId) => {
 /**
  * Check whether vehicle belongs to a user
  */
-export const vehicleBelongsToOwner = async (
+exports.vehicleBelongsToOwner = async (
   vehicleId,
   ownerId
 ) => {
@@ -320,7 +320,7 @@ export const vehicleBelongsToOwner = async (
 /**
  * Check whether vehicle is verified
  */
-export const isVehicleVerified = async (
+exports.isVehicleVerified = async (
   vehicleId
 ) => {
   const vehicle = await prisma.vehicle.findFirst({
@@ -342,7 +342,7 @@ export const isVehicleVerified = async (
  *
  * Useful when publishing a ride.
  */
-export const findVerifiedVehiclesByOwner = async (
+exports.findVerifiedVehiclesByOwner = async (
   ownerId
 ) => {
   return prisma.vehicle.findMany({
@@ -360,7 +360,7 @@ export const findVerifiedVehiclesByOwner = async (
 /**
  * Count vehicles in an organization
  */
-export const countOrganizationVehicles = async (
+exports.countOrganizationVehicles = async (
   organizationId
 ) => {
   return prisma.vehicle.count({
@@ -373,7 +373,7 @@ export const countOrganizationVehicles = async (
 /**
  * Count verified vehicles
  */
-export const countVerifiedVehicles = async (
+exports.countVerifiedVehicles = async (
   organizationId
 ) => {
   return prisma.vehicle.count({
@@ -387,7 +387,7 @@ export const countVerifiedVehicles = async (
 /**
  * Delete vehicle
  */
-export const deleteVehicle = async (vehicleId) => {
+exports.deleteVehicle = async (vehicleId) => {
   return prisma.vehicle.delete({
     where: {
       id: vehicleId,

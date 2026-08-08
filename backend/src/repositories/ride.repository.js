@@ -1,11 +1,11 @@
 // backend/src/repositories/ride.repository.js
 
-import prisma from "../config/database.js";
+const prisma = require("../config/database.js");
 
 /**
  * Create a new ride
  */
-export const createRide = async (rideData) => {
+exports.createRide = async (rideData) => {
   return prisma.ride.create({
     data: {
       driverId: rideData.driverId,
@@ -47,7 +47,7 @@ export const createRide = async (rideData) => {
 /**
  * Find ride by ID
  */
-export const findRideById = async (rideId) => {
+exports.findRideById = async (rideId) => {
   return prisma.ride.findUnique({
     where: {
       id: rideId,
@@ -86,7 +86,7 @@ export const findRideById = async (rideId) => {
 /**
  * Find rides created by a particular driver
  */
-export const findRidesByDriver = async (
+exports.findRidesByDriver = async (
   driverId,
   options = {}
 ) => {
@@ -147,7 +147,7 @@ export const findRidesByDriver = async (
 /**
  * Search available rides
  */
-export const searchRides = async ({
+exports.searchRides = async ({
   organizationId,
   source,
   destination,
@@ -239,7 +239,7 @@ export const searchRides = async ({
 /**
  * Find upcoming rides for an organization
  */
-export const findUpcomingRides = async (
+exports.findUpcomingRides = async (
   organizationId,
   limit = 20
 ) => {
@@ -277,7 +277,7 @@ export const findUpcomingRides = async (
 /**
  * Update ride information
  */
-export const updateRide = async (
+exports.updateRide = async (
   rideId,
   updateData
 ) => {
@@ -305,7 +305,7 @@ export const updateRide = async (
 /**
  * Update available seats
  */
-export const updateAvailableSeats = async (
+exports.updateAvailableSeats = async (
   rideId,
   availableSeats
 ) => {
@@ -323,7 +323,7 @@ export const updateAvailableSeats = async (
 /**
  * Decrease available seats after booking
  */
-export const decreaseAvailableSeats = async (
+exports.decreaseAvailableSeats = async (
   rideId,
   seats
 ) => {
@@ -349,7 +349,7 @@ export const decreaseAvailableSeats = async (
 /**
  * Increase available seats after booking cancellation
  */
-export const increaseAvailableSeats = async (
+exports.increaseAvailableSeats = async (
   rideId,
   seats
 ) => {
@@ -369,7 +369,7 @@ export const increaseAvailableSeats = async (
 /**
  * Update ride status
  */
-export const updateRideStatus = async (
+exports.updateRideStatus = async (
   rideId,
   status
 ) => {
@@ -387,7 +387,7 @@ export const updateRideStatus = async (
 /**
  * Cancel a ride
  */
-export const cancelRide = async (rideId) => {
+exports.cancelRide = async (rideId) => {
   return prisma.ride.update({
     where: {
       id: rideId,
@@ -402,7 +402,7 @@ export const cancelRide = async (rideId) => {
 /**
  * Check whether a ride belongs to a driver
  */
-export const rideBelongsToDriver = async (
+exports.rideBelongsToDriver = async (
   rideId,
   driverId
 ) => {
@@ -423,7 +423,7 @@ export const rideBelongsToDriver = async (
 /**
  * Get ride count for an organization
  */
-export const countOrganizationRides = async (
+exports.countOrganizationRides = async (
   organizationId
 ) => {
   return prisma.ride.count({
@@ -436,7 +436,7 @@ export const countOrganizationRides = async (
 /**
  * Get rides by organization
  */
-export const findRidesByOrganization = async (
+exports.findRidesByOrganization = async (
   organizationId,
   options = {}
 ) => {
@@ -497,7 +497,7 @@ export const findRidesByOrganization = async (
 /**
  * Delete a ride
  */
-export const deleteRide = async (rideId) => {
+exports.deleteRide = async (rideId) => {
   return prisma.ride.delete({
     where: {
       id: rideId,
