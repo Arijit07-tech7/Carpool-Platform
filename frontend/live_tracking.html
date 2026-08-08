@@ -1,1081 +1,415 @@
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Tracking — RideSync</title>
+  <meta name="description" content="Track your ride in real-time on RideSync">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    :root{
+      --blue:#1677ff;--blue-dark:#075ed7;--blue-light:#eaf3ff;
+      --text:#11151b;--muted:#737d8c;--border:#e7ebf0;--bg:#f7f9fc;--white:#fff;
+      --green:#20a464;--orange:#ef8a22;--red:#df4d4d;
+    }
+    body{font-family:"Inter",sans-serif;color:var(--text);background:var(--bg);overflow:hidden;height:100vh}
+    a{color:inherit;text-decoration:none}
+    button{cursor:pointer;font-family:inherit}
 
-    <title>RideSync - Live Tracking</title>
+    .layout{display:grid;grid-template-columns:380px 1fr;height:100vh}
 
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    /* SIDE PANEL */
+    .side-panel{background:white;border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+    .side-header{padding:24px 24px 20px;border-bottom:1px solid var(--border)}
+    .back-btn{display:inline-flex;align-items:center;gap:8px;color:var(--muted);font-size:12px;font-weight:700;margin-bottom:18px;text-decoration:none;transition:color .2s}
+    .back-btn:hover{color:var(--blue)}
+    .tracking-badge{display:inline-flex;align-items:center;gap:7px;padding:6px 14px;background:rgba(32,164,100,.1);color:var(--green);border-radius:100px;font-size:11px;font-weight:800;margin-bottom:16px}
+    .live-dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 1.5s infinite}
+    @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(1.3)}}
+    .trip-title{font-size:18px;font-weight:900;letter-spacing:-.3px;margin-bottom:4px}
+    .trip-sub{font-size:12px;color:var(--muted)}
 
-    <!-- Google Font -->
-    <link
-        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet"
-    >
+    .side-body{flex:1;overflow-y:auto;padding:20px 24px}
 
-    <!-- Material Symbols -->
-    <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
-    >
+    /* ROUTE CARD */
+    .route-card{background:var(--bg);border-radius:16px;padding:20px;margin-bottom:20px}
+    .route-step{display:flex;gap:14px;align-items:flex-start}
+    .route-step+.route-step{margin-top:16px}
+    .step-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0;margin-top:3px}
+    .dot-green{background:var(--green)}
+    .dot-red{background:var(--red)}
+    .step-info{}
+    .step-label{font-size:10px;text-transform:uppercase;letter-spacing:1px;font-weight:800;color:var(--muted)}
+    .step-value{font-size:14px;font-weight:800;color:var(--text);margin-top:2px}
+    .route-line{width:2px;height:24px;background:var(--border);margin-left:5px;margin-top:4px}
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+    /* DRIVER CARD */
+    .driver-card{background:white;border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:16px}
+    .driver-card-title{font-size:10px;text-transform:uppercase;letter-spacing:1px;font-weight:800;color:var(--muted);margin-bottom:14px}
+    .driver-info{display:flex;align-items:center;gap:14px}
+    .driver-avatar{width:48px;height:48px;border-radius:14px;background:linear-gradient(145deg,#111,#30343b);color:white;font-size:18px;font-weight:800;display:grid;place-items:center}
+    .driver-name{font-size:15px;font-weight:800}
+    .driver-meta{font-size:12px;color:var(--muted);margin-top:3px}
 
-        body {
-            margin: 0;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #f9f9f9;
-        }
+    /* STATS GRID */
+    .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+    .stat-box{background:var(--bg);border-radius:13px;padding:14px;text-align:center}
+    .stat-box-val{font-size:20px;font-weight:900;color:var(--text)}
+    .stat-box-label{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-top:4px}
 
-        .sidebar-active {
-            background: #0052ff;
-            color: white;
-        }
+    /* STATUS TIMELINE */
+    .timeline{display:flex;flex-direction:column;gap:0}
+    .tl-item{display:flex;gap:14px;position:relative;padding-bottom:16px}
+    .tl-item:last-child{padding-bottom:0}
+    .tl-dot{width:28px;height:28px;border-radius:50%;flex-shrink:0;display:grid;place-items:center;font-size:12px;border:2px solid var(--border);background:white}
+    .tl-dot.done{background:var(--green);border-color:var(--green);color:white}
+    .tl-dot.active{background:var(--blue);border-color:var(--blue);color:white;animation:dotPulse 1.5s infinite}
+    @keyframes dotPulse{0%,100%{box-shadow:0 0 0 0 rgba(22,119,255,.4)}50%{box-shadow:0 0 0 8px rgba(22,119,255,0)}}
+    .tl-line{position:absolute;left:13px;top:28px;width:2px;background:var(--border);height:calc(100% - 28px)}
+    .tl-item.done .tl-line{background:var(--green)}
+    .tl-content{padding-top:4px}
+    .tl-title{font-size:13px;font-weight:800}
+    .tl-time{font-size:11px;color:var(--muted);margin-top:2px}
 
-        #map {
-            width: 100%;
-            height: 100%;
-        }
+    /* ACTIONS */
+    .action-bar{padding:20px 24px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:10px}
+    .btn-danger{width:100%;padding:13px;border-radius:12px;border:1.5px solid rgba(223,77,77,.2);background:rgba(223,77,77,.05);color:var(--red);font-size:13px;font-weight:800;cursor:pointer;transition:all .2s}
+    .btn-danger:hover{background:var(--red);color:white;border-color:var(--red)}
+    .btn-chat{width:100%;padding:13px;border-radius:12px;border:1.5px solid var(--border);background:white;color:var(--text);font-size:13px;font-weight:800;cursor:pointer;transition:all .2s}
+    .btn-chat:hover{background:var(--blue-light);color:var(--blue);border-color:var(--blue)}
 
-        /* Live tracking pulse */
-        .live-dot {
-            animation: pulse 1.5s infinite;
-        }
+    /* MAP AREA */
+    .map-area{position:relative}
+    #trackingMap{width:100%;height:100vh}
 
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-                opacity: 1;
-            }
+    /* ETA BUBBLE */
+    .eta-bubble{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);background:white;border-radius:16px;padding:16px 24px;box-shadow:0 8px 30px rgba(0,0,0,.15);display:flex;align-items:center;gap:24px;border:1px solid var(--border)}
+    .eta-item{text-align:center}
+    .eta-val{font-size:20px;font-weight:900}
+    .eta-label{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-top:2px}
+    .eta-divider{width:1px;height:36px;background:var(--border)}
 
-            50% {
-                transform: scale(1.5);
-                opacity: 0.5;
-            }
+    /* NO TRIP */
+    .no-trip{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:40px;text-align:center;gap:16px;color:var(--muted)}
 
-            100% {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-
-        /* Ride card entrance */
-        .ride-card {
-            animation: slideUp 0.7s ease-out;
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translate(-50%, 30px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translate(-50%, 0);
-            }
-        }
-    </style>
+    @media(max-width:768px){
+      .layout{grid-template-columns:1fr;grid-template-rows:auto 1fr}
+      .side-panel{height:auto;overflow:visible}
+      #trackingMap{height:50vh}
+      .side-body{max-height:300px}
+      .layout{overflow-y:auto;height:auto}
+    }
+  </style>
 </head>
+<body>
 
+<div class="layout">
 
-<body class="h-screen overflow-hidden flex">
+  <!-- SIDE PANEL -->
+  <div class="side-panel">
+    <div class="side-header">
+      <a href="my-trips.html" class="back-btn">← Back to Trips</a>
+      <div class="tracking-badge"><div class="live-dot"></div> LIVE TRACKING</div>
+      <div class="trip-title" id="tripTitle">Loading trip...</div>
+      <div class="trip-sub" id="tripSub">Fetching details...</div>
+    </div>
 
+    <div class="side-body">
 
-    <!-- =========================================================
-         SIDEBAR
-    ========================================================== -->
-
-    <aside class="w-64 bg-white border-r border-gray-100 flex flex-col z-20">
-
-        <!-- Logo -->
-        <div class="p-6">
-            <h1 class="text-2xl font-extrabold tracking-tighter text-gray-900">
-                RideSync
-            </h1>
+      <!-- ROUTE -->
+      <div class="route-card">
+        <div class="route-step">
+          <div style="display:flex;flex-direction:column;align-items:center">
+            <div class="step-dot dot-green"></div>
+            <div class="route-line"></div>
+          </div>
+          <div class="step-info">
+            <div class="step-label">From</div>
+            <div class="step-value" id="fromLocation">—</div>
+          </div>
         </div>
-
-
-        <!-- Driver Profile -->
-        <div class="px-4 mb-8">
-
-            <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
-
-                <img
-                    src="https://i.pravatar.cc/100?img=12"
-                    alt="Manish Halder"
-                    class="w-10 h-10 rounded-full object-cover"
-                >
-
-                <div>
-
-                    <p class="text-sm font-bold text-gray-900">
-                        Manish Halder
-                    </p>
-
-                    <p class="text-xs text-gray-500 font-medium">
-                        Pro Driver • 4.98 ★
-                    </p>
-
-                </div>
-
-            </div>
-
+        <div class="route-step">
+          <div class="step-dot dot-red"></div>
+          <div class="step-info">
+            <div class="step-label">To</div>
+            <div class="step-value" id="toLocation">—</div>
+          </div>
         </div>
+      </div>
 
-
-        <!-- Navigation -->
-        <nav class="flex-1 px-2 space-y-1">
-
-            <a
-                href="#"
-                class="flex items-center gap-3 px-4 py-3 sidebar-active rounded-xl text-sm font-bold transition-all"
-            >
-                <span class="material-symbols-outlined text-[20px]">
-                    home
-                </span>
-
-                Home
-            </a>
-
-
-            <a
-                href="#"
-                class="flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-xl text-sm font-semibold transition-all"
-            >
-                <span class="material-symbols-outlined text-[20px]">
-                    directions_car
-                </span>
-
-                Offer Ride
-            </a>
-
-
-            <a
-                href="#"
-                class="flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-xl text-sm font-semibold transition-all"
-            >
-                <span class="material-symbols-outlined text-[20px]">
-                    garage
-                </span>
-
-                Vehicles
-            </a>
-
-
-            <a
-                href="#"
-                class="flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-xl text-sm font-semibold transition-all"
-            >
-                <span class="material-symbols-outlined text-[20px]">
-                    history
-                </span>
-
-                History
-            </a>
-
-
-            <a
-                href="#"
-                class="flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-xl text-sm font-semibold transition-all"
-            >
-                <span class="material-symbols-outlined text-[20px]">
-                    chat
-                </span>
-
-                Messages
-            </a>
-
-        </nav>
-
-
-        <!-- Partner Button -->
-        <div class="p-4">
-
-            <button
-                class="w-full py-4 bg-[#0052ff] text-white rounded-xl font-bold text-sm hover:opacity-90 active:scale-[0.98] transition-all"
-            >
-                Become a Partner
-            </button>
-
+      <!-- DRIVER INFO -->
+      <div class="driver-card">
+        <div class="driver-card-title">👤 Driver</div>
+        <div class="driver-info">
+          <div class="driver-avatar" id="driverAvatar">D</div>
+          <div>
+            <div class="driver-name" id="driverName">Loading...</div>
+            <div class="driver-meta" id="driverMeta">—</div>
+          </div>
         </div>
+      </div>
 
-    </aside>
-
-
-
-    <!-- =========================================================
-         MAIN CONTENT
-    ========================================================== -->
-
-    <main class="flex-1 relative flex flex-col">
-
-
-        <!-- Live Tracking Badge -->
-
-        <div class="absolute top-6 left-6 z-10">
-
-            <div
-                class="flex items-center gap-2 px-3 py-1.5 bg-white/90 backdrop-blur shadow-lg rounded-full border border-white/50"
-            >
-
-                <span
-                    class="live-dot flex h-2 w-2 rounded-full bg-red-500"
-                ></span>
-
-                <span
-                    class="text-[10px] font-extrabold uppercase tracking-widest text-gray-900"
-                >
-                    Live Tracking
-                </span>
-
-            </div>
-
+      <!-- STATS -->
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="stat-box-val" id="etaVal">—</div>
+          <div class="stat-box-label">ETA (min)</div>
         </div>
-
-
-
-        <!-- =====================================================
-             GOOGLE MAP
-        ====================================================== -->
-
-        <div id="map"></div>
-
-
-
-        <!-- =====================================================
-             FLOATING RIDE CARD
-        ====================================================== -->
-
-        <div
-            class="ride-card absolute bottom-10 left-1/2 -translate-x-1/2 w-full max-w-xl px-6 z-10"
-        >
-
-            <div
-                class="bg-white rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] overflow-hidden"
-            >
-
-
-                <!-- Ride Status -->
-
-                <div class="p-5 border-b border-gray-50">
-
-                    <div class="flex justify-between items-start mb-1">
-
-                        <span
-                            class="text-[10px] font-extrabold uppercase tracking-widest text-gray-400"
-                        >
-                            En Route
-                        </span>
-
-
-                        <span
-                            class="px-2 py-0.5 bg-[#0052ff]/10 text-[#0052ff] text-[10px] font-bold rounded"
-                        >
-                            LIVE
-                        </span>
-
-                    </div>
-
-
-                    <h2 class="text-xl font-extrabold text-gray-900">
-
-                        Arriving in
-
-                        <span id="arrival-time">
-                            4 min
-                        </span>
-
-                    </h2>
-
-                </div>
-
-
-
-                <!-- Driver & Vehicle -->
-
-                <div
-                    class="p-5 bg-gray-50/50 flex items-center justify-between"
-                >
-
-                    <div class="flex items-center gap-4">
-
-                        <div class="relative">
-
-                            <!-- Vehicle -->
-                            <img
-                                src="https://images.unsplash.com/photo-1549924231-f129b911e442?auto=format&fit=crop&w=300&q=80"
-                                alt="White Suzuki Dzire"
-                                class="w-16 h-10 object-cover rounded-lg shadow-sm"
-                            >
-
-
-                            <!-- Driver -->
-                            <img
-                                src="https://i.pravatar.cc/100?img=12"
-                                alt="Manish Halder"
-                                class="absolute -bottom-1 -right-1 w-5 h-5 rounded-full border-2 border-white object-cover"
-                            >
-
-                        </div>
-
-
-                        <div>
-
-                            <p class="text-sm font-bold text-gray-900">
-                                White Suzuki Dzire
-                            </p>
-
-                            <p class="text-xs text-gray-500 font-medium">
-                                WB 123456 • Manish Halder
-                            </p>
-
-                        </div>
-
-                    </div>
-
-
-
-                    <!-- Chat Button -->
-
-                    <button
-                        id="chatButton"
-                        class="w-10 h-10 flex items-center justify-center bg-white border border-gray-100 rounded-full text-[#0052ff] shadow-sm hover:bg-gray-50 transition-all"
-                    >
-
-                        <span class="material-symbols-outlined text-[20px]">
-                            forum
-                        </span>
-
-                    </button>
-
-                </div>
-
-
-
-                <!-- Progress -->
-
-                <div class="px-5 py-4">
-
-                    <div class="flex items-center gap-3">
-
-                        <p
-                            class="text-[10px] font-bold text-gray-400 uppercase tracking-widest whitespace-nowrap"
-                        >
-                            Pickup
-                        </p>
-
-
-                        <div
-                            class="h-[4px] flex-1 bg-gray-100 rounded-full overflow-hidden"
-                        >
-
-                            <div
-                                id="progress-bar"
-                                class="h-full bg-[#0052ff]"
-                                style="width: 0%;"
-                            ></div>
-
-                        </div>
-
-
-                        <p
-                            class="text-[10px] font-bold text-gray-400 uppercase tracking-widest whitespace-nowrap"
-                        >
-                            Destination
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </div>
-
+        <div class="stat-box">
+          <div class="stat-box-val" id="distVal">—</div>
+          <div class="stat-box-label">Distance</div>
         </div>
-
-    </main>
-
-
-
-    <!-- =========================================================
-         JAVASCRIPT
-    ========================================================== -->
-
-    <script>
-
-
-        /* =========================================================
-           GLOBAL VARIABLES
-        ========================================================== */
-
-        let map;
-        let carMarker;
-        let routeLine;
-
-        let animationFrame = null;
-        let animationStartTime = null;
-
-
-        /*
-         * CAR SPEED
-         *
-         * 60 seconds = slow movement
-         *
-         * You can change this:
-         *
-         * 30000  = 30 seconds
-         * 60000  = 60 seconds
-         * 90000  = 90 seconds
-         * 120000 = 2 minutes
-         */
-
-        const animationDuration = 60000;
-
-
-
-        /* =========================================================
-           SOURCE / PICKUP
-        ========================================================== */
-
-        const pickup = {
-            lat: 22.5448,
-            lng: 88.3426
-        };
-
-
-
-        /* =========================================================
-           DESTINATION
-        ========================================================== */
-
-        const destination = {
-            lat: 22.5726,
-            lng: 88.4339
-        };
-
-
-
-        /* =========================================================
-           CAR ICON
-        ========================================================== */
-
-        const carIcon = {
-
-            path:
-                "M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5S16.67 13 17.5 13s1.5.67 1.5 1.5S18.33 16 17.5 16zM5 11l1.5-4.5h11L19 11H5z",
-
-            fillColor: "#0052ff",
-
-            fillOpacity: 1,
-
-            strokeColor: "#ffffff",
-
-            strokeWeight: 1,
-
-            scale: 1.5,
-
-            anchor: new google.maps.Point(12, 12),
-
-            rotation: 0
-
-        };
-
-
-
-        /* =========================================================
-           INITIALIZE GOOGLE MAP
-        ========================================================== */
-
-        function initMap() {
-
-
-            const mapOptions = {
-
-                zoom: 13,
-
-                center: {
-                    lat: 22.56,
-                    lng: 88.38
-                },
-
-                disableDefaultUI: true,
-
-                zoomControl: true,
-
-                styles: [
-
-                    {
-                        featureType: "all",
-                        elementType: "labels.text.fill",
-                        stylers: [
-                            {
-                                color: "#7c93a3"
-                            }
-                        ]
-                    },
-
-                    {
-                        featureType: "landscape",
-                        elementType: "geometry",
-                        stylers: [
-                            {
-                                color: "#f5f5f5"
-                            }
-                        ]
-                    },
-
-                    {
-                        featureType: "poi",
-                        elementType: "geometry",
-                        stylers: [
-                            {
-                                color: "#f5f5f5"
-                            }
-                        ]
-                    },
-
-                    {
-                        featureType: "road",
-                        elementType: "geometry",
-                        stylers: [
-                            {
-                                color: "#ffffff"
-                            }
-                        ]
-                    },
-
-                    {
-                        featureType: "water",
-                        elementType: "geometry",
-                        stylers: [
-                            {
-                                color: "#c9d2d9"
-                            }
-                        ]
-                    }
-
-                ]
-
-            };
-
-
-
-            /* Create map */
-
-            map = new google.maps.Map(
-                document.getElementById("map"),
-                mapOptions
-            );
-
-
-
-            /* =====================================================
-               PICKUP MARKER
-            ====================================================== */
-
-            new google.maps.Marker({
-
-                position: pickup,
-
-                map: map,
-
-                title: "Pickup Location",
-
-                label: {
-                    text: "P",
-                    color: "#ffffff",
-                    fontWeight: "bold"
-                }
-
-            });
-
-
-
-            /* =====================================================
-               DESTINATION MARKER
-            ====================================================== */
-
-            new google.maps.Marker({
-
-                position: destination,
-
-                map: map,
-
-                title: "Destination",
-
-                label: {
-                    text: "D",
-                    color: "#ffffff",
-                    fontWeight: "bold"
-                }
-
-            });
-
-
-
-            /* =====================================================
-               ROUTE LINE
-            ====================================================== */
-
-            routeLine = new google.maps.Polyline({
-
-                path: [
-                    pickup,
-                    destination
-                ],
-
-                geodesic: true,
-
-                strokeColor: "#0052ff",
-
-                strokeOpacity: 0.25,
-
-                strokeWeight: 5,
-
-                map: map
-
-            });
-
-
-
-            /* =====================================================
-               CREATE MOVING CAR
-            ====================================================== */
-
-            carMarker = new google.maps.Marker({
-
-                position: pickup,
-
-                map: map,
-
-                icon: carIcon,
-
-                title: "RideSync Car"
-
-            });
-
-
-
-            /* =====================================================
-               FIT MAP TO ROUTE
-            ====================================================== */
-
-            const bounds =
-                new google.maps.LatLngBounds();
-
-            bounds.extend(pickup);
-            bounds.extend(destination);
-
-            map.fitBounds(bounds);
-
-
-
-            /* Start car animation */
-
-            startCarAnimation();
-
+        <div class="stat-box">
+          <div class="stat-box-val" id="fareVal">—</div>
+          <div class="stat-box-label">Fare</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-box-val" id="seatsVal">—</div>
+          <div class="stat-box-label">Seats</div>
+        </div>
+      </div>
+
+      <!-- TIMELINE -->
+      <div class="driver-card">
+        <div class="driver-card-title">📍 Trip Status</div>
+        <div class="timeline" id="timeline">
+          <div class="tl-item">
+            <div style="position:relative"><div class="tl-dot done">✓</div><div class="tl-line"></div></div>
+            <div class="tl-content"><div class="tl-title">Booking Confirmed</div><div class="tl-time" id="tl-booked">—</div></div>
+          </div>
+          <div class="tl-item">
+            <div style="position:relative"><div class="tl-dot" id="tl-dot-pickup">🚗</div><div class="tl-line"></div></div>
+            <div class="tl-content"><div class="tl-title">Driver En Route</div><div class="tl-time" id="tl-enroute">Waiting...</div></div>
+          </div>
+          <div class="tl-item">
+            <div style="position:relative"><div class="tl-dot" id="tl-dot-started">🛣️</div><div class="tl-line"></div></div>
+            <div class="tl-content"><div class="tl-title">Trip Started</div><div class="tl-time" id="tl-started">Waiting...</div></div>
+          </div>
+          <div class="tl-item">
+            <div style="position:relative"><div class="tl-dot" id="tl-dot-done">🏁</div></div>
+            <div class="tl-content"><div class="tl-title">Arrived</div><div class="tl-time" id="tl-arrived">Waiting...</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="action-bar">
+      <button class="btn-chat" onclick="API.toast('Chat coming soon!', 'info')">💬 Message Driver</button>
+      <button class="btn-danger" onclick="confirmCancel()">✕ Cancel Trip</button>
+    </div>
+  </div>
+
+  <!-- MAP -->
+  <div class="map-area">
+    <div id="trackingMap"></div>
+    <div class="eta-bubble">
+      <div class="eta-item">
+        <div class="eta-val" id="etaBubble">—</div>
+        <div class="eta-label">ETA (min)</div>
+      </div>
+      <div class="eta-divider"></div>
+      <div class="eta-item">
+        <div class="eta-val" id="distBubble">—</div>
+        <div class="eta-label">km left</div>
+      </div>
+      <div class="eta-divider"></div>
+      <div class="eta-item">
+        <div class="eta-val" id="statusBubble" style="font-size:13px">Loading</div>
+        <div class="eta-label">Status</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Socket.IO (from backend) -->
+<script src="http://localhost:5000/socket.io/socket.io.js"></script>
+<!-- Google Maps -->
+<script>
+  let map, driverMarker, pickupMarker, destMarker, directionsService, directionsRenderer;
+  let tripId = null;
+  let pollInterval = null;
+
+  function initMap() {
+    map = new google.maps.Map(document.getElementById('trackingMap'), {
+      center: { lat: 22.5726, lng: 88.3639 },
+      zoom: 13,
+      styles: [{ featureType: 'poi', elementType: 'labels', stylers: [{ visibility: 'off' }] }]
+    });
+    directionsService = new google.maps.DirectionsService();
+    directionsRenderer = new google.maps.DirectionsRenderer({
+      suppressMarkers: true,
+      polylineOptions: { strokeColor: '#1677ff', strokeWeight: 5 }
+    });
+    directionsRenderer.setMap(map);
+  }
+
+  function updateDriverMarker(lat, lng) {
+    const pos = { lat, lng };
+    if (!driverMarker) {
+      driverMarker = new google.maps.Marker({
+        position: pos,
+        map,
+        icon: {
+          url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
+              <circle cx="20" cy="20" r="18" fill="#1677ff" stroke="white" stroke-width="3"/>
+              <text x="20" y="26" text-anchor="middle" font-size="18" fill="white">🚗</text>
+            </svg>`),
+          scaledSize: new google.maps.Size(40, 40),
+          anchor: new google.maps.Point(20, 20)
+        },
+        title: 'Driver Location'
+      });
+    } else {
+      driverMarker.setPosition(pos);
+    }
+    map.panTo(pos);
+  }
+
+  function showRoute(pickup, dest) {
+    directionsService.route({
+      origin: pickup,
+      destination: dest,
+      travelMode: google.maps.TravelMode.DRIVING
+    }, (result, status) => {
+      if (status === 'OK') {
+        directionsRenderer.setDirections(result);
+        const leg = result.routes[0].legs[0];
+        document.getElementById('etaVal').textContent = Math.ceil(leg.duration.value / 60);
+        document.getElementById('distVal').textContent = (leg.distance.value / 1000).toFixed(1) + 'km';
+        document.getElementById('etaBubble').textContent = Math.ceil(leg.duration.value / 60);
+        document.getElementById('distBubble').textContent = (leg.distance.value / 1000).toFixed(1);
+      }
+    });
+  }
+</script>
+<script async defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCV0e64xLCJgtbwo2WB_mBVwJDOzda26CQ&callback=initMap"
+  onerror="console.warn('Maps API unavailable')">
+</script>
+
+<script src="api.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', async () => {
+    API.requireAuth();
+
+    const params = new URLSearchParams(window.location.search);
+    tripId = params.get('tripId') || params.get('id');
+
+    if (!tripId) {
+      document.getElementById('tripTitle').textContent = 'No trip specified';
+      document.getElementById('tripSub').textContent = 'Go back and select a trip to track.';
+      return;
+    }
+
+    await loadTripDetails();
+    startTracking();
+  });
+
+  async function loadTripDetails() {
+    try {
+      const res = await API.get(`/trips/${tripId}`);
+      const trip = res.data || res.trip || res;
+
+      document.getElementById('tripTitle').textContent = `Trip #${tripId.slice(0, 8)}`;
+      document.getElementById('tripSub').textContent = `Status: ${trip.status || 'IN_PROGRESS'}`;
+
+      const from = trip.originName || trip.ride?.pickupLocation || trip.pickupLocation || 'Pickup Point';
+      const to = trip.destinationName || trip.ride?.destination || trip.destination || 'Destination';
+
+      document.getElementById('fromLocation').textContent = from;
+      document.getElementById('toLocation').textContent = to;
+      document.getElementById('fareVal').textContent = trip.fare ? `₹${trip.fare}` : '—';
+      document.getElementById('seatsVal').textContent = trip.passengers?.length || trip.seats || '—';
+      document.getElementById('statusBubble').textContent = trip.status || 'ACTIVE';
+
+      // Driver info
+      const driver = trip.driver || trip.ride?.driver || {};
+      document.getElementById('driverName').textContent = driver.name || 'Driver';
+      document.getElementById('driverMeta').textContent = driver.phone || driver.email || '—';
+      document.getElementById('driverAvatar').textContent = (driver.name || 'D').charAt(0).toUpperCase();
+
+      // Timeline
+      if (trip.createdAt) document.getElementById('tl-booked').textContent = new Date(trip.createdAt).toLocaleTimeString();
+      if (trip.startTime) {
+        document.getElementById('tl-dot-started').classList.add('done');
+        document.getElementById('tl-dot-started').textContent = '✓';
+        document.getElementById('tl-started').textContent = new Date(trip.startTime).toLocaleTimeString();
+      }
+
+      // Show map route
+      if (trip.ride) {
+        const r = trip.ride;
+        const pickup = { lat: r.pickupLat || 22.5726, lng: r.pickupLng || 88.3639 };
+        const dest = { lat: r.destinationLat || 22.6, lng: r.destinationLng || 88.4 };
+        setTimeout(() => { if (typeof showRoute === 'function') showRoute(pickup, dest); }, 2000);
+      }
+    } catch(err) {
+      console.error(err);
+      document.getElementById('tripSub').textContent = err.message;
+    }
+  }
+
+  function startTracking() {
+    // Poll live location every 5s
+    pollLocation();
+    pollInterval = setInterval(pollLocation, 5000);
+
+    // Socket.IO real-time events
+    try {
+      const socket = io('http://localhost:5000');
+      const token = API.getToken();
+      if (token) socket.emit('authenticate', { token });
+
+      socket.on('location:update', (data) => {
+        if (data.tripId === tripId && data.lat && data.lng) {
+          if (typeof updateDriverMarker === 'function') updateDriverMarker(data.lat, data.lng);
         }
+      });
 
-
-
-        /* =========================================================
-           START CAR ANIMATION
-        ========================================================== */
-
-        function startCarAnimation() {
-
-
-            /*
-             * Reset timer
-             */
-
-            animationStartTime = null;
-
-
-
-            /*
-             * Cancel previous animation
-             */
-
-            if (animationFrame) {
-
-                cancelAnimationFrame(
-                    animationFrame
-                );
-
-            }
-
-
-
-            /*
-             * Put car at source
-             */
-
-            carMarker.setPosition(
-                pickup
-            );
-
-
-
-            /*
-             * Reset progress
-
-             */
-
-            const progressBar =
-                document.getElementById(
-                    "progress-bar"
-                );
-
-            if (progressBar) {
-
-                progressBar.style.width =
-                    "0%";
-
-            }
-
-
-
-            /*
-             * Reset ETA
-             */
-
-            const arrivalTime =
-                document.getElementById(
-                    "arrival-time"
-                );
-
-            if (arrivalTime) {
-
-                arrivalTime.innerText =
-                    "4 min";
-
-            }
-
-
-
-            /*
-             * Start animation
-
-             */
-
-            animationFrame =
-                requestAnimationFrame(
-                    animateCar
-                );
-
+      socket.on('trip:status', (data) => {
+        if (data.tripId === tripId) {
+          document.getElementById('statusBubble').textContent = data.status;
+          document.getElementById('tripSub').textContent = `Status: ${data.status}`;
+          if (data.status === 'COMPLETED') {
+            clearInterval(pollInterval);
+            API.toast('Trip completed! 🎉', 'success');
+            setTimeout(() => { window.location.href = 'ride-history.html'; }, 2000);
+          }
         }
-
-
-
-        /* =========================================================
-           MOVING CAR ANIMATION
-        ========================================================== */
-
-        function animateCar(timestamp) {
-
-
-            /*
-             * Set initial timestamp
-             */
-
-            if (animationStartTime === null) {
-
-                animationStartTime =
-                    timestamp;
-
-            }
-
-
-
-            /*
-             * Calculate elapsed time
-             */
-
-            const elapsed =
-                timestamp -
-                animationStartTime;
-
-
-
-            /*
-             * Calculate movement progress
-
-             * 0 = source
-             * 1 = destination
-             */
-
-            let progress =
-                elapsed /
-                animationDuration;
-
-
-
-            /*
-             * Prevent going beyond destination
-             */
-
-            progress =
-                Math.min(
-                    progress,
-                    1
-                );
-
-
-
-            /* =====================================================
-               SMOOTH MOVEMENT
-            ====================================================== */
-
-            const smoothProgress =
-                easeInOutCubic(
-                    progress
-                );
-
-
-
-            /* =====================================================
-               CALCULATE CURRENT LATITUDE
-            ====================================================== */
-
-            const currentLat =
-                pickup.lat +
-                (
-                    destination.lat -
-                    pickup.lat
-                ) *
-                smoothProgress;
-
-
-
-            /* =====================================================
-               CALCULATE CURRENT LONGITUDE
-            ====================================================== */
-
-            const currentLng =
-                pickup.lng +
-                (
-                    destination.lng -
-                    pickup.lng
-                ) *
-                smoothProgress;
-
-
-
-            /*
-             * Current car position
-             */
-
-            const currentPosition = {
-
-                lat: currentLat,
-
-                lng: currentLng
-
-            };
-
-
-
-            /* =====================================================
-               MOVE CAR
-            ====================================================== */
-
-            carMarker.setPosition(
-                currentPosition
-            );
-
-
-
-            /* =====================================================
-               UPDATE PROGRESS BAR
-            ====================================================== */
-
-            const percentage =
-                Math.round(
-                    progress * 100
-                );
-
-
-            const progressBar =
-                document.getElementById(
-                    "progress-bar"
-                );
-
-
-            if (progressBar) {
-
-                progressBar.style.width =
-                    percentage + "%";
-
-            }
-
-
-
-            /* =====================================================
-               UPDATE ETA
-            ====================================================== */
-
-            const arrivalTime =
-                document.getElementById(
-                    "arrival-time"
-                );
-
-
-            if (arrivalTime) {
-
-
-                /*
-                 * Keep the displayed ETA
-                 * smooth and easy to understand.
-                 */
-
-                const totalMinutes = 4;
-
-
-                const remainingMinutes =
-                    Math.ceil(
-                        totalMinutes *
-                        (1 - progress)
-                    );
-
-
-                if (progress < 1) {
-
-                    arrivalTime.innerText =
-                        remainingMinutes +
-                        " min";
-
-                } else {
-
-                    arrivalTime.innerText =
-                        "Arrived";
-
-                }
-
-            }
-
-
-
-            /* =====================================================
-               CONTINUE MOVEMENT
-            ====================================================== */
-
-            if (progress < 1) {
-
-
-                /*
-                 * Continue moving the car
-                 */
-
-                animationFrame =
-                    requestAnimationFrame(
-                        animateCar
-                    );
-
-
-            } else {
-
-
-                /*
-                 * Destination reached.
-                 *
-                 * Keep the car there for
-                 * 4 seconds before restarting.
-                 */
-
-                setTimeout(
-                    function () {
-
-                        startCarAnimation();
-
-                    },
-                    4000
-                );
-
-            }
-
-        }
-
-
-
-        /* =========================================================
-           SMOOTH EASING FUNCTION
-        ========================================================== */
-
-        function easeInOutCubic(t) {
-
-
-            /*
-             * Slow start
-             */
-
-            if (t < 0.5) {
-
-                return 4 *
-                    t *
-                    t *
-                    t;
-
-            }
-
-
-            /*
-             * Slow finish
-             */
-
-            return 1 -
-                Math.pow(
-                    -2 * t + 2,
-                    3
-                ) /
-                2;
-
-        }
-
-
-
-        /* =========================================================
-           CHAT BUTTON
-        ========================================================== */
-
-        document
-            .getElementById("chatButton")
-            .addEventListener(
-                "click",
-                function () {
-
-                    alert(
-                        "Chat with Manish Halder"
-                    );
-
-                }
-            );
-
-    </script>
-
-
-
-    <!-- =========================================================
-         GOOGLE MAPS API
-
-         YOUR ORIGINAL API KEY IS RETAINED
-    ========================================================== -->
-
-    <script
-        async
-        defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBXINXYhwOmPz1EOFH63mU0GdOMpC6XHqs&callback=initMap"
-    ></script>
-
-
+      });
+    } catch(e) {
+      console.warn('Socket.IO not available:', e.message);
+    }
+  }
+
+  async function pollLocation() {
+    try {
+      const res = await API.tracking.getLiveLocation(tripId);
+      const loc = res.data || res;
+      if (loc.lat && loc.lng && typeof updateDriverMarker === 'function') {
+        updateDriverMarker(loc.lat, loc.lng);
+      }
+    } catch(e) {
+      // Silently ignore — driver may not have started sharing location
+    }
+  }
+
+  function confirmCancel() {
+    if (confirm('Are you sure you want to cancel this trip?')) {
+      API.patch(`/trips/${tripId}/cancel`, {})
+        .then(() => {
+          API.toast('Trip cancelled', 'info');
+          clearInterval(pollInterval);
+          setTimeout(() => { window.location.href = 'my-trips.html'; }, 1500);
+        })
+        .catch(err => API.toast(err.message, 'error'));
+    }
+  }
+</script>
 </body>
-
 </html>
-```

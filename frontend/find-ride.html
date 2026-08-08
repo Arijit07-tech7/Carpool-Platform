@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 
@@ -3360,6 +3359,7 @@ select.input-field{
 
 
 
+<script src="api.js"></script>
 <script>
 
 /* =========================================================
@@ -4432,6 +4432,10 @@ function renderRides(
                             })
                         );
 
+                        setTimeout(() => {
+                            window.location.href = `trip-booking.html?rideId=${ride.id || ''}`;
+                        }, 500);
+
                     }
                 );
 
@@ -4966,4 +4970,3 @@ console.log(
 
 </body>
 </html>
-```

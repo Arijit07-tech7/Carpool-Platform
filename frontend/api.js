@@ -130,8 +130,10 @@
         phone,
         organizationCode,
       });
-      if (data.token && data.data) {
-        saveSession(data.token, data.data);
+      // Backend wraps response as { success, data: { user, token } }
+      const payload = data.data || data;
+      if (payload.token && payload.user) {
+        saveSession(payload.token, payload.user);
       }
       return data;
     },
@@ -142,8 +144,10 @@
      */
     async login(email, password) {
       const data = await post("/auth/login", { email, password });
-      if (data.token && data.data) {
-        saveSession(data.token, data.data);
+      // Backend wraps response as { success, data: { user, token } }
+      const payload = data.data || data;
+      if (payload.token && payload.user) {
+        saveSession(payload.token, payload.user);
       }
       return data;
     },

@@ -55,6 +55,7 @@ exports.register = async (userData) => {
     password,
     role,
     organizationId,
+    organizationCode,
   } = userData;
 
   // Check whether email already exists.
@@ -65,6 +66,24 @@ exports.register = async (userData) => {
     throw new Error(
       "An account with this email already exists."
     );
+  }
+
+  // Resolve organizationId: accept either direct UUID or a human-readable code.
+  let resolvedOrgId = organizationId || null;
+
+  if (!resolvedOrgId && organizationCode) {
+    const prisma = require("../config/database.js");
+    const org = await prisma.organization.findUnique({
+      where: { code: organizationCode.trim().toUpperCase() },
+    });
+
+    if (!org) {
+      throw new Error(
+        "Invalid organization code. Please check and try again."
+      );
+    }
+
+    resolvedOrgId = org.id;
   }
 
   // Hash password before storing it.
@@ -78,7 +97,7 @@ exports.register = async (userData) => {
       phone,
       password: hashedPassword,
       role: role || "EMPLOYEE",
-      organizationId: organizationId || null,
+      organizationId: resolvedOrgId,
     });
 
   const token = generateToken(user);
@@ -249,10 +268,10 @@ exports.authenticateToken = async (
   token
 ) => {
   const decoded =
-    verifyToken(token);
+    exports.verifyToken(token);
 
   const user =
-    await getAuthenticatedUser(
+    await exports.getAuthenticatedUser(
       decoded.userId
     );
 
@@ -260,4 +279,53 @@ exports.authenticateToken = async (
     user,
     decoded,
   };
+};
+
+
+/**
+ * Logout user (stateless — client drops the token).
+ */
+exports.logout = async (user) => {
+  // JWT is stateless; nothing to invalidate server-side.
+  return { success: true, message: "Logged out successfully." };
+};
+
+
+/**
+ * Get current authenticated user by ID.
+ */
+exports.getCurrentUser = async (userId) => {
+  const user = await userRepository.findUserById(userId);
+  if (!user) {
+    throw new Error("User not found.");
+  }
+  return sanitizeUser(user);
+};
+
+
+/**
+ * Forgot password — sends reset email.
+ * (stub: email sending not yet wired up)
+ */
+exports.forgotPassword = async (email) => {
+  const user = await userRepository.findUserByEmail(email);
+  // Don't reveal whether account exists
+  if (!user) {
+    return { success: true, message: "If an account exists, a reset link has been sent." };
+  }
+  // TODO: generate reset token and send email
+  return { success: true, message: "If an account exists, a reset link has been sent." };
+};
+
+
+/**
+ * Reset password using token.
+ * (stub: token verification not yet wired up)
+ */
+exports.resetPassword = async ({ token, newPassword, confirmPassword }) => {
+  if (newPassword !== confirmPassword) {
+    throw new Error("Passwords do not match.");
+  }
+  // TODO: verify reset token and update password
+  return { success: true, message: "Password reset successfully." };
 };

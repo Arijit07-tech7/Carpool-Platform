@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 
@@ -21,7 +20,7 @@
         content="RideSync Trip Booking"
     >
 
-    <title>RideSync — Confirm Trip</title>
+    <title>RideSync â€” Confirm Trip</title>
 
     <link
         rel="preconnect"
@@ -1399,7 +1398,7 @@
             class="back-button"
             id="backButton"
         >
-            ← Back to rides
+            â† Back to rides
         </button>
 
 
@@ -1448,7 +1447,7 @@
                 class="error-back"
                 id="errorBack"
             >
-                ← Choose a ride
+                â† Choose a ride
             </button>
 
         </section>
@@ -1521,7 +1520,7 @@
                                         class="route-location"
                                         id="startLocation"
                                     >
-                                        —
+                                        â€”
                                     </div>
 
                                 </div>
@@ -1546,7 +1545,7 @@
                                         class="route-location"
                                         id="destinationLocation"
                                     >
-                                        —
+                                        â€”
                                     </div>
 
                                 </div>
@@ -1572,7 +1571,7 @@
                                     class="meta-value"
                                     id="travelDate"
                                 >
-                                    —
+                                    â€”
                                 </div>
 
                             </div>
@@ -1588,7 +1587,7 @@
                                     class="meta-value"
                                     id="travelTime"
                                 >
-                                    —
+                                    â€”
                                 </div>
 
                             </div>
@@ -1604,7 +1603,7 @@
                                     class="meta-value"
                                     id="seatCount"
                                 >
-                                    —
+                                    â€”
                                 </div>
 
                             </div>
@@ -1653,7 +1652,7 @@
 
 
                                 <div class="verified">
-                                    ✓ VERIFIED
+                                    âœ“ VERIFIED
                                 </div>
 
                             </div>
@@ -1667,7 +1666,7 @@
                         <div class="vehicle-card">
 
                             <div class="vehicle-icon">
-                                🚙
+                                ðŸš™
                             </div>
 
 
@@ -1730,7 +1729,7 @@
                             class="fare"
                             id="fareAmount"
                         >
-                            ₹0
+                            â‚¹0
                         </div>
 
                         <div class="fare-note">
@@ -1756,7 +1755,7 @@
                             class="summary-value"
                             id="rideType"
                         >
-                            —
+                            â€”
                         </span>
 
                     </div>
@@ -1772,7 +1771,7 @@
                             class="summary-value"
                             id="routeSummary"
                         >
-                            —
+                            â€”
                         </span>
 
                     </div>
@@ -1804,7 +1803,7 @@
                             class="summary-value"
                             id="summaryVehicle"
                         >
-                            —
+                            â€”
                         </span>
 
                     </div>
@@ -1820,7 +1819,7 @@
                             class="summary-value"
                             id="summarySeats"
                         >
-                            —
+                            â€”
                         </span>
 
                     </div>
@@ -1835,13 +1834,13 @@
                         class="confirm-button"
                         id="confirmBooking"
                     >
-                        CONFIRM BOOKING →
+                        CONFIRM BOOKING â†’
                     </button>
 
 
                     <div class="security-note">
 
-                        ✓ Your booking information is stored locally
+                        âœ“ Your booking information is stored locally
                         for this RideSync demo.
 
                     </div>
@@ -1866,644 +1865,311 @@
     ></div>
 
 
+    <script src="api.js"></script>
     <script>
 
         /* =====================================================
-           RIDESYNC TRIP BOOKING ENGINE
+           RIDESYNC TRIP BOOKING â€” REAL API INTEGRATION
         ===================================================== */
 
+        let rideData  = null;
+        let bookingId = null;
+        let selectedSeats = 1;
+        let selectedPayment = 'WALLET';
 
-        const bookingContent =
-            document.getElementById("bookingContent");
+        // -------------------------------------------------------
+        // HELPERS
+        // -------------------------------------------------------
 
-        const errorState =
-            document.getElementById("errorState");
-
-
-        /*
-         -------------------------------------------------------
-         LOAD SELECTED RIDE
-         -------------------------------------------------------
-        */
-
-        let rideData = null;
-
-
-        try {
-
-            const savedRide =
-                localStorage.getItem(
-                    "ridesyncSelectedRide"
-                );
-
-            if (savedRide) {
-
-                rideData =
-                    JSON.parse(savedRide);
-
-            }
-
-        } catch (error) {
-
-            console.error(
-                "RideSync booking data error:",
-                error
-            );
-
+        function safeValue(val, fallback) {
+            return (val !== null && val !== undefined && val !== "") ? val : fallback;
         }
-
-
-        /*
-         -------------------------------------------------------
-         HELPERS
-         -------------------------------------------------------
-        */
-
-        function safeValue(value, fallback = "—") {
-
-            if (
-                value === undefined ||
-                value === null ||
-                String(value).trim() === ""
-            ) {
-
-                return fallback;
-
-            }
-
-            return String(value);
-
-        }
-
-
-        function escapeHTML(value) {
-
-            return String(value)
-                .replaceAll("&", "&amp;")
-                .replaceAll("<", "&lt;")
-                .replaceAll(">", "&gt;")
-                .replaceAll('"', "&quot;")
-                .replaceAll("'", "&#039;");
-
-        }
-
-
-        function formatDate(dateValue) {
-
-            if (!dateValue) {
-                return "—";
-            }
-
-            const date =
-                new Date(
-                    dateValue + "T00:00:00"
-                );
-
-            if (Number.isNaN(date.getTime())) {
-                return dateValue;
-            }
-
-            return date.toLocaleDateString(
-                "en-IN",
-                {
-                    day: "2-digit",
-                    month: "short",
-                    year: "numeric"
-                }
-            );
-
-        }
-
-
-        function formatTime(timeValue) {
-
-            if (!timeValue) {
-                return "—";
-            }
-
-            const parts =
-                timeValue.split(":");
-
-            if (parts.length < 2) {
-                return timeValue;
-            }
-
-            let hour =
-                Number(parts[0]);
-
-            const minute =
-                parts[1];
-
-            const period =
-                hour >= 12
-                    ? "PM"
-                    : "AM";
-
-            hour =
-                hour % 12 || 12;
-
-            return `${hour}:${minute} ${period}`;
-
-        }
-
 
         function getInitials(name) {
+            if (!name) return "?";
+            return name.split(" ").map(w => w[0]).join("").toUpperCase().slice(0, 2);
+        }
 
-            const clean =
-                safeValue(
-                    name,
-                    "RideSync Driver"
-                );
+        function formatDate(d) {
+            if (!d) return "â€”";
+            return new Date(d).toLocaleDateString("en-IN", { weekday: "short", day: "numeric", month: "long", year: "numeric" });
+        }
 
-            const words =
-                clean
-                    .trim()
-                    .split(/\s+/)
-                    .filter(Boolean);
-
-            if (!words.length) {
-                return "D";
-            }
-
-            if (words.length === 1) {
-
-                return words[0]
-                    .substring(0, 2)
-                    .toUpperCase();
-
-            }
-
-            return (
-                words[0][0] +
-                words[words.length - 1][0]
-            ).toUpperCase();
-
+        function formatTime(t) {
+            if (!t) return "â€”";
+            if (t.includes("T")) return new Date(t).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" });
+            return t;
         }
 
 
-        /*
-         -------------------------------------------------------
-         DISPLAY RIDE
-         -------------------------------------------------------
-        */
+        // -------------------------------------------------------
+        // LOAD RIDE FROM BACKEND (or localStorage fallback)
+        // -------------------------------------------------------
+
+        async function loadRide() {
+            const params = new URLSearchParams(window.location.search);
+            const rideId = params.get("rideId") || params.get("id");
+
+            if (rideId) {
+                try {
+                    const res = await API.rides.getById(rideId);
+                    rideData = res.data || res.ride || res;
+                    rideData.id = rideData.id || rideId;
+                    renderRide();
+                    return;
+                } catch(err) {
+                    console.warn("Could not fetch ride from backend:", err.message);
+                }
+            }
+
+            // Fallback to localStorage (for demo/testing)
+            const stored = localStorage.getItem("ridesyncSelectedRide") || localStorage.getItem("ridesync_selected_ride");
+            if (stored) {
+                try {
+                    rideData = JSON.parse(stored);
+                    renderRide();
+                    return;
+                } catch(_) {}
+            }
+
+            showError("No ride selected. Please go back and select a ride.");
+        }
+
+
+        // -------------------------------------------------------
+        // RENDER
+        // -------------------------------------------------------
 
         function renderRide() {
-
-            if (
-                !rideData ||
-                !rideData.start ||
-                !rideData.destination
-            ) {
-
-                bookingContent.style.display =
-                    "none";
-
-                errorState.classList.add(
-                    "show"
-                );
-
-                return;
-
-            }
-
-
-            bookingContent.style.display =
-                "grid";
-
-            errorState.classList.remove(
-                "show"
-            );
-
-
-            const start =
-                safeValue(
-                    rideData.start
-                );
-
-            const destination =
-                safeValue(
-                    rideData.destination
-                );
-
-
-            /*
-             ROUTE
-            */
-
-            document.getElementById(
-                "startLocation"
-            ).textContent =
-                start;
-
-
-            document.getElementById(
-                "destinationLocation"
-            ).textContent =
-                destination;
-
-
-            document.getElementById(
-                "routeSummary"
-            ).textContent =
-                `${start} → ${destination}`;
-
-
-            /*
-             DATE / TIME
-            */
-
-            document.getElementById(
-                "travelDate"
-            ).textContent =
-                formatDate(
-                    rideData.date
-                );
-
-
-            document.getElementById(
-                "travelTime"
-            ).textContent =
-                formatTime(
-                    rideData.time
-                );
-
-
-            /*
-             SEATS
-            */
-
-            const seats =
-                safeValue(
-                    rideData.seats,
-                    "1"
-                );
-
-
-            document.getElementById(
-                "seatCount"
-            ).textContent =
-                `${seats} ${
-                    Number(seats) === 1
-                        ? "Seat"
-                        : "Seats"
-                }`;
-
-
-            document.getElementById(
-                "summarySeats"
-            ).textContent =
-                `${seats} ${
-                    Number(seats) === 1
-                        ? "seat"
-                        : "seats"
-                }`;
-
-
-            /*
-             DRIVER
-            */
-
-            const driver =
-                safeValue(
-                    rideData.driver,
-                    rideData.type === "offered"
-                        ? "You"
-                        : "RideSync Driver"
-                );
-
-
-            document.getElementById(
-                "driverName"
-            ).textContent =
-                driver;
-
-
-            document.getElementById(
-                "driverAvatar"
-            ).textContent =
-                getInitials(driver);
-
-
-            document.getElementById(
-                "driverRole"
-            ).textContent =
-                rideData.type === "offered"
-                    ? "Ride owner • RideSync member"
-                    : "Verified RideSync member";
-
-
-            /*
-             VEHICLE
-            */
-
-            const vehicle =
-                safeValue(
-                    rideData.vehicle,
-                    "RideSync Vehicle"
-                );
-
-
-            document.getElementById(
-                "vehicleName"
-            ).textContent =
-                vehicle;
-
-
-            document.getElementById(
-                "summaryVehicle"
-            ).textContent =
-                vehicle;
-
-
-            /*
-             REGISTRATION
-            */
-
-            let registration =
-                safeValue(
-                    rideData.registration,
-                    ""
-                );
-
-
-            /*
-             If vehicle is stored as:
-             Hyundai i20 • WB 02 AB 1234
-            */
-
-            if (
-                !registration &&
-                vehicle.includes("•")
-            ) {
-
-                const parts =
-                    vehicle.split("•");
-
-                registration =
-                    parts[1].trim();
-
-            }
-
-
-            document.getElementById(
-                "vehicleNumber"
-            ).textContent =
-                registration ||
-                "Registered RideSync vehicle";
-
-
-            /*
-             FARE
-            */
-
-            const fare =
-                Number(
-                    rideData.fare || 0
-                );
-
-
-            document.getElementById(
-                "fareAmount"
-            ).textContent =
-                `₹${fare.toLocaleString("en-IN")}`;
-
-
-            /*
-             RIDE TYPE
-            */
-
-            document.getElementById(
-                "rideType"
-            ).textContent =
-                rideData.type === "offered"
-                    ? "Offered Ride"
-                    : "Booked Ride";
-
-
-            /*
-             DISTANCE
-             Uses existing data if available.
-             Later Google Maps can populate
-             rideData.distance.
-            */
-
-            document.getElementById(
-                "distanceValue"
-            ).textContent =
-                safeValue(
-                    rideData.distance,
-                    "Route distance pending"
-                );
-
+            if (!rideData) { showError("Ride data unavailable."); return; }
+
+            const start = safeValue(rideData.pickupLocation, safeValue(rideData.start, "â€”"));
+            const destination = safeValue(rideData.destination, "â€”");
+            const dateStr = formatDate(rideData.rideDate || rideData.date || rideData.startTime);
+            const timeStr = formatTime(rideData.rideTime || rideData.time || rideData.startTime);
+
+            // Update any element that exists in the page
+            const setEl = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+
+            setEl("startLocation", start);
+            setEl("endLocation", destination);
+            setEl("routeSummary", `${start} â†’ ${destination}`);
+            setEl("travelDate", dateStr);
+            setEl("travelTime", timeStr);
+            setEl("seatCount", `${selectedSeats} Seat${selectedSeats > 1 ? "s" : ""}`);
+            setEl("summarySeats", `${selectedSeats} seat${selectedSeats > 1 ? "s" : ""}`);
+
+            const driver = rideData.driver || {};
+            setEl("driverName", driver.name || "RideSync Driver");
+            setEl("driverRole", "Verified RideSync Member");
+            const driverAvEl = document.getElementById("driverAvatar");
+            if (driverAvEl) driverAvEl.textContent = getInitials(driver.name || "D");
+
+            const vehicle = rideData.vehicle || {};
+            setEl("vehicleModel", [vehicle.make, vehicle.model, vehicle.year].filter(Boolean).join(" ") || "â€”");
+            setEl("vehiclePlate", vehicle.licensePlate || vehicle.registrationNumber || "â€”");
+
+            updateFare();
+
+            // Hide loading, show content
+            const loading = document.getElementById("loadingState");
+            const content = document.getElementById("bookingContent");
+            if (loading) loading.style.display = "none";
+            if (content) content.style.display = "block";
         }
 
 
-        /*
-         -------------------------------------------------------
-         CONFIRM BOOKING
-         -------------------------------------------------------
-        */
+        function updateFare() {
+            if (!rideData) return;
+            const farePerSeat = parseFloat(rideData.farePerSeat || rideData.pricePerSeat || rideData.price || 0);
+            const total = farePerSeat * selectedSeats;
 
-        document
-            .getElementById("confirmBooking")
-            .addEventListener(
-                "click",
-                function () {
+            const setEl = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+            setEl("farePerSeat", `â‚¹${farePerSeat.toFixed(0)}`);
+            setEl("totalFare", `â‚¹${total.toFixed(0)}`);
+            setEl("summaryTotal", `â‚¹${total.toFixed(0)}`);
+        }
 
 
-                    if (
-                        !rideData ||
-                        !rideData.start ||
-                        !rideData.destination
-                    ) {
+        function showError(msg) {
+            const err = document.getElementById("errorState");
+            const content = document.getElementById("bookingContent");
+            const loading = document.getElementById("loadingState");
+            if (loading) loading.style.display = "none";
+            if (content) content.style.display = "none";
+            if (err) { err.style.display = "flex"; const m = err.querySelector("p"); if (m) m.textContent = msg; }
+        }
 
-                        showToast(
-                            "Ride information is missing."
-                        );
 
-                        return;
+        // -------------------------------------------------------
+        // SEAT COUNTER
+        // -------------------------------------------------------
 
+        function changeSeat(delta) {
+            const max = parseInt(rideData?.availableSeats || rideData?.totalSeats || 4);
+            selectedSeats = Math.max(1, Math.min(max, selectedSeats + delta));
+            const setEl = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+            setEl("seatCount", `${selectedSeats} Seat${selectedSeats > 1 ? "s" : ""}`);
+            setEl("summarySeats", `${selectedSeats} seat${selectedSeats > 1 ? "s" : ""}`);
+            setEl("seatDisplay", selectedSeats);
+            updateFare();
+        }
+
+        // Wire seat buttons if they exist
+        document.addEventListener("DOMContentLoaded", () => {
+            document.getElementById("seatMinus")?.addEventListener("click", () => changeSeat(-1));
+            document.getElementById("seatPlus")?.addEventListener("click", () => changeSeat(1));
+        });
+
+
+        // -------------------------------------------------------
+        // PAYMENT METHOD SELECTION
+        // -------------------------------------------------------
+
+        function selectPayment(method) {
+            selectedPayment = method;
+            document.querySelectorAll(".payment-option").forEach(el => el.classList.remove("selected"));
+            document.getElementById(`pay-${method}`)?.classList.add("selected");
+
+            const paypalContainer = document.getElementById("paypal-button-container");
+            if (paypalContainer) paypalContainer.style.display = method === "PAYPAL" ? "block" : "none";
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll(".payment-option").forEach(el => {
+                el.addEventListener("click", () => selectPayment(el.dataset.method || "WALLET"));
+            });
+        });
+
+
+        // -------------------------------------------------------
+        // CONFIRM BOOKING â€” REAL API
+        // -------------------------------------------------------
+
+        async function confirmBooking() {
+            if (!API.isLoggedIn()) { API.toast("Please login first", "warning"); window.location.href = "login.html"; return; }
+            if (!rideData) { API.toast("Ride data missing", "error"); return; }
+
+            const btn = document.getElementById("confirmBooking");
+            if (btn) { btn.disabled = true; btn.textContent = "Processing..."; }
+
+            try {
+                // 1. Create booking
+                const bookRes = await API.bookings.create(rideData.id, selectedSeats);
+                bookingId = bookRes.data?.id || bookRes.booking?.id || bookRes.id;
+
+                if (selectedPayment === "PAYPAL") {
+                    await processPayPal();
+                } else if (selectedPayment === "WALLET") {
+                    await API.patch("/wallet/pay", { bookingId, amount: calcTotal() });
+                    await createPayment("WALLET");
+                    onSuccess();
+                } else {
+                    // CASH â€” just confirm booking
+                    await createPayment("CASH");
+                    onSuccess();
+                }
+            } catch(err) {
+                API.toast(err.message || "Booking failed", "error");
+                if (btn) { btn.disabled = false; btn.textContent = "Confirm Booking"; }
+            }
+        }
+
+        async function createPayment(method) {
+            try {
+                await API.payments.create({ tripId: rideData.tripId || bookingId, paymentMethod: method });
+            } catch(e) {
+                console.warn("Payment record creation failed:", e.message);
+            }
+        }
+
+        function calcTotal() {
+            const fare = parseFloat(rideData.farePerSeat || rideData.pricePerSeat || 0);
+            return fare * selectedSeats;
+        }
+
+        async function processPayPal() {
+            const amount = calcTotal();
+            const orderRes = await API.payments.createPaypalOrder({ tripId: rideData.id, amount });
+            const approvalUrl = orderRes.data?.approvalUrl;
+            if (!approvalUrl) { API.toast("PayPal order creation failed", "error"); return; }
+
+            // Open PayPal in popup
+            const popup = window.open(approvalUrl, "paypal_checkout", "width=600,height=700");
+            const checkClosed = setInterval(async () => {
+                if (popup && popup.closed) {
+                    clearInterval(checkClosed);
+                    // Try to capture
+                    try {
+                        await API.payments.capturePaypal({ paymentId: bookingId, paypalOrderId: orderRes.data?.orderId });
+                        onSuccess();
+                    } catch(e) {
+                        API.toast("PayPal capture failed: " + e.message, "error");
                     }
-
-
-                    const booking = {
-
-                        ...rideData,
-
-                        bookingId:
-                            "RS-" +
-                            Date.now(),
-
-                        status:
-                            "confirmed",
-
-                        bookedAt:
-                            new Date()
-                                .toISOString()
-
-                    };
-
-
-                    /*
-                     Save active booking
-                    */
-
-                    localStorage.setItem(
-                        "ridesync_active_booking",
-                        JSON.stringify(
-                            booking
-                        )
-                    );
-
-
-                    /*
-                     Also maintain selected ride
-                    */
-
-                    localStorage.setItem(
-                        "ridesyncSelectedRide",
-                        JSON.stringify(
-                            booking
-                        )
-                    );
-
-
-                    showToast(
-                        "Booking confirmed. Starting your trip..."
-                    );
-
-
-                    const button =
-                        document.getElementById(
-                            "confirmBooking"
-                        );
-
-
-                    button.disabled =
-                        true;
-
-                    button.textContent =
-                        "BOOKING CONFIRMED ✓";
-
-
-                    /*
-                     Small premium transition
-                    */
-
-                    setTimeout(
-                        function () {
-
-                            window.location.href =
-                                "active-trip.html";
-
-                        },
-                        900
-                    );
-
                 }
-            );
+            }, 1000);
+        }
 
-
-        /*
-         -------------------------------------------------------
-         BACK BUTTON
-        -------------------------------------------------------
-        */
-
-        document
-            .getElementById("backButton")
-            .addEventListener(
-                "click",
-                function () {
-
-                    window.history.back();
-
-                }
-            );
-
-
-        document
-            .getElementById("errorBack")
-            .addEventListener(
-                "click",
-                function () {
-
-                    window.location.href =
-                        "find-ride.html";
-
-                }
-            );
-
-
-        /*
-         -------------------------------------------------------
-         TOAST
-        -------------------------------------------------------
-        */
-
-        let toastTimer;
-
-
-        function showToast(message) {
-
-            const toast =
-                document.getElementById(
-                    "toast"
-                );
-
-
-            toast.textContent =
-                message;
-
-
-            toast.classList.add(
-                "show"
-            );
-
-
-            clearTimeout(
-                toastTimer
-            );
-
-
-            toastTimer =
-                setTimeout(
-                    function () {
-
-                        toast.classList.remove(
-                            "show"
-                        );
-
-                    },
-                    2800
-                );
-
+        function onSuccess() {
+            API.toast("Booking confirmed! Starting your trip... ðŸŽ‰", "success");
+            localStorage.setItem("ridesync_active_booking", JSON.stringify({ ...rideData, bookingId, status: "confirmed" }));
+            setTimeout(() => {
+                const tripId = rideData.tripId || bookingId;
+                window.location.href = tripId ? `live_tracking.html?tripId=${tripId}` : "my-trips.html";
+            }, 1500);
         }
 
 
-        /*
-         -------------------------------------------------------
-         INITIALIZE
-        -------------------------------------------------------
-        */
+        // -------------------------------------------------------
+        // BACK BUTTON
+        // -------------------------------------------------------
 
-        renderRide();
+        document.addEventListener("DOMContentLoaded", () => {
+            document.getElementById("backButton")?.addEventListener("click", () => window.history.back());
+            document.getElementById("errorBack")?.addEventListener("click", () => window.location.href = "find-ride.html");
+            document.getElementById("confirmBooking")?.addEventListener("click", confirmBooking);
+        });
 
 
-        /*
-         -------------------------------------------------------
-         DEBUG
-        -------------------------------------------------------
-        */
+        // -------------------------------------------------------
+        // PAYPAL SDK
+        // -------------------------------------------------------
 
-        console.log(
-            "RideSync Trip Booking:",
-            rideData
-        );
+        function initPayPal() {
+            if (typeof paypal === "undefined") return;
+            const container = document.getElementById("paypal-button-container");
+            if (!container) return;
+
+            paypal.Buttons({
+                createOrder: async () => {
+                    const amount = calcTotal();
+                    const res = await API.payments.createPaypalOrder({ tripId: rideData?.id, amount });
+                    return res.data?.orderId;
+                },
+                onApprove: async (data) => {
+                    await API.payments.capturePaypal({ paymentId: bookingId, paypalOrderId: data.orderID });
+                    onSuccess();
+                },
+                onError: (err) => {
+                    API.toast("PayPal error: " + err, "error");
+                }
+            }).render("#paypal-button-container");
+        }
+
+
+        // -------------------------------------------------------
+        // INIT
+        // -------------------------------------------------------
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            if (!API.isLoggedIn()) { window.location.href = "login.html"; return; }
+            await loadRide();
+        });
+
+        console.log("RideSync Trip Booking â€” API Integrated");
 
     </script>
 
 </body>
 
 </html>
-```

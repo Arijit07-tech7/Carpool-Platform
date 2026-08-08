@@ -25,14 +25,7 @@ const requireOrganization = async (req, res, next) => {
         }
       });
 
-      if (!user || !user.organizationId) {
-        return res.status(403).json({
-          success: false,
-          message: "User is not associated with an organization"
-        });
-      }
-
-      organizationId = user.organizationId;
+      organizationId = user?.organizationId || null;
     }
 
     req.organizationId = organizationId;

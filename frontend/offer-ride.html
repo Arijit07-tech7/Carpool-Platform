@@ -1,1730 +1,478 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Offer Ride — RideSync</title>
-
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
-:root{
-    --blue:#1769ff;
-    --blue-soft:#eef5ff;
-    --black:#080b10;
-    --text:#111827;
-    --muted:#6b7280;
-    --border:#e7ebf1;
-    --success:#16a34a;
-    --shadow:0 20px 60px rgba(15,23,42,.08);
-}
-
-body{
-    font-family:Inter,Arial,sans-serif;
-    background:#f7f9fc;
-    color:var(--text);
-}
-
-.navbar{
-    height:76px;
-    background:rgba(255,255,255,.95);
-    backdrop-filter:blur(18px);
-    border-bottom:1px solid var(--border);
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:0 5%;
-    position:sticky;
-    top:0;
-    z-index:100;
-}
-
-.logo{
-    display:flex;
-    align-items:center;
-    gap:11px;
-    font-weight:800;
-    font-size:22px;
-}
-
-.logo-box{
-    width:38px;
-    height:38px;
-    border-radius:12px;
-    background:#080b10;
-    color:#fff;
-    display:grid;
-    place-items:center;
-}
-
-.logo span{
-    color:var(--blue);
-}
-
-.nav{
-    display:flex;
-    gap:7px;
-}
-
-.nav a{
-    text-decoration:none;
-    color:#697280;
-    font-size:14px;
-    font-weight:700;
-    padding:10px 14px;
-    border-radius:10px;
-}
-
-.nav a:hover,
-.nav a.active{
-    color:var(--blue);
-    background:var(--blue-soft);
-}
-
-.profile{
-    width:40px;
-    height:40px;
-    border-radius:50%;
-    display:grid;
-    place-items:center;
-    background:#edf4ff;
-    color:var(--blue);
-    font-weight:900;
-}
-
-.page{
-    max-width:1320px;
-    margin:auto;
-    padding:45px 5% 70px;
-}
-
-.eyebrow{
-    font-size:12px;
-    font-weight:900;
-    letter-spacing:2px;
-    color:var(--blue);
-}
-
-h1{
-    font-size:42px;
-    letter-spacing:-1.8px;
-    margin:7px 0;
-}
-
-.subtitle{
-    color:var(--muted);
-    font-size:15px;
-    margin-bottom:30px;
-}
-
-.switch{
-    display:flex;
-    width:max-content;
-    padding:5px;
-    border-radius:15px;
-    background:#edf1f6;
-    margin-bottom:25px;
-}
-
-.switch a{
-    text-decoration:none;
-    padding:12px 25px;
-    border-radius:11px;
-    color:#697280;
-    font-size:14px;
-    font-weight:800;
-}
-
-.switch a.active{
-    color:white;
-    background:#080b10;
-}
-
-.grid{
-    display:grid;
-    grid-template-columns:460px 1fr;
-    gap:25px;
-}
-
-.card{
-    background:#fff;
-    border:1px solid var(--border);
-    border-radius:25px;
-    padding:27px;
-    box-shadow:var(--shadow);
-}
-
-.card h2{
-    font-size:19px;
-    margin-bottom:23px;
-}
-
-.location{
-    position:relative;
-    margin-bottom:13px;
-}
-
-.location label,
-.field label{
-    display:block;
-    font-size:11px;
-    text-transform:uppercase;
-    letter-spacing:1px;
-    font-weight:900;
-    color:#737c88;
-    margin-bottom:7px;
-}
-
-.input{
-    height:58px;
-    border:1px solid #dfe5ed;
-    border-radius:14px;
-    display:flex;
-    align-items:center;
-    gap:11px;
-    padding:0 14px;
-}
-
-.input:focus-within{
-    border-color:var(--blue);
-    box-shadow:0 0 0 4px rgba(23,105,255,.08);
-}
-
-.input input{
-    width:100%;
-    border:0;
-    outline:0;
-    font-size:14px;
-}
-
-.dot{
-    width:10px;
-    height:10px;
-    border-radius:50%;
-    border:3px solid var(--blue);
-}
-
-.dot.black{
-    border-color:#111827;
-}
-
-.swap{
-    position:absolute;
-    right:18px;
-    top:67px;
-    z-index:10;
-    width:39px;
-    height:39px;
-    border-radius:50%;
-    border:1px solid #dce3ec;
-    background:#fff;
-    cursor:pointer;
-    font-size:18px;
-    transition:.2s;
-}
-
-.swap:hover{
-    transform:rotate(180deg);
-    color:var(--blue);
-}
-
-.suggestions{
-    position:absolute;
-    left:0;
-    right:0;
-    top:78px;
-    background:#fff;
-    border:1px solid var(--border);
-    border-radius:15px;
-    box-shadow:0 18px 40px rgba(0,0,0,.12);
-    z-index:50;
-    display:none;
-    overflow:hidden;
-}
-
-.suggestion{
-    padding:13px;
-    display:flex;
-    gap:12px;
-    cursor:pointer;
-}
-
-.suggestion:hover{
-    background:#f5f7fa;
-}
-
-.icon{
-    width:35px;
-    height:35px;
-    border-radius:10px;
-    background:var(--blue-soft);
-    color:var(--blue);
-    display:grid;
-    place-items:center;
-}
-
-.suggestion strong{
-    display:block;
-    font-size:13px;
-}
-
-.suggestion small{
-    color:#8b939e;
-    font-size:11px;
-}
-
-.current{
-    width:100%;
-    border:1px dashed #b7c6df;
-    background:#f6f9ff;
-    color:var(--blue);
-    padding:11px;
-    border-radius:12px;
-    text-align:left;
-    cursor:pointer;
-    font-weight:800;
-    margin:3px 0 20px;
-}
-
-.fields{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:13px;
-}
-
-.field input,
-.field select{
-    width:100%;
-    height:52px;
-    border:1px solid #dfe5ed;
-    border-radius:13px;
-    padding:0 13px;
-    outline:none;
-    background:#fff;
-}
-
-.field input:focus,
-.field select:focus{
-    border-color:var(--blue);
-}
-
-.vehicle{
-    margin-top:18px;
-}
-
-.vehicle select{
-    width:100%;
-    height:52px;
-    border:1px solid #dfe5ed;
-    border-radius:13px;
-    padding:0 13px;
-}
-
-.fare{
-    margin-top:18px;
-}
-
-.offer-btn{
-    width:100%;
-    height:57px;
-    border:0;
-    border-radius:14px;
-    margin-top:20px;
-    background:#080b10;
-    color:#fff;
-    font-size:14px;
-    font-weight:900;
-    cursor:pointer;
-    transition:.2s;
-}
-
-.offer-btn:hover{
-    background:var(--blue);
-    transform:translateY(-1px);
-}
-
-.map-card{
-    min-height:650px;
-    background:#fff;
-    border:1px solid var(--border);
-    border-radius:25px;
-    overflow:hidden;
-    box-shadow:var(--shadow);
-    position:relative;
-}
-
-.map-head{
-    position:absolute;
-    z-index:10;
-    top:20px;
-    left:20px;
-    right:20px;
-    padding:14px 16px;
-    border-radius:15px;
-    background:rgba(255,255,255,.94);
-    backdrop-filter:blur(14px);
-    border:1px solid #e7ebf1;
-    display:flex;
-    justify-content:space-between;
-}
-
-.map-head strong{
-    font-size:13px;
-}
-
-.map-head span{
-    color:var(--success);
-    font-size:11px;
-    font-weight:900;
-}
-
-.map{
-    height:650px;
-    position:relative;
-    overflow:hidden;
-    background:
-        linear-gradient(30deg,transparent 48%,#d9e0e8 49%,#d9e0e8 51%,transparent 52%) 0 0/130px 130px,
-        linear-gradient(-30deg,transparent 48%,#d9e0e8 49%,#d9e0e8 51%,transparent 52%) 0 0/150px 150px,
-        linear-gradient(90deg,#f4f6f8 2px,transparent 2px) 0 0/90px 90px,
-        #eef1f4;
-}
-
-.road{
-    position:absolute;
-    width:120%;
-    height:35px;
-    background:white;
-    box-shadow:0 0 0 1px #dfe3e7;
-    left:-10%;
-    top:50%;
-    transform:rotate(-18deg);
-}
-
-.road.r2{
-    top:34%;
-    transform:rotate(35deg);
-}
-
-.road.r3{
-    top:67%;
-    transform:rotate(5deg);
-}
-
-.route{
-    position:absolute;
-    left:24%;
-    top:47%;
-    width:55%;
-    height:7px;
-    background:var(--blue);
-    border-radius:20px;
-    transform:rotate(-18deg);
-    box-shadow:0 0 20px rgba(23,105,255,.35);
-    display:none;
-}
-
-.pin{
-    position:absolute;
-    width:42px;
-    height:42px;
-    border-radius:50%;
-    border:5px solid white;
-    color:#fff;
-    font-weight:900;
-    display:none;
-    place-items:center;
-    box-shadow:0 8px 20px rgba(0,0,0,.18);
-}
-
-.pin.a{
-    left:24%;
-    top:45%;
-    background:var(--blue);
-}
-
-.pin.b{
-    right:19%;
-    top:28%;
-    background:#080b10;
-}
-
-.empty{
-    position:absolute;
-    left:50%;
-    top:50%;
-    transform:translate(-50%,-50%);
-    text-align:center;
-    color:#8a929d;
-}
-
-.empty div{
-    font-size:35px;
-}
-
-.empty strong{
-    display:block;
-    color:#505865;
-    font-size:14px;
-    margin:7px 0;
-}
-
-.empty span{
-    font-size:11px;
-}
-
-.toast{
-    position:fixed;
-    right:25px;
-    bottom:25px;
-    background:#080b10;
-    color:white;
-    padding:14px 18px;
-    border-radius:12px;
-    opacity:0;
-    transform:translateY(80px);
-    transition:.3s;
-    z-index:999;
-    font-size:13px;
-}
-
-.toast.show{
-    opacity:1;
-    transform:translateY(0);
-}
-
-@media(max-width:950px){
-
-    .nav{
-        display:none;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Offer a Ride — RideSync</title>
+  <meta name="description" content="Offer a carpool ride on RideSync">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    :root{
+      --blue:#1677ff;--blue-dark:#075ed7;--blue-light:#eaf3ff;
+      --text:#11151b;--muted:#737d8c;--muted-light:#9aa3af;
+      --border:#e7ebf0;--bg:#f7f9fc;--white:#fff;
+      --green:#20a464;--orange:#ef8a22;
+      --shadow:0 20px 60px rgba(15,25,40,.07);
     }
+    html{scroll-behavior:smooth}
+    body{min-height:100vh;font-family:"Inter",sans-serif;color:var(--text);background:radial-gradient(circle at 80% 0%,rgba(22,119,255,.07),transparent 28%),var(--bg);overflow-x:hidden}
+    a{color:inherit;text-decoration:none}
+    button{cursor:pointer;font-family:inherit}
+    input,select,textarea{font-family:inherit}
 
-    .grid{
-        grid-template-columns:1fr;
+    .app{min-height:100vh;display:flex}
+
+    /* SIDEBAR */
+    .sidebar{position:fixed;left:0;top:0;bottom:0;width:260px;background:rgba(255,255,255,.94);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:100;backdrop-filter:blur(20px)}
+    .brand{height:90px;padding:0 25px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border)}
+    .brand-logo{width:43px;height:43px;display:grid;place-items:center;border-radius:13px;background:linear-gradient(145deg,#050505,#252a31);color:white;font-size:22px;font-weight:900;box-shadow:0 10px 25px rgba(0,0,0,.15)}
+    .brand-name{font-size:21px;font-weight:900;letter-spacing:-1px}
+    .brand-name span{color:var(--blue)}
+    .navigation{flex:1;padding:25px 15px;overflow-y:auto}
+    .nav-label{padding:0 12px;margin-bottom:11px;color:#a0a8b4;font-size:9px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase}
+    .nav-item{position:relative;width:100%;min-height:48px;padding:0 13px;margin-bottom:5px;display:flex;align-items:center;gap:13px;border:0;border-radius:12px;background:transparent;color:#697382;font-size:12px;font-weight:700;text-align:left;transition:all .2s;cursor:pointer;text-decoration:none}
+    .nav-item:hover{background:#f4f7fb;color:var(--text);transform:translateX(2px)}
+    .nav-item.active{background:var(--blue-light);color:var(--blue)}
+    .nav-item.active::before{content:"";position:absolute;left:0;width:3px;height:22px;border-radius:0 5px 5px 0;background:var(--blue)}
+    .nav-icon{width:25px;height:25px;display:grid;place-items:center;border-radius:8px;font-size:13px;flex-shrink:0}
+    .sidebar-bottom{padding:15px;border-top:1px solid var(--border)}
+    .profile-mini{display:flex;align-items:center;gap:10px;padding:10px;border-radius:13px;background:#f7f9fc}
+    .avatar{width:37px;height:37px;display:grid;place-items:center;border-radius:11px;background:linear-gradient(145deg,#111,#30343b);color:white;font-size:12px;font-weight:800}
+    .profile-info{min-width:0;flex:1}
+    .profile-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#20252d;font-size:11px;font-weight:800}
+    .profile-role{margin-top:3px;color:var(--muted);font-size:9px}
+
+    /* MAIN */
+    .main{width:calc(100% - 260px);margin-left:260px;min-height:100vh}
+    .topbar{position:sticky;top:0;height:75px;padding:0 38px;display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.88);border-bottom:1px solid rgba(225,230,237,.8);backdrop-filter:blur(18px);z-index:50}
+    .page-title{font-size:19px;font-weight:850;letter-spacing:-.5px}
+    .page-kicker{color:var(--blue);font-size:9px;font-weight:800;letter-spacing:1.5px}
+
+    .content{padding:35px 38px 60px;max-width:1100px;margin:auto;display:grid;grid-template-columns:1fr 400px;gap:30px}
+
+    /* FORM CARD */
+    .form-card{background:white;border:1px solid var(--border);border-radius:22px;padding:36px;box-shadow:var(--shadow)}
+    .form-title{font-size:20px;font-weight:900;letter-spacing:-.5px;margin-bottom:28px;display:flex;align-items:center;gap:10px}
+    .form-section{margin-bottom:28px}
+    .section-label{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:14px}
+    .field{margin-bottom:16px}
+    .field label{display:block;font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+    .field input,.field select,.field textarea{width:100%;padding:13px 16px;border:1.5px solid var(--border);border-radius:13px;font-size:14px;font-weight:600;color:var(--text);background:var(--bg);outline:none;transition:border-color .2s,box-shadow .2s}
+    .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(22,119,255,.1);background:white}
+    .field textarea{resize:vertical;min-height:80px}
+    .field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .field-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+    .loc-input-wrap{position:relative}
+    .loc-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:16px}
+    .loc-input-wrap input{padding-left:42px}
+
+    /* MAP PREVIEW */
+    .map-wrap{background:white;border:1px solid var(--border);border-radius:22px;overflow:hidden;height:400px;box-shadow:var(--shadow);position:sticky;top:100px}
+    #offerMap{width:100%;height:100%}
+    .map-placeholder{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:var(--bg);color:var(--muted)}
+    .map-placeholder-icon{font-size:48px}
+    .map-placeholder-text{font-size:14px;font-weight:600}
+
+    /* FARE ESTIMATE */
+    .fare-estimate{background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:white;border-radius:16px;padding:20px 22px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between}
+    .fare-est-label{font-size:11px;font-weight:700;opacity:.8}
+    .fare-est-value{font-size:24px;font-weight:900}
+
+    /* SUBMIT BTN */
+    .submit-btn{width:100%;padding:16px;border-radius:14px;border:0;background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:white;font-size:15px;font-weight:800;cursor:pointer;transition:all .2s;box-shadow:0 8px 25px rgba(22,119,255,.3);display:flex;align-items:center;justify-content:center;gap:10px}
+    .submit-btn:hover{transform:translateY(-2px);box-shadow:0 12px 35px rgba(22,119,255,.4)}
+    .submit-btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
+    .submit-btn.loading::after{content:"";width:18px;height:18px;border:2px solid rgba(255,255,255,.5);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* VEHICLE SELECT */
+    .vehicle-cards{display:flex;flex-direction:column;gap:10px;margin-top:4px}
+    .vehicle-card{display:flex;align-items:center;gap:14px;padding:14px 16px;border:1.5px solid var(--border);border-radius:13px;cursor:pointer;transition:all .2s}
+    .vehicle-card.selected{border-color:var(--blue);background:var(--blue-light)}
+    .vehicle-card:hover:not(.selected){border-color:var(--muted-light)}
+    .vehicle-icon{width:40px;height:40px;border-radius:10px;background:var(--bg);display:grid;place-items:center;font-size:20px}
+    .vehicle-name{font-size:13px;font-weight:800}
+    .vehicle-plate{font-size:11px;color:var(--muted);margin-top:2px}
+
+    @media(max-width:900px){
+      .content{grid-template-columns:1fr}
+      .map-wrap{height:280px;position:static}
+      .sidebar{display:none}
+      .main{width:100%;margin-left:0}
     }
-
-    .map-card,
-    .map{
-        min-height:500px;
-        height:500px;
-    }
-}
-
-@media(max-width:600px){
-
-    .page{
-        padding:30px 15px;
-    }
-
-    h1{
-        font-size:32px;
-    }
-
-    .card{
-        padding:19px;
-    }
-
-    .fields{
-        grid-template-columns:1fr;
-    }
-
-    .switch{
-        width:100%;
-    }
-
-    .switch a{
-        flex:1;
-        text-align:center;
-    }
-}
-</style>
+  </style>
 </head>
-
 <body>
+<div class="app">
 
-<header class="navbar">
-
-    <div class="logo">
-
-        <div class="logo-box">R</div>
-
-        Ride<span>Sync</span>
-
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-logo">R</div>
+      <div>
+        <div class="brand-name">Ride<span>Sync</span></div>
+        <span style="display:block;margin-top:2px;color:#9aa3af;font-size:8px;font-weight:800;letter-spacing:1.2px">CARPOOLING</span>
+      </div>
     </div>
-
-    <nav class="nav">
-
-        <a href="#" class="active">
-            Carpooling
-        </a>
-
-        <a href="#">
-            My Trips
-        </a>
-
-        <a href="#">
-            My Vehicle
-        </a>
-
-        <a href="#">
-            Ride History
-        </a>
-
-        <a href="#">
-            Wallet
-        </a>
-
-        <a href="#">
-            Settings
-        </a>
-
+    <nav class="navigation">
+      <div class="nav-label">Main</div>
+      <a href="user-dashboard.html" class="nav-item"><span class="nav-icon">🏠</span> Dashboard</a>
+      <a href="find-ride.html" class="nav-item"><span class="nav-icon">🔍</span> Find Ride</a>
+      <a href="offer-ride.html" class="nav-item active"><span class="nav-icon">🚗</span> Offer Ride</a>
+      <div class="nav-label" style="margin-top:20px">Account</div>
+      <a href="my-trips.html" class="nav-item"><span class="nav-icon">🗺️</span> My Trips</a>
+      <a href="ride-history.html" class="nav-item"><span class="nav-icon">📋</span> Ride History</a>
+      <a href="wallet.html" class="nav-item"><span class="nav-icon">💳</span> Wallet</a>
+      <a href="my_vehicle.html" class="nav-item"><span class="nav-icon">🚙</span> My Vehicle</a>
+      <a href="settings.html" class="nav-item"><span class="nav-icon">⚙️</span> Settings</a>
     </nav>
-
-    <div class="profile">
-        A
-    </div>
-
-</header>
-
-
-<main class="page">
-
-    <div class="eyebrow">
-        SMART CARPOOLING
-    </div>
-
-    <h1>
-        Offer a ride.
-    </h1>
-
-    <p class="subtitle">
-        Share your journey and help your network commute smarter.
-    </p>
-
-
-    <div class="switch">
-
-        <a href="find-ride.html">
-            Find Ride
-        </a>
-
-        <a
-            href="offer-ride.html"
-            class="active"
-        >
-            Offer Ride
-        </a>
-
-    </div>
-
-
-    <section class="grid">
-
-        <div class="card">
-
-            <h2>
-                Plan your journey
-            </h2>
-
-
-            <div class="location">
-
-                <label>
-                    Start Location
-                </label>
-
-                <div class="input">
-
-                    <span class="dot"></span>
-
-                    <input
-                        id="start"
-                        type="text"
-                        autocomplete="off"
-                        placeholder="Search Kolkata location..."
-                    >
-
-                </div>
-
-                <div
-                    id="startSuggestions"
-                    class="suggestions"
-                ></div>
-
-            </div>
-
-
-            <button
-                id="swap"
-                class="swap"
-            >
-                ⇅
-            </button>
-
-
-            <div class="location">
-
-                <label>
-                    Destination
-                </label>
-
-                <div class="input">
-
-                    <span class="dot black"></span>
-
-                    <input
-                        id="destination"
-                        type="text"
-                        autocomplete="off"
-                        placeholder="Where are you going?"
-                    >
-
-                </div>
-
-                <div
-                    id="destinationSuggestions"
-                    class="suggestions"
-                ></div>
-
-            </div>
-
-
-            <button
-                class="current"
-                id="current"
-            >
-                ◎ Use my current location
-            </button>
-
-
-            <div class="fields">
-
-                <div class="field">
-
-                    <label>
-                        Travel Date
-                    </label>
-
-                    <input
-                        type="date"
-                        id="date"
-                    >
-
-                </div>
-
-
-                <div class="field">
-
-                    <label>
-                        Departure Time
-                    </label>
-
-                    <input
-                        type="time"
-                        id="time"
-                    >
-
-                </div>
-
-
-                <div class="field">
-
-                    <label>
-                        Available Seats
-                    </label>
-
-                    <select id="seats">
-
-                        <option value="1">
-                            1 Seat
-                        </option>
-
-                        <option value="2">
-                            2 Seats
-                        </option>
-
-                        <option value="3">
-                            3 Seats
-                        </option>
-
-                        <option value="4">
-                            4 Seats
-                        </option>
-
-                    </select>
-
-                </div>
-
-            </div>
-
-
-            <div class="vehicle">
-
-                <label>
-                    Your Vehicle
-                </label>
-
-                <select id="vehicle">
-
-                    <option value="">
-                        Select registered vehicle
-                    </option>
-
-                    <option>
-                        Hyundai i20 • WB 02 AB 1234
-                    </option>
-
-                    <option>
-                        Tata Nexon • WB 06 CD 5678
-                    </option>
-
-                    <option>
-                        Honda City • WB 04 EF 9012
-                    </option>
-
-                </select>
-
-            </div>
-
-
-            <div class="fare">
-
-                <div class="field">
-
-                    <label>
-                        Fare Per Seat
-                    </label>
-
-                    <input
-                        type="number"
-                        id="fare"
-                        min="0"
-                        placeholder="₹ Enter fare"
-                    >
-
-                </div>
-
-            </div>
-
-
-        
-            
-
-
-        <div class="map-card">
-
-            <div class="map-head">
-
-                <strong>
-                    RideSync Route Preview
-                </strong>
-
-                <span id="status">
-                    ● READY
-                </span>
-
-            </div>
-
-
-            <div class="map">
-
-                <div class="road"></div>
-                <div class="road r2"></div>
-                <div class="road r3"></div>
-
-                <div
-                    class="route"
-                    id="route"
-                ></div>
-
-                <div
-                    class="pin a"
-                    id="pinA"
-                >
-                    A
-                </div>
-
-                <div
-                    class="pin b"
-                    id="pinB"
-                >
-                    B
-                </div>
-
-                <div
-                    class="empty"
-                    id="empty"
-                >
-
-                    <div>
-                        ⌖
-                    </div>
-
-                    <strong>
-                        Confirm your route
-                    </strong>
-
-                    <span>
-                        Verified RideSync demo locations
-                    </span>
-
-                </div>
-
-            </div>
-
+    <div class="sidebar-bottom">
+      <div class="profile-mini">
+        <div class="avatar" id="avatarInitials">U</div>
+        <div class="profile-info">
+          <div class="profile-name" id="sidebarName">Loading...</div>
+          <div class="profile-role" id="sidebarRole">Employee</div>
         </div>
-
-    </section>
-
-</main>
-
-
-<div
-    class="toast"
-    id="toast"
-></div>
-
-
-<script src="api.js"></script>
-
-<script>
-/* =========================================================
-   RIDESYNC SHARED LOCATION DATA
-   SAME STRUCTURE CAN LATER ACCEPT GOOGLE PLACE DATA
-========================================================= */
-
-const RIDESYNC_LOCATIONS = [
-
-    {
-        id:"kankurgachi",
-        name:"Kankurgachi",
-        address:"Kankurgachi, Kolkata",
-        pincode:"700054",
-        lat:22.5821,
-        lng:88.3955
-    },
-
-    {
-        id:"salt-lake-sector-v",
-        name:"Salt Lake Sector V",
-        address:"Sector V, Salt Lake, Kolkata",
-        pincode:"700091",
-        lat:22.5726,
-        lng:88.4331
-    },
-
-    {
-        id:"new-town",
-        name:"New Town",
-        address:"New Town, Kolkata",
-        pincode:"700156",
-        lat:22.5958,
-        lng:88.4797
-    },
-
-    {
-        id:"city-centre-1",
-        name:"City Centre 1",
-        address:"City Centre 1, Salt Lake",
-        pincode:"700064",
-        lat:22.5868,
-        lng:88.4172
-    },
-
-    {
-        id:"city-centre-2",
-        name:"City Centre 2",
-        address:"City Centre 2, New Town",
-        pincode:"700157",
-        lat:22.6212,
-        lng:88.4517
-    },
-
-    {
-        id:"sealdah",
-        name:"Sealdah",
-        address:"Sealdah, Kolkata",
-        pincode:"700014",
-        lat:22.5646,
-        lng:88.3704
-    },
-
-    {
-        id:"howrah",
-        name:"Howrah",
-        address:"Howrah Station Area",
-        pincode:"711101",
-        lat:22.5839,
-        lng:88.3426
-    },
-
-    {
-        id:"esplanade",
-        name:"Esplanade",
-        address:"Esplanade, Kolkata",
-        pincode:"700069",
-        lat:22.5667,
-        lng:88.3517
-    },
-
-    {
-        id:"park-street",
-        name:"Park Street",
-        address:"Park Street, Kolkata",
-        pincode:"700016",
-        lat:22.5525,
-        lng:88.3527
-    },
-
-    {
-        id:"garia",
-        name:"Garia",
-        address:"Garia, Kolkata",
-        pincode:"700084",
-        lat:22.4635,
-        lng:88.3914
-    },
-
-    {
-        id:"jadavpur",
-        name:"Jadavpur",
-        address:"Jadavpur, Kolkata",
-        pincode:"700032",
-        lat:22.4986,
-        lng:88.3714
-    },
-
-    {
-        id:"tollygunge",
-        name:"Tollygunge",
-        address:"Tollygunge, Kolkata",
-        pincode:"700033",
-        lat:22.4989,
-        lng:88.3467
-    },
-
-    {
-        id:"ballygunge",
-        name:"Ballygunge",
-        address:"Ballygunge, Kolkata",
-        pincode:"700019",
-        lat:22.5277,
-        lng:88.3660
-    },
-
-    {
-        id:"dum-dum",
-        name:"Dum Dum",
-        address:"Dum Dum, Kolkata",
-        pincode:"700080",
-        lat:22.6226,
-        lng:88.4156
-    },
-
-    {
-        id:"airport",
-        name:"Kolkata Airport",
-        address:"NSCB International Airport Area",
-        pincode:"700052",
-        lat:22.6547,
-        lng:88.4467
-    },
-
-    {
-        id:"barasat",
-        name:"Barasat",
-        address:"Barasat, North 24 Parganas",
-        pincode:"700124",
-        lat:22.7225,
-        lng:88.4800
-    },
-
-    {
-        id:"shyambazar",
-        name:"Shyambazar",
-        address:"Shyambazar, Kolkata",
-        pincode:"700004",
-        lat:22.5993,
-        lng:88.3731
-    },
-
-    {
-        id:"behala",
-        name:"Behala",
-        address:"Behala, Kolkata",
-        pincode:"700034",
-        lat:22.5000,
-        lng:88.3170
-    },
-
-    {
-        id:"rajarhat",
-        name:"Rajarhat",
-        address:"Rajarhat, Kolkata",
-        pincode:"700135",
-        lat:22.6275,
-        lng:88.4496
-    },
-
-    {
-        id:"science-city",
-        name:"Science City",
-        address:"Science City, Kolkata",
-        pincode:"700046",
-        lat:22.5415,
-        lng:88.3965
-    }
-
-];
-
-
-/* =========================================================
-   STATE
-========================================================= */
-
-let startLocation = null;
-let destinationLocation = null;
-
-
-/* =========================================================
-   ELEMENTS
-========================================================= */
-
-const start =
-    document.getElementById("start");
-
-const destination =
-    document.getElementById("destination");
-
-const startSuggestions =
-    document.getElementById("startSuggestions");
-
-const destinationSuggestions =
-    document.getElementById("destinationSuggestions");
-
-const toast =
-    document.getElementById("toast");
-
-
-/* =========================================================
-   DEFAULT DATE / TIME
-========================================================= */
-
-const now = new Date();
-
-document.getElementById("date").value =
-    `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,"0")}-${String(now.getDate()).padStart(2,"0")}`;
-
-document.getElementById("time").value =
-    `${String(now.getHours()).padStart(2,"0")}:${String(now.getMinutes()).padStart(2,"0")}`;
-
-
-/* =========================================================
-   TOAST
-========================================================= */
-
-function showToast(message){
-
-    toast.textContent =
-        message;
-
-    toast.classList.add("show");
-
-    setTimeout(
-        ()=>{
-            toast.classList.remove("show");
-        },
-        2800
-    );
-}
-
-
-/* =========================================================
-   LOCATION SEARCH
-========================================================= */
-
-function findLocations(query){
-
-    query =
-        query.trim().toLowerCase();
-
-    if(!query){
-
-        return RIDESYNC_LOCATIONS.slice(0,8);
-
-    }
-
-    return RIDESYNC_LOCATIONS.filter(
-        location =>
-
-        location.name.toLowerCase()
-        .includes(query)
-
-        ||
-
-        location.address.toLowerCase()
-        .includes(query)
-
-        ||
-
-        location.pincode
-        .includes(query)
-
-    ).slice(0,8);
-}
-
-
-/* =========================================================
-   SUGGESTIONS
-========================================================= */
-
-function showSuggestions(
-    input,
-    container,
-    type
-){
-
-    const locations =
-        findLocations(input.value);
-
-    container.innerHTML = "";
-
-
-    if(!locations.length){
-
-        container.innerHTML = `
-
-            <div class="suggestion">
-
-                <div class="icon">
-                    !
-                </div>
-
-                <div>
-
-                    <strong>
-                        Location not found
-                    </strong>
-
-                    <small>
-                        Choose a verified RideSync location
-                    </small>
-
-                </div>
-
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <div class="page-kicker">DRIVER · OFFER A RIDE</div>
+        <h1 class="page-title">Offer a Ride</h1>
+      </div>
+      <button onclick="API.auth.logout()" style="padding:9px 18px;border-radius:10px;border:1px solid var(--border);background:white;font-size:12px;font-weight:700;color:var(--muted)">Logout</button>
+    </div>
+
+    <div class="content">
+
+      <!-- FORM -->
+      <div class="form-card">
+        <div class="form-title">🚗 Create a Ride</div>
+
+        <form id="offerForm" onsubmit="submitOffer(event)">
+
+          <!-- ROUTE -->
+          <div class="form-section">
+            <div class="section-label">📍 Route</div>
+            <div class="field">
+              <label>Pickup Location</label>
+              <div class="loc-input-wrap">
+                <span class="loc-icon">🟢</span>
+                <input type="text" id="pickup" placeholder="Enter pickup address" autocomplete="off" required>
+              </div>
             </div>
-        `;
-
-        container.style.display =
-            "block";
-
-        return;
-    }
-
-
-    locations.forEach(
-        location => {
-
-            const item =
-                document.createElement("div");
-
-            item.className =
-                "suggestion";
-
-            item.innerHTML = `
-
-                <div class="icon">
-                    ⌖
-                </div>
-
-                <div>
-
-                    <strong>
-                        ${location.name}
-                    </strong>
-
-                    <small>
-                        ${location.address} • ${location.pincode}
-                    </small>
-
-                </div>
-            `;
-
-
-            item.addEventListener(
-                "mousedown",
-                event => {
-
-                    event.preventDefault();
-
-                    input.value =
-                        location.name;
-
-
-                    if(type === "start"){
-
-                        startLocation =
-                            location;
-
-                    }else{
-
-                        destinationLocation =
-                            location;
-
-                    }
-
-
-                    container.style.display =
-                        "none";
-
-                    updateRoute();
-
-                }
-            );
-
-
-            container.appendChild(item);
-
-        }
-    );
-
-
-    container.style.display =
-        "block";
-}
-
-
-/* =========================================================
-   INPUT EVENTS
-========================================================= */
-
-start.addEventListener(
-    "input",
-    ()=>{
-        startLocation = null;
-
-        showSuggestions(
-            start,
-            startSuggestions,
-            "start"
-        );
-    }
-);
-
-destination.addEventListener(
-    "input",
-    ()=>{
-        destinationLocation = null;
-
-        showSuggestions(
-            destination,
-            destinationSuggestions,
-            "destination"
-        );
-    }
-);
-
-
-start.addEventListener(
-    "focus",
-    ()=>{
-        showSuggestions(
-            start,
-            startSuggestions,
-            "start"
-        );
-    }
-);
-
-destination.addEventListener(
-    "focus",
-    ()=>{
-        showSuggestions(
-            destination,
-            destinationSuggestions,
-            "destination"
-        );
-    }
-);
-
-
-/* =========================================================
-   CLOSE
-========================================================= */
-
-document.addEventListener(
-    "click",
-    event => {
-
-        if(
-            !start.contains(event.target) &&
-            !startSuggestions.contains(event.target)
-        ){
-
-            startSuggestions.style.display =
-                "none";
-        }
-
-
-        if(
-            !destination.contains(event.target) &&
-            !destinationSuggestions.contains(event.target)
-        ){
-
-            destinationSuggestions.style.display =
-                "none";
-        }
-
-    }
-);
-
-
-/* =========================================================
-   SWAP
-========================================================= */
-
-document.getElementById("swap")
-.addEventListener(
-    "click",
-    ()=>{
-
-        const text =
-            start.value;
-
-        start.value =
-            destination.value;
-
-        destination.value =
-            text;
-
-
-        const location =
-            startLocation;
-
-        startLocation =
-            destinationLocation;
-
-        destinationLocation =
-            location;
-
-
-        updateRoute();
-
-    }
-);
-
-
-/* =========================================================
-   ROUTE PREVIEW
-========================================================= */
-
-function updateRoute(){
-
-    const route =
-        document.getElementById("route");
-
-    const pinA =
-        document.getElementById("pinA");
-
-    const pinB =
-        document.getElementById("pinB");
-
-    const empty =
-        document.getElementById("empty");
-
-    const status =
-        document.getElementById("status");
-
-
-    if(
-        startLocation &&
-        destinationLocation
-    ){
-
-        route.style.display =
-            "block";
-
-        pinA.style.display =
-            "grid";
-
-        pinB.style.display =
-            "grid";
-
-        empty.style.display =
-            "none";
-
-        status.textContent =
-            "● ROUTE READY";
-
-    }else{
-
-        route.style.display =
-            "none";
-
-        pinA.style.display =
-            "none";
-
-        pinB.style.display =
-            "none";
-
-        empty.style.display =
-            "block";
-
-        status.textContent =
-            "● READY";
-
-    }
-
-}
-
-
-/* =========================================================
-   CURRENT LOCATION
-========================================================= */
-
-document.getElementById("current")
-.addEventListener(
-    "click",
-    ()=>{
-
-        if(!navigator.geolocation){
-
-            showToast(
-                "Your browser does not support GPS."
-            );
-
-            return;
-        }
-
-
-        showToast(
-            "Detecting your current position..."
-        );
-
-
-        navigator.geolocation.getCurrentPosition(
-
-            position => {
-
-                start.value =
-                    "Current Location";
-
-
-                startLocation = {
-
-                    id:"current-location",
-
-                    name:"Current Location",
-
-                    address:"Browser GPS location",
-
-                    pincode:"",
-
-                    lat:
-                        position.coords.latitude,
-
-                    lng:
-                        position.coords.longitude
-
-                };
-
-
-                updateRoute();
-
-
-                showToast(
-                    "Current location detected."
-                );
-
-            },
-
-            ()=>{
-                showToast(
-                    "Please allow location permission."
-                );
-            }
-
-        );
-
-    }
-);
-
-
-/* =========================================================
-   OFFER RIDE
-========================================================= */
-
-document.getElementById("offer")
-.addEventListener(
-    "click",
-    ()=>{
-
-        if(!startLocation){
-
-            showToast(
-                "Select a verified start location."
-            );
-
-            start.focus();
-
-            return;
-        }
-
-
-        if(!destinationLocation){
-
-            showToast(
-                "Select a verified destination."
-            );
-
-            destination.focus();
-
-            return;
-        }
-
-
-        if(
-            startLocation.id ===
-            destinationLocation.id
-        ){
-
-            showToast(
-                "Start and destination cannot be same."
-            );
-
-            return;
-        }
-
-
-        const vehicle =
-            document.getElementById("vehicle").value;
-
-        const fare =
-            document.getElementById("fare").value;
-
-
-        if(!vehicle){
-
-            showToast(
-                "Please select your vehicle."
-            );
-
-            return;
-        }
-
-
-        if(!fare || Number(fare) < 0){
-
-            showToast(
-                "Enter a valid fare per seat."
-            );
-
-            return;
-        }
-
-
-        // Convert to ISO string by assuming a standard time or grabbing actual time
-        // The form has "date" and "time".
-        const dateVal = document.getElementById("date").value;
-        const timeVal = document.getElementById("time").value;
-        const rideDateTime = new Date(`${dateVal}T${timeVal}:00`).toISOString();
-
-        const submitRideData = {
-            pickupLocation: startLocation.name + ", " + startLocation.address,
-            destination: destinationLocation.name + ", " + destinationLocation.address,
-            pickupLatitude: startLocation.lat,
-            pickupLongitude: startLocation.lng,
-            destinationLatitude: destinationLocation.lat,
-            destinationLongitude: destinationLocation.lng,
-            rideDate: rideDateTime,
-            rideTime: rideDateTime,
-            totalSeats: parseInt(document.getElementById("seats").value, 10) || 1,
-            availableSeats: parseInt(document.getElementById("seats").value, 10) || 1,
-            farePerSeat: Number(fare),
-            vehicleId: vehicle // Make sure vehicle select stores vehicleId
-        };
-
-        if (!API.isLoggedIn()) {
-            API.toast("Please log in before offering a ride.", "error");
-            setTimeout(() => { window.location.href = "login.html"; }, 1500);
-            return;
-        }
-
-        const btn = document.getElementById("submit");
-        const origText = btn.textContent;
-        btn.textContent = "Offering...";
-        btn.disabled = true;
-
-        API.rides.create(submitRideData)
-            .then(res => {
-                showToast("Ride successfully prepared and published.");
-                console.log("RideSync API Offer Ride Success:", res);
-                setTimeout(() => { window.location.href = "user-dashboard.html"; }, 1500);
-            })
-            .catch(err => {
-                API.toast(err.message || "Failed to publish ride.", "error");
-                btn.textContent = origText;
-                btn.disabled = false;
-            });
-
-    }
-);
-
-function convertGooglePlace(place) {
-
-    return {
-
-        id: place.place_id,
-
-        name: place.name,
-
-        address: place.formatted_address,
-
-        pincode: "",
-
-        lat: place.geometry.location.lat(),
-
-        lng: place.geometry.location.lng()
-
-    };
-
-}
-
-
-/* =========================================================
-   FUTURE GOOGLE PLACE ADAPTER
-=========================================================
-
-function convertGooglePlace(place){
-
-    return {
-
-        id:place.place_id,
-
-        name:place.name,
-
-        address:place.formatted_address,
-
-        pincode:"",
-
-        lat:place.geometry.location.lat(),
-
-        lng:place.geometry.location.lng()
-
-    };
-
-}
-
-Only this adapter needs to change later.
-The Offer Ride system remains the same.
-
-========================================================= */
+            <div class="field">
+              <label>Destination</label>
+              <div class="loc-input-wrap">
+                <span class="loc-icon">🔴</span>
+                <input type="text" id="destination" placeholder="Enter drop-off address" autocomplete="off" required>
+              </div>
+            </div>
+          </div>
+
+          <!-- SCHEDULE -->
+          <div class="form-section">
+            <div class="section-label">📅 Schedule</div>
+            <div class="field-row">
+              <div class="field">
+                <label>Date</label>
+                <input type="date" id="rideDate" required>
+              </div>
+              <div class="field">
+                <label>Time</label>
+                <input type="time" id="rideTime" required>
+              </div>
+            </div>
+          </div>
+
+          <!-- VEHICLE -->
+          <div class="form-section">
+            <div class="section-label">🚗 Vehicle</div>
+            <div id="vehicleList" class="vehicle-cards">
+              <div style="color:var(--muted);font-size:13px;padding:10px">Loading your vehicles...</div>
+            </div>
+            <input type="hidden" id="vehicleId">
+          </div>
+
+          <!-- SEATS & PRICE -->
+          <div class="form-section">
+            <div class="section-label">💺 Seats & Pricing</div>
+            <div class="field-row">
+              <div class="field">
+                <label>Total Seats</label>
+                <input type="number" id="totalSeats" min="1" max="8" value="3" required>
+              </div>
+              <div class="field">
+                <label>Fare per Seat (₹)</label>
+                <input type="number" id="farePerSeat" min="1" step="0.01" placeholder="e.g. 150" required>
+              </div>
+            </div>
+          </div>
+
+          <!-- PREFERENCES -->
+          <div class="form-section">
+            <div class="section-label">✅ Preferences</div>
+            <div class="field-row">
+              <div class="field">
+                <label>Music</label>
+                <select id="musicPref">
+                  <option value="NO_PREFERENCE">No Preference</option>
+                  <option value="ALLOWED">Allowed</option>
+                  <option value="NOT_ALLOWED">Not Allowed</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Smoking</label>
+                <select id="smokingPref">
+                  <option value="NOT_ALLOWED">Not Allowed</option>
+                  <option value="ALLOWED">Allowed</option>
+                  <option value="NO_PREFERENCE">No Preference</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- NOTES -->
+          <div class="field">
+            <label>Additional Notes (Optional)</label>
+            <textarea id="notes" placeholder="e.g. Meet at the main gate, no extra luggage..."></textarea>
+          </div>
+
+          <!-- FARE ESTIMATE (auto-calculated) -->
+          <div id="fareEstimate" style="display:none" class="fare-estimate">
+            <div>
+              <div class="fare-est-label">Estimated Total Revenue</div>
+              <div class="fare-est-value" id="fareEstVal">₹0</div>
+            </div>
+            <div>
+              <div class="fare-est-label">Per Seat</div>
+              <div class="fare-est-value" id="farePerSeatDisplay">₹0</div>
+            </div>
+          </div>
+
+          <button type="submit" class="submit-btn" id="submitBtn">
+            <span>🚗</span> Post Ride
+          </button>
+        </form>
+      </div>
+
+      <!-- MAP PREVIEW -->
+      <div>
+        <div class="map-wrap">
+          <div id="mapPlaceholder" class="map-placeholder">
+            <div class="map-placeholder-icon">🗺️</div>
+            <div class="map-placeholder-text">Enter locations to see route</div>
+          </div>
+          <div id="offerMap" style="display:none"></div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- Google Maps -->
+<script>
+  const MAPS_KEY = 'AIzaSyCV0e64xLCJgtbwo2WB_mBVwJDOzda26CQ';
+  let map, directionsService, directionsRenderer, pickupAutocomplete, destAutocomplete;
+  let selectedVehicleId = null;
+  let pickupLatLng = null, destLatLng = null;
+
+  function initMap() {
+    map = new google.maps.Map(document.getElementById('offerMap'), {
+      center: { lat: 22.5726, lng: 88.3639 }, // Default: Kolkata
+      zoom: 12,
+      styles: [
+        { featureType: 'poi', elementType: 'labels', stylers: [{ visibility: 'off' }] }
+      ]
+    });
+    directionsService = new google.maps.DirectionsService();
+    directionsRenderer = new google.maps.DirectionsRenderer({ suppressMarkers: false });
+    directionsRenderer.setMap(map);
+
+    // Autocomplete for pickup
+    pickupAutocomplete = new google.maps.places.Autocomplete(document.getElementById('pickup'));
+    pickupAutocomplete.addListener('place_changed', () => {
+      const place = pickupAutocomplete.getPlace();
+      if (place.geometry) {
+        pickupLatLng = { lat: place.geometry.location.lat(), lng: place.geometry.location.lng() };
+        tryRoute();
+      }
+    });
+
+    // Autocomplete for destination
+    destAutocomplete = new google.maps.places.Autocomplete(document.getElementById('destination'));
+    destAutocomplete.addListener('place_changed', () => {
+      const place = destAutocomplete.getPlace();
+      if (place.geometry) {
+        destLatLng = { lat: place.geometry.location.lat(), lng: place.geometry.location.lng() };
+        tryRoute();
+      }
+    });
+
+    document.getElementById('offerMap').style.display = 'block';
+    document.getElementById('mapPlaceholder').style.display = 'none';
+  }
+
+  function tryRoute() {
+    if (!pickupLatLng || !destLatLng) return;
+    directionsService.route({
+      origin: pickupLatLng,
+      destination: destLatLng,
+      travelMode: google.maps.TravelMode.DRIVING
+    }, (result, status) => {
+      if (status === 'OK') {
+        directionsRenderer.setDirections(result);
+      }
+    });
+  }
+</script>
+<script async defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCV0e64xLCJgtbwo2WB_mBVwJDOzda26CQ&libraries=places&callback=initMap"
+  onerror="document.getElementById('mapPlaceholder').innerHTML='<div class=map-placeholder><div class=map-placeholder-icon>🗺️</div><div class=map-placeholder-text>Map unavailable — enter addresses manually</div></div>'">
 </script>
 
+<script src="api.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', async () => {
+    API.requireAuth();
+
+    // Set today as minimum date
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('rideDate').min = today;
+    document.getElementById('rideDate').value = today;
+    // Set current time + 1 hour
+    const now = new Date(); now.setHours(now.getHours() + 1);
+    document.getElementById('rideTime').value = now.toTimeString().slice(0, 5);
+
+    // Load user
+    const me = API.getUser();
+    if (me) {
+      document.getElementById('sidebarName').textContent = me.name || 'User';
+      document.getElementById('sidebarRole').textContent = me.role || 'EMPLOYEE';
+      document.getElementById('avatarInitials').textContent = (me.name || 'U').charAt(0).toUpperCase();
+    }
+
+    // Load vehicles
+    await loadVehicles();
+
+    // Auto-calculate fare estimate
+    ['farePerSeat', 'totalSeats'].forEach(id => {
+      document.getElementById(id).addEventListener('input', updateFareEstimate);
+    });
+  });
+
+  async function loadVehicles() {
+    try {
+      const res = await API.vehicles.myVehicles();
+      const vehicles = res.data || res.vehicles || [];
+      const container = document.getElementById('vehicleList');
+
+      if (!vehicles.length) {
+        container.innerHTML = `
+          <div style="text-align:center;padding:20px;background:var(--bg);border-radius:13px;border:1px dashed var(--border)">
+            <div style="font-size:24px;margin-bottom:8px">🚗</div>
+            <div style="font-size:13px;font-weight:700;color:var(--text)">No vehicles registered</div>
+            <a href="register_vehicle.html" style="display:inline-block;margin-top:10px;font-size:12px;font-weight:700;color:var(--blue)">Register a vehicle →</a>
+          </div>`;
+        return;
+      }
+
+      container.innerHTML = vehicles.map((v, i) => `
+        <div class="vehicle-card ${i === 0 ? 'selected' : ''}" id="vc-${v.id}" onclick="selectVehicle('${v.id}')">
+          <div class="vehicle-icon">🚗</div>
+          <div>
+            <div class="vehicle-name">${v.make} ${v.model} ${v.year || ''}</div>
+            <div class="vehicle-plate">${v.licensePlate || v.registrationNumber || '—'} · ${v.color || ''}</div>
+          </div>
+        </div>
+      `).join('');
+
+      // Auto-select first
+      if (vehicles.length > 0) {
+        selectedVehicleId = vehicles[0].id;
+        document.getElementById('vehicleId').value = selectedVehicleId;
+      }
+    } catch(err) {
+      document.getElementById('vehicleList').innerHTML = `<div style="color:var(--muted);font-size:13px">${err.message}</div>`;
+    }
+  }
+
+  function selectVehicle(id) {
+    selectedVehicleId = id;
+    document.getElementById('vehicleId').value = id;
+    document.querySelectorAll('.vehicle-card').forEach(c => c.classList.remove('selected'));
+    document.getElementById('vc-' + id)?.classList.add('selected');
+  }
+
+  function updateFareEstimate() {
+    const fare = parseFloat(document.getElementById('farePerSeat').value) || 0;
+    const seats = parseInt(document.getElementById('totalSeats').value) || 0;
+    if (fare > 0 && seats > 0) {
+      document.getElementById('fareEstimate').style.display = 'flex';
+      document.getElementById('fareEstVal').textContent = `₹${(fare * seats).toFixed(0)}`;
+      document.getElementById('farePerSeatDisplay').textContent = `₹${fare}`;
+    } else {
+      document.getElementById('fareEstimate').style.display = 'none';
+    }
+  }
+
+  async function submitOffer(event) {
+    event.preventDefault();
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.classList.add('loading');
+    btn.querySelector('span').textContent = 'Posting...';
+
+    const pickup = document.getElementById('pickup').value.trim();
+    const destination = document.getElementById('destination').value.trim();
+    const rideDate = document.getElementById('rideDate').value;
+    const rideTime = document.getElementById('rideTime').value;
+    const totalSeats = parseInt(document.getElementById('totalSeats').value);
+    const farePerSeat = parseFloat(document.getElementById('farePerSeat').value);
+    const notes = document.getElementById('notes').value.trim();
+
+    if (!pickup || !destination) {
+      API.toast('Please enter pickup and destination locations', 'warning');
+      btn.disabled = false; btn.classList.remove('loading');
+      btn.querySelector('span').textContent = '🚗';
+      return;
+    }
+
+    const payload = {
+      pickupLocation: pickup,
+      destination,
+      rideDate,
+      rideTime,
+      totalSeats,
+      farePerSeat,
+      ...(selectedVehicleId && { vehicleId: selectedVehicleId }),
+      preferences: {
+        music: document.getElementById('musicPref').value,
+        smoking: document.getElementById('smokingPref').value,
+      },
+      ...(notes && { notes }),
+      ...(pickupLatLng && { pickupLat: pickupLatLng.lat, pickupLng: pickupLatLng.lng }),
+      ...(destLatLng && { destinationLat: destLatLng.lat, destinationLng: destLatLng.lng }),
+    };
+
+    try {
+      await API.rides.create(payload);
+      API.toast('Ride posted successfully! 🎉', 'success');
+      setTimeout(() => { window.location.href = 'my-trips.html'; }, 1500);
+    } catch(err) {
+      API.toast(err.message || 'Failed to post ride', 'error');
+      btn.disabled = false; btn.classList.remove('loading');
+      btn.querySelector('span').textContent = '🚗';
+    }
+  }
+</script>
 </body>
 </html>

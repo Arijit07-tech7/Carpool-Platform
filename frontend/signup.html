@@ -1661,6 +1661,9 @@
                 </div>
 
 
+
+
+
                 <!-- Terms -->
 
                 <label class="rs-terms">
@@ -1982,9 +1985,7 @@
                 // Read phone, stripping formatting
                 const rawPhone = (phone.value || "").replace(/[^\d+]/g, "");
 
-                // Organization code (optional field)
-                const orgCodeEl = document.getElementById("organizationCode");
-                const organizationCode = orgCodeEl ? orgCodeEl.value.trim() : "";
+
 
                 // Validations
                 if (name.length < 3) {
@@ -2012,10 +2013,7 @@
                     return;
                 }
 
-                if (!organizationCode) {
-                    API.toast("Please enter your organization code.", "warning");
-                    return;
-                }
+
 
                 // Submit to backend
                 const submitBtn = event.target.querySelector("button[type=submit]");
@@ -2027,7 +2025,7 @@
                         email,
                         password: pass,
                         phone: rawPhone || undefined,
-                        organizationCode,
+
                     });
 
                     API.toast("Account created successfully! Redirecting...", "success");

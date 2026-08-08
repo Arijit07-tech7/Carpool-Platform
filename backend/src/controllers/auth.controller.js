@@ -109,9 +109,11 @@ const refreshToken = async (req, res, next) => {
 
 const changePassword = async (req, res, next) => {
   try {
+    const { currentPassword, newPassword } = req.body;
     const result = await authService.changePassword(
       req.user.id,
-      req.body
+      currentPassword,
+      newPassword
     );
 
     return res.status(200).json({

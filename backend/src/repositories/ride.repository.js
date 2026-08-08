@@ -159,7 +159,7 @@ exports.searchRides = async ({
   const skip = (page - 1) * limit;
 
   const where = {
-    organizationId,
+    ...(organizationId ? { organizationId } : {}),
 
     status: "PUBLISHED",
 
@@ -245,7 +245,7 @@ exports.findUpcomingRides = async (
 ) => {
   return prisma.ride.findMany({
     where: {
-      organizationId,
+      ...(organizationId ? { organizationId } : {}),
 
       status: "PUBLISHED",
 

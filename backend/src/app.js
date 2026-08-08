@@ -39,6 +39,22 @@ app.use(apiLimiter);
 // ROUTES
 // ============================================================
 
+app.get("/", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "Welcome to the Carpool Platform Backend API. The server is running successfully! 🚀",
+    docs: "Access endpoints under /api/*"
+  });
+});
+
+app.get("/api/health", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "Server is healthy and running",
+    timestamp: new Date().toISOString()
+  });
+});
+
 app.use("/api/auth", require("./routes/auth.routes.js"));
 
 app.use("/api/users", require("./routes/user.routes.js"));

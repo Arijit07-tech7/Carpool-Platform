@@ -2436,74 +2436,55 @@
             </button>
 
 
-            <button
+            <a
                 class="nav-item"
-                data-page="my-trips"
+                href="my-trips.html"
             >
-
                 <span class="nav-icon">
                     ↗
                 </span>
-
                 My Trips
+            </a>
 
-            </button>
-
-
-            <button
+            <a
                 class="nav-item"
-                data-page="vehicle"
+                href="my_vehicle.html"
             >
-
                 <span class="nav-icon">
                     ▣
                 </span>
-
                 My Vehicle
+            </a>
 
-            </button>
-
-
-            <button
+            <a
                 class="nav-item"
-                data-page="history"
+                href="ride-history.html"
             >
-
                 <span class="nav-icon">
                     ◷
                 </span>
-
                 Ride History
+            </a>
 
-            </button>
-
-
-            <button
+            <a
                 class="nav-item"
-                data-page="wallet"
+                href="wallet.html"
             >
-
                 <span class="nav-icon">
                     ◇
                 </span>
-
                 Wallet
+            </a>
 
-            </button>
-
-
-            <button
+            <a
                 class="nav-item"
-                data-page="settings"
+                href="settings.html"
             >
-
                 <span class="nav-icon">
                     ⚙
                 </span>
-
                 Settings
-
-            </button>
+            </a>
 
 
         </nav>
@@ -3098,6 +3079,7 @@
 </div>
 
 
+<script src="api.js"></script>
 <script>
 
     /* =========================================================
@@ -3739,7 +3721,7 @@
                              */
 
                             window.location.href =
-                                "ride-details.html";
+                                `trip-booking.html?rideId=${rideId || ''}`;
 
                         }
                     );
@@ -4060,7 +4042,7 @@
                             "my-trips.html",
 
                         "vehicle":
-                            "my-vehicle.html",
+                            "my_vehicle.html",
 
                         "history":
                             "ride-history.html",
@@ -4260,7 +4242,50 @@
                 });
 
             }
-        );
+    /* =========================================================
+       API INTEGRATION FOR REAL DATA
+    ========================================================= */
+
+    document.addEventListener("DOMContentLoaded", async () => {
+        if (typeof API !== 'undefined') {
+            if (!API.isLoggedIn()) {
+                window.location.href = "login.html";
+                return;
+            }
+
+            const user = API.getUser();
+            if (user) {
+                const nameEl = document.getElementById("profileName") || document.getElementById("userName");
+                if (nameEl) nameEl.textContent = user.name || "Employee";
+                const avatarEl = document.getElementById("userAvatar");
+                if (avatarEl) avatarEl.textContent = (user.name || "E").charAt(0).toUpperCase();
+            }
+
+            try {
+                const res = await API.rides.available();
+                const realRides = res.data || res.rides || res || [];
+                if (realRides.length > 0 && typeof renderRides === "function") {
+                    const formatted = realRides.map(r => ({
+                        id: r.id,
+                        driver: r.driver?.name || "RideSync Driver",
+                        initials: (r.driver?.name || "D").charAt(0).toUpperCase(),
+                        rating: "4.9",
+                        vehicle: r.vehicle ? `${r.vehicle.make} ${r.vehicle.model}` : "Standard Sedan",
+                        start: r.pickupLocation || r.originName || "Pickup",
+                        destination: r.destination || r.destinationName || "Destination",
+                        time: r.rideTime || "10:00 AM",
+                        distance: `${r.distanceKm || 12} km`,
+                        eta: "25 min",
+                        seats: r.availableSeats || r.totalSeats || 3,
+                        price: r.farePerSeat || r.fare || 150
+                    }));
+                    renderRides(formatted);
+                }
+            } catch(err) {
+                console.warn("Real rides fetch fallback:", err.message);
+            }
+        }
+    });
 
 </script>
 

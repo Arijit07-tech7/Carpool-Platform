@@ -37,7 +37,7 @@
    ========================================================= */
 
 const RIDESYNC_GOOGLE_API_KEY =
-    "PASTE_YOUR_GOOGLE_MAPS_API_KEY_HERE";
+    "AIzaSyCV0e64xLCJgtbwo2WB_mBVwJDOzda26CQ";
 
 
 /* =========================================================
