@@ -1,7 +1,7 @@
 // backend/src/config/razorpay.js
 
-import Razorpay from "razorpay";
-import env from "./env.js";
+const Razorpay = require("razorpay");
+const env = require("./env.js");
 
 
 
@@ -10,8 +10,8 @@ const razorpay = new Razorpay({
   key_secret: env.razorpayKeySecret,
 });
 
-export const getRazorpay = () => {
+razorpay.getRazorpay = () => {
   return razorpay;
 };
 
-export default razorpay;
+module.exports = razorpay;

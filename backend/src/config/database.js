@@ -1,6 +1,6 @@
 
 
-import { PrismaClient } from "@prisma/client";
+const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient({
   log:
@@ -10,7 +10,7 @@ const prisma = new PrismaClient({
 });
 
 // Connect to database
-export const connectDatabase = async () => {
+prisma.connectDatabase = async () => {
   try {
     await prisma.$connect();
     console.log("✅ PostgreSQL database connected successfully");
@@ -21,7 +21,7 @@ export const connectDatabase = async () => {
 };
 
 // Disconnect from database
-export const disconnectDatabase = async () => {
+prisma.disconnectDatabase = async () => {
   try {
     await prisma.$disconnect();
     console.log("🛑 PostgreSQL database disconnected");
@@ -32,13 +32,13 @@ export const disconnectDatabase = async () => {
 
 // Graceful shutdown
 process.on("SIGINT", async () => {
-  await disconnectDatabase();
+  await prisma.disconnectDatabase();
   process.exit(0);
 });
 
 process.on("SIGTERM", async () => {
-  await disconnectDatabase();
+  await prisma.disconnectDatabase();
   process.exit(0);
 });
 
-export default prisma;
+module.exports = prisma;
