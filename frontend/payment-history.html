@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Payment History — RideSync</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+
+        :root {
+
+            --blue: #2563eb;
+            --blue-light: #3b82f6;
+            --blue-soft:
+                rgba(37,99,235,.07);
+
+            --blue-border:
+                rgba(37,99,235,.13);
+
+            --text: #0f172a;
+            --soft: #475569;
+            --muted: #64748b;
+
+            --border:
+                rgba(37,99,235,.10);
+
+            --white: #ffffff;
+
+            --shadow:
+                0 20px 60px
+                rgba(30,64,175,.09);
+        }
+
+
+        * {
+
+            margin: 0;
+
+            padding: 0;
+
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            min-height: 100vh;
+
+            background:
+
+                radial-gradient(
+                    circle at 5% 5%,
+                    rgba(37,99,235,.10),
+                    transparent 28%
+                ),
+
+                radial-gradient(
+                    circle at 95% 15%,
+                    rgba(59,130,246,.08),
+                    transparent 25%
+                ),
+
+                linear-gradient(
+                    180deg,
+                    #f8fbff,
+                    #f2f6ff,
+                    #ffffff
+                );
+
+            color: var(--text);
+
+            font-family:
+                Inter,
+                Arial,
+                sans-serif;
+        }
+
+
+        .page {
+
+            width:
+                min(1000px, calc(100% - 30px));
+
+            min-height: 100vh;
+
+            margin: auto;
+        }
+
+
+        header {
+
+            min-height: 78px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            border-bottom:
+                1px solid var(--border);
+        }
+
+
+        .logo {
+
+            color: var(--blue);
+
+            font-size: 13px;
+
+            font-weight: 900;
+
+            letter-spacing: .2em;
+        }
+
+
+        .back {
+
+            border:
+                1px solid var(--blue-border);
+
+            background:
+                rgba(255,255,255,.82);
+
+            color: var(--blue);
+
+            padding:
+                10px 15px;
+
+            border-radius: 10px;
+
+            cursor: pointer;
+
+            font-size: 9px;
+
+            font-weight: 800;
+        }
+
+
+        main {
+
+            padding:
+                40px 0 60px;
+        }
+
+
+        .heading {
+
+            margin-bottom: 25px;
+        }
+
+
+        .eyebrow {
+
+            color: var(--blue);
+
+            font-size: 9px;
+
+            font-weight: 900;
+
+            letter-spacing: .18em;
+        }
+
+
+        h1 {
+
+            margin-top: 8px;
+
+            font-size: 32px;
+
+            letter-spacing: -.04em;
+
+            font-weight: 900;
+        }
+
+
+        .heading p {
+
+            margin-top: 8px;
+
+            color: var(--muted);
+
+            font-size: 10px;
+        }
+
+
+        /* HISTORY CARD */
+
+        .history-card {
+
+            overflow: hidden;
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 23px;
+
+            background:
+                rgba(255,255,255,.84);
+
+            backdrop-filter:
+                blur(20px);
+
+            box-shadow: var(--shadow);
+        }
+
+
+        .history-head {
+
+            padding:
+                20px 22px;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            border-bottom:
+                1px solid var(--border);
+        }
+
+
+        .history-head strong {
+
+            font-size: 12px;
+
+            font-weight: 850;
+        }
+
+
+        .count {
+
+            padding:
+                6px 10px;
+
+            border-radius: 999px;
+
+            background: var(--blue-soft);
+
+            color: var(--blue);
+
+            font-size: 8px;
+
+            font-weight: 900;
+        }
+
+
+        /* HISTORY ITEM */
+
+        .history-item {
+
+            padding:
+                22px;
+
+            border-bottom:
+                1px solid var(--border);
+
+            transition: .2s;
+        }
+
+
+        .history-item:last-child {
+
+            border-bottom: none;
+        }
+
+
+        .history-item:hover {
+
+            background:
+                rgba(239,246,255,.38);
+        }
+
+
+        .top {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 15px;
+        }
+
+
+        .identity {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+        }
+
+
+        .icon {
+
+            width: 42px;
+
+            height: 42px;
+
+            border-radius: 13px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background:
+                var(--blue-soft);
+
+            color:
+                var(--blue);
+
+            font-size: 16px;
+
+            font-weight: 900;
+        }
+
+
+        .name {
+
+            font-size: 11px;
+
+            font-weight: 850;
+        }
+
+
+        .meta {
+
+            margin-top: 4px;
+
+            color: var(--muted);
+
+            font-size: 8px;
+        }
+
+
+        .amount {
+
+            text-align: right;
+
+            font-size: 16px;
+
+            font-weight: 900;
+
+            color: var(--blue);
+        }
+
+
+        .success {
+
+            display: block;
+
+            margin-top: 4px;
+
+            color: var(--blue);
+
+            font-size: 7px;
+
+            font-weight: 900;
+
+            letter-spacing: .08em;
+        }
+
+
+        /* DETAILS */
+
+        .details {
+
+            margin-top: 17px;
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 9px;
+        }
+
+
+        .detail {
+
+            padding:
+                11px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 12px;
+
+            background:
+                rgba(248,250,252,.62);
+        }
+
+
+        .detail span {
+
+            display: block;
+
+            color: var(--muted);
+
+            font-size: 7px;
+
+            font-weight: 700;
+        }
+
+
+        .detail strong {
+
+            display: block;
+
+            margin-top: 5px;
+
+            color: var(--text);
+
+            font-size: 9px;
+
+            font-weight: 750;
+        }
+
+
+        .method {
+
+            color: var(--blue) !important;
+        }
+
+
+        .transaction {
+
+            font-family:
+                "Courier New",
+                monospace;
+
+            overflow: hidden;
+
+            text-overflow: ellipsis;
+        }
+
+
+        /* EMPTY */
+
+        .empty {
+
+            padding:
+                60px 20px;
+
+            text-align: center;
+
+            color: var(--muted);
+        }
+
+
+        .empty-icon {
+
+            font-size: 35px;
+
+            color: var(--blue);
+
+            margin-bottom: 10px;
+        }
+
+
+        .empty strong {
+
+            display: block;
+
+            color: var(--text);
+
+            font-size: 12px;
+        }
+
+
+        .empty p {
+
+            margin-top: 5px;
+
+            font-size: 9px;
+        }
+
+
+        footer {
+
+            padding:
+                20px 0;
+
+            border-top:
+                1px solid var(--border);
+
+            display: flex;
+
+            justify-content: space-between;
+
+            color: var(--muted);
+
+            font-size: 8px;
+        }
+
+
+        @media(max-width:700px) {
+
+            .details {
+
+                grid-template-columns:
+                    1fr 1fr;
+            }
+        }
+
+
+        @media(max-width:480px) {
+
+            .page {
+
+                width:
+                    calc(100% - 20px);
+            }
+
+            .top {
+
+                align-items: flex-start;
+            }
+
+            .amount {
+
+                font-size: 14px;
+            }
+
+            .details {
+
+                grid-template-columns:
+                    1fr;
+            }
+
+            footer {
+
+                flex-direction: column;
+
+                gap: 6px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="page">
+
+
+<header>
+
+    <div class="logo">
+        RIDESYNC
+    </div>
+
+
+    <button
+        class="back"
+        onclick="goBack()"
+    >
+        ← BACK
+    </button>
+
+</header>
+
+
+
+<main>
+
+
+    <div class="heading">
+
+        <span class="eyebrow">
+            TRANSACTION CENTER
+        </span>
+
+        <h1>
+            Payment History
+        </h1>
+
+        <p>
+            View your ride, payment method, transaction and payment status.
+        </p>
+
+    </div>
+
+
+
+    <section class="history-card">
+
+
+        <div class="history-head">
+
+            <strong>
+                Your Ride Payments
+            </strong>
+
+            <span
+                class="count"
+                id="count"
+            >
+                0 TRANSACTIONS
+            </span>
+
+        </div>
+
+
+        <div id="history"></div>
+
+
+    </section>
+
+
+</main>
+
+
+
+<footer>
+
+    <span>
+        © 2026 RideSync
+    </span>
+
+    <span>
+        Secure Payment History
+    </span>
+
+</footer>
+
+
+</div>
+
+
+
+<script>
+
+    /* =====================================================
+       LOAD HISTORY
+       ===================================================== */
+
+    let history = [];
+
+
+    try {
+
+        history =
+            JSON.parse(
+                localStorage.getItem(
+                    "ridesync_payment_history"
+                )
+            ) || [];
+
+    }
+
+    catch(error) {
+
+        history = [];
+
+    }
+
+
+
+    /* =====================================================
+       FALLBACK
+       ===================================================== */
+
+    if (!history.length) {
+
+        const current =
+            JSON.parse(
+                localStorage.getItem(
+                    "ridesync_last_payment"
+                )
+            );
+
+
+        if (current) {
+
+            history = [current];
+
+        }
+
+    }
+
+
+
+    /* =====================================================
+       COUNT
+       ===================================================== */
+
+    document.getElementById(
+        "count"
+    ).textContent =
+
+        history.length +
+        (
+            history.length === 1
+                ? " TRANSACTION"
+                : " TRANSACTIONS"
+        );
+
+
+
+    /* =====================================================
+       ICON
+       ===================================================== */
+
+    function getIcon(method) {
+
+        const m =
+            String(method)
+                .toLowerCase();
+
+
+        if (m === "card")
+            return "▣";
+
+
+        if (m === "wallet")
+            return "◉";
+
+
+        if (m === "cash")
+            return "₹";
+
+
+        return "↗";
+
+    }
+
+
+
+    /* =====================================================
+       DATE
+       ===================================================== */
+
+    function formatDate(date) {
+
+        return new Date(
+            date || Date.now()
+        ).toLocaleString(
+            "en-IN",
+            {
+                day: "2-digit",
+                month: "short",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit"
+            }
+        );
+
+    }
+
+
+
+    /* =====================================================
+       RENDER HISTORY
+       ===================================================== */
+
+    const historyContainer =
+        document.getElementById(
+            "history"
+        );
+
+
+    if (!history.length) {
+
+        historyContainer.innerHTML = `
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    ◷
+                </div>
+
+                <strong>
+                    No Payment History
+                </strong>
+
+                <p>
+                    Your completed RideSync payments will appear here.
+                </p>
+
+            </div>
+
+        `;
+
+    }
+
+    else {
+
+        historyContainer.innerHTML =
+
+            history.map(
+                (current) => {
+
+                    const ride =
+                        current.ride || {};
+
+
+                    const icon =
+                        getIcon(
+                            current.method
+                        );
+
+
+                    const date =
+                        formatDate(
+                            current.date
+                        );
+
+
+                    return `
+
+                        <article
+                            class="history-item"
+                        >
+
+                            <div class="top">
+
+                                <div class="identity">
+
+                                    <div class="icon">
+                                        ${icon}
+                                    </div>
+
+                                    <div>
+
+                                        <div class="name">
+                                            ${ride.from || "Kolkata"}
+                                            →
+                                            ${ride.to || "Salt Lake"}
+                                        </div>
+
+                                        <div class="meta">
+
+                                            ${current.transactionId || "RS000000"}
+                                            •
+                                            ${date}
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+
+                                <div>
+
+                                    <div class="amount">
+
+                                        ₹${Number(
+                                            current.amount || 0
+                                        ).toLocaleString("en-IN")}
+
+                                    </div>
+
+                                    <span class="success">
+                                        ✓ SUCCESSFUL
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="details">
+
+
+                                <div class="detail">
+
+                                    <span>
+                                        PAYMENT METHOD
+                                    </span>
+
+                                    <strong class="method">
+                                        ${current.method || "UPI"}
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="detail">
+
+                                    <span>
+                                        BOOKING ID
+                                    </span>
+
+                                    <strong>
+                                        ${ride.bookingId || "RSBK000000"}
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="detail">
+
+                                    <span>
+                                        DRIVER
+                                    </span>
+
+                                    <strong>
+                                        ${ride.driver || "RideSync Driver"}
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="detail">
+
+                                    <span>
+                                        VEHICLE
+                                    </span>
+
+                                    <strong>
+                                        ${ride.vehicle || "Sedan"}
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="detail">
+
+                                    <span>
+                                        RIDE DATE
+                                    </span>
+
+                                    <strong>
+                                        ${ride.date || "08 Aug 2026"}
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="detail">
+
+                                    <span>
+                                        RIDE TIME
+                                    </span>
+
+                                    <strong>
+                                        ${ride.time || "03:30 PM"}
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="detail">
+
+                                    <span>
+                                        TRANSACTION
+                                    </span>
+
+                                    <strong class="transaction">
+                                        ${current.transactionId || "RS000000"}
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="detail">
+
+                                    <span>
+                                        STATUS
+                                    </span>
+
+                                    <strong class="method">
+                                        SUCCESSFUL
+                                    </strong>
+
+                                </div>
+
+
+                            </div>
+
+                        </article>
+
+                    `;
+
+                }
+            ).join("");
+
+    }
+
+
+
+    /* =====================================================
+       BACK
+       ===================================================== */
+
+    function goBack() {
+
+        window.location.href =
+            "payment-success.html";
+
+    }
+
+</script>
+
+
+</body>
+
+</html>

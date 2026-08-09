@@ -1,0 +1,1075 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Verify UPI — RideSync</title>
+
+    <link
+        rel="stylesheet"
+        href="payment-summary.css"
+    >
+
+    <style>
+
+        /* =====================================================
+           UPI VERIFY
+           PREMIUM WHITE + BLUE GLASS
+           ===================================================== */
+
+        .verify-container {
+            width: min(500px, 100%);
+            margin: auto;
+        }
+
+
+        .verify-card {
+            padding: 32px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                24px;
+
+            background:
+                rgba(255,255,255,.88);
+
+            backdrop-filter:
+                blur(22px);
+
+            -webkit-backdrop-filter:
+                blur(22px);
+
+            box-shadow:
+                var(--shadow-lg);
+
+            text-align:
+                center;
+        }
+
+
+        /* =====================================================
+           ICON
+           ===================================================== */
+
+        .verify-icon {
+            width: 64px;
+            height: 64px;
+
+            margin:
+                0 auto 20px;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            border-radius:
+                18px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--blue),
+                    var(--blue-light)
+                );
+
+            color:
+                white;
+
+            font-size:
+                18px;
+
+            font-weight:
+                800;
+
+            box-shadow:
+                0 12px 30px
+                rgba(37,99,235,.22);
+        }
+
+
+        /* =====================================================
+           HEADING
+           ===================================================== */
+
+        .verify-card h2 {
+
+            margin-top:
+                8px;
+
+            color:
+                var(--text);
+
+            font-size:
+                27px;
+
+            font-weight:
+                800;
+
+            letter-spacing:
+                -.03em;
+        }
+
+
+        .verify-description {
+
+            max-width:
+                390px;
+
+            margin:
+                9px auto 0;
+
+            color:
+                var(--text-muted);
+
+            font-size:
+                11px;
+
+            line-height:
+                1.7;
+        }
+
+
+        /* =====================================================
+           UPI DISPLAY
+           ===================================================== */
+
+        .upi-display {
+
+            margin-top:
+                22px;
+
+            padding:
+                14px 16px;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                space-between;
+
+            gap:
+                12px;
+
+            border:
+                1px solid var(--border-blue);
+
+            border-radius:
+                13px;
+
+            background:
+                var(--blue-pale);
+
+            text-align:
+                left;
+        }
+
+
+        .upi-display span {
+
+            display:
+                block;
+
+            color:
+                var(--text-muted);
+
+            font-size:
+                8px;
+
+            font-weight:
+                700;
+
+            text-transform:
+                uppercase;
+
+            letter-spacing:
+                .08em;
+        }
+
+
+        .upi-display strong {
+
+            display:
+                block;
+
+            margin-top:
+                4px;
+
+            color:
+                var(--text);
+
+            font-size:
+                11px;
+        }
+
+
+        .verified-label {
+
+            padding:
+                6px 9px;
+
+            border-radius:
+                999px;
+
+            background:
+                rgba(37,99,235,.08);
+
+            color:
+                var(--blue);
+
+            font-size:
+                8px;
+
+            font-weight:
+                800;
+        }
+
+
+        /* =====================================================
+           AMOUNT
+           ===================================================== */
+
+        .amount-box {
+
+            margin-top:
+                14px;
+
+            padding:
+                17px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                14px;
+
+            background:
+                rgba(255,255,255,.70);
+        }
+
+
+        .amount-box span {
+
+            color:
+                var(--text-muted);
+
+            font-size:
+                8px;
+
+            letter-spacing:
+                .08em;
+        }
+
+
+        .amount-box strong {
+
+            display:
+                block;
+
+            margin-top:
+                5px;
+
+            color:
+                var(--blue);
+
+            font-size:
+                25px;
+
+            font-weight:
+                800;
+        }
+
+
+        /* =====================================================
+           OTP AREA
+           ===================================================== */
+
+        .otp-title {
+
+            margin-top:
+                25px;
+
+            color:
+                var(--text);
+
+            font-size:
+                11px;
+
+            font-weight:
+                800;
+        }
+
+
+        .otp-subtitle {
+
+            margin-top:
+                5px;
+
+            color:
+                var(--text-muted);
+
+            font-size:
+                9px;
+        }
+
+
+        .otp-container {
+
+            margin-top:
+                15px;
+
+            display:
+                flex;
+
+            justify-content:
+                center;
+
+            gap:
+                8px;
+        }
+
+
+        .otp-input {
+
+            width:
+                43px;
+
+            height:
+                48px;
+
+            border:
+                1px solid var(--border-blue);
+
+            border-radius:
+                10px;
+
+            outline:
+                none;
+
+            background:
+                white;
+
+            color:
+                var(--text);
+
+            text-align:
+                center;
+
+            font-size:
+                17px;
+
+            font-weight:
+                800;
+
+            transition:
+                .2s ease;
+        }
+
+
+        .otp-input:focus {
+
+            border-color:
+                var(--blue);
+
+            box-shadow:
+                0 0 0 4px
+                rgba(37,99,235,.08);
+
+            transform:
+                translateY(-1px);
+        }
+
+
+        /* =====================================================
+           DEMO OTP
+           ===================================================== */
+
+        .demo-note {
+
+            margin-top:
+                14px;
+
+            padding:
+                10px;
+
+            border:
+                1px dashed
+                rgba(37,99,235,.25);
+
+            border-radius:
+                10px;
+
+            background:
+                rgba(239,246,255,.55);
+
+            color:
+                var(--text-muted);
+
+            font-size:
+                8px;
+
+            line-height:
+                1.5;
+        }
+
+
+        .demo-note strong {
+
+            color:
+                var(--blue);
+
+            font-weight:
+                800;
+        }
+
+
+        /* =====================================================
+           VERIFY BUTTON
+           ===================================================== */
+
+        .verify-btn {
+
+            width:
+                100%;
+
+            height:
+                51px;
+
+            margin-top:
+                20px;
+
+            border:
+                0;
+
+            border-radius:
+                12px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--blue),
+                    var(--blue-light)
+                );
+
+            color:
+                white;
+
+            font-size:
+                11px;
+
+            font-weight:
+                800;
+
+            cursor:
+                pointer;
+
+            box-shadow:
+                0 12px 28px
+                rgba(37,99,235,.22);
+
+            transition:
+                .2s ease;
+        }
+
+
+        .verify-btn:hover {
+
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 16px 34px
+                rgba(37,99,235,.28);
+        }
+
+
+        .verify-btn:disabled {
+
+            opacity:
+                .6;
+
+            cursor:
+                not-allowed;
+
+            transform:
+                none;
+        }
+
+
+        /* =====================================================
+           RESEND
+           ===================================================== */
+
+        .resend {
+
+            margin-top:
+                15px;
+
+            color:
+                var(--text-muted);
+
+            font-size:
+                9px;
+        }
+
+
+        .resend button {
+
+            border:
+                0;
+
+            background:
+                transparent;
+
+            color:
+                var(--blue);
+
+            font-size:
+                9px;
+
+            font-weight:
+                800;
+
+            cursor:
+                pointer;
+        }
+
+
+        /* =====================================================
+           BACK
+           ===================================================== */
+
+        .back-link {
+
+            display:
+                block;
+
+            margin-top:
+                18px;
+
+            color:
+                var(--blue);
+
+            font-size:
+                9px;
+
+            font-weight:
+                700;
+
+            text-decoration:
+                none;
+        }
+
+
+        /* =====================================================
+           ERROR
+           ===================================================== */
+
+        .error-message {
+
+            min-height:
+                18px;
+
+            margin-top:
+                10px;
+
+            color:
+                #dc2626;
+
+            font-size:
+                9px;
+
+            font-weight:
+                700;
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+           ===================================================== */
+
+        @media(max-width:500px) {
+
+            .verify-card {
+                padding:
+                    24px 18px;
+            }
+
+            .otp-container {
+                gap:
+                    5px;
+            }
+
+            .otp-input {
+
+                width:
+                    40px;
+
+                height:
+                    46px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="page">
+
+
+    <!-- =================================================
+         HEADER
+         ================================================= -->
+
+    <header class="header">
+
+        <a
+            href="upi-payment.html"
+            class="back-btn"
+        >
+            ←
+        </a>
+
+
+        <div class="header-title">
+
+            <span>
+                RideSync Payments
+            </span>
+
+            <h1>
+                Verify Payment
+            </h1>
+
+        </div>
+
+
+        <div class="secure">
+
+            <span class="secure-dot"></span>
+
+            Secure
+
+        </div>
+
+    </header>
+
+
+    <!-- =================================================
+         MAIN
+         ================================================= -->
+
+    <main class="main">
+
+        <div class="verify-container">
+
+
+            <div class="verify-card">
+
+
+                <!-- ICON -->
+
+                <div class="verify-icon">
+                    UPI
+                </div>
+
+
+                <div class="eyebrow">
+                    UPI Verification
+                </div>
+
+
+                <h2>
+                    Verify Your Payment
+                </h2>
+
+
+                <p class="verify-description">
+
+                    A verification code has been generated
+                    for your UPI payment. Enter the code below
+                    to complete the transaction.
+
+                </p>
+
+
+                <!-- UPI -->
+
+                <div class="upi-display">
+
+                    <div>
+
+                        <span>
+                            UPI ID
+                        </span>
+
+                        <strong id="upiValue">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="verified-label">
+                        VERIFIED
+                    </div>
+
+                </div>
+
+
+                <!-- AMOUNT -->
+
+                <div class="amount-box">
+
+                    <span>
+                        PAYMENT AMOUNT
+                    </span>
+
+                    <strong>
+                        ₹180
+                    </strong>
+
+                </div>
+
+
+                <!-- OTP -->
+
+                <div class="otp-title">
+
+                    Enter 6-Digit Verification Code
+
+                </div>
+
+
+                <div class="otp-subtitle">
+
+                    Use the demo verification code shown below.
+
+                </div>
+
+
+                <form id="verifyForm">
+
+
+                    <div class="otp-container">
+
+
+                        <input
+                            class="otp-input"
+                            maxlength="1"
+                            inputmode="numeric"
+                            autocomplete="one-time-code"
+                        >
+
+                        <input
+                            class="otp-input"
+                            maxlength="1"
+                            inputmode="numeric"
+                        >
+
+                        <input
+                            class="otp-input"
+                            maxlength="1"
+                            inputmode="numeric"
+                        >
+
+                        <input
+                            class="otp-input"
+                            maxlength="1"
+                            inputmode="numeric"
+                        >
+
+                        <input
+                            class="otp-input"
+                            maxlength="1"
+                            inputmode="numeric"
+                        >
+
+                        <input
+                            class="otp-input"
+                            maxlength="1"
+                            inputmode="numeric"
+                        >
+
+
+                    </div>
+
+
+                    <div
+                        class="error-message"
+                        id="errorMessage"
+                    ></div>
+
+
+                    <!-- DEMO -->
+
+                    <div class="demo-note">
+
+                        Hackathon Demo Mode —
+                        Verification code:
+                        <strong>123456</strong>
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="verify-btn"
+                    >
+                        Verify & Pay ₹180 →
+                    </button>
+
+
+                </form>
+
+
+                <div class="resend">
+
+                    Didn't receive a code?
+
+                    <button
+                        type="button"
+                        id="resendBtn"
+                    >
+                        Generate Again
+                    </button>
+
+                </div>
+
+
+                <a
+                    href="upi-payment.html"
+                    class="back-link"
+                >
+                    ← Change UPI ID
+                </a>
+
+
+            </div>
+
+
+        </div>
+
+    </main>
+
+
+</div>
+
+
+<script>
+
+    /* =====================================================
+       LOAD UPI ID
+       ===================================================== */
+
+    const upiId =
+        localStorage.getItem(
+            "ridesyncUpiId"
+        ) || "demo@upi";
+
+
+    document
+        .getElementById("upiValue")
+        .textContent =
+        upiId;
+
+
+    /* =====================================================
+       OTP INPUTS
+       ===================================================== */
+
+    const inputs =
+        document.querySelectorAll(
+            ".otp-input"
+        );
+
+
+    inputs.forEach((input, index) => {
+
+        input.addEventListener(
+            "input",
+            function() {
+
+                this.value =
+                    this.value.replace(
+                        /[^0-9]/g,
+                        ""
+                    );
+
+                if (
+                    this.value &&
+                    index < inputs.length - 1
+                ) {
+
+                    inputs[index + 1].focus();
+
+                }
+
+            }
+        );
+
+
+        input.addEventListener(
+            "keydown",
+            function(e) {
+
+                if (
+                    e.key === "Backspace" &&
+                    !this.value &&
+                    index > 0
+                ) {
+
+                    inputs[index - 1].focus();
+
+                }
+
+            }
+        );
+
+    });
+
+
+    /* =====================================================
+       VERIFY
+       ===================================================== */
+
+    document
+        .getElementById("verifyForm")
+        .addEventListener(
+            "submit",
+            function(e) {
+
+                e.preventDefault();
+
+
+                let otp = "";
+
+                inputs.forEach(
+                    input => {
+                        otp += input.value;
+                    }
+                );
+
+
+                const error =
+                    document.getElementById(
+                        "errorMessage"
+                    );
+
+
+                if (otp.length !== 6) {
+
+                    error.textContent =
+                        "Please enter the complete 6-digit code.";
+
+                    return;
+
+                }
+
+
+                /* DEMO OTP */
+
+                if (otp !== "123456") {
+
+                    error.textContent =
+                        "Invalid verification code. Try the demo code.";
+
+                    return;
+
+                }
+
+
+                error.textContent = "";
+
+
+                /* SAVE PAYMENT */
+
+                localStorage.setItem(
+                    "ridesyncPaymentMethod",
+                    "upi"
+                );
+
+
+                localStorage.setItem(
+                    "ridesyncPaymentStatus",
+                    "success"
+                );
+
+
+                localStorage.setItem(
+                    "ridesyncTransactionId",
+                    "RSUPI" + Date.now()
+                );
+
+
+                localStorage.setItem(
+                    "ridesyncPaymentAmount",
+                    "180"
+                );
+
+
+                /* SUCCESS */
+
+                window.location.href =
+                    "payment-success.html";
+
+            }
+        );
+
+
+    /* =====================================================
+       DEMO RESEND
+       ===================================================== */
+
+    document
+        .getElementById("resendBtn")
+        .addEventListener(
+            "click",
+            function() {
+
+                const error =
+                    document.getElementById(
+                        "errorMessage"
+                    );
+
+                error.style.color =
+                    "var(--blue)";
+
+                error.textContent =
+                    "Demo verification code generated: 123456";
+
+                setTimeout(() => {
+
+                    error.textContent = "";
+
+                }, 3500);
+
+            }
+        );
+
+</script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,5403 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#ffffff"
+    >
+
+    <meta
+        name="description"
+        content="RideSync Admin Dashboard"
+    >
+
+    <title>RideSync — Admin Dashboard</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg: #f5f5f3;
+            --panel: #ffffff;
+            --text: #111111;
+            --muted: #777777;
+            --border: #e8e8e5;
+            --soft: #f8f8f6;
+            --black: #111111;
+            --green: #16794c;
+            --red: #c93636;
+            --orange: #b56b00;
+            --shadow:
+                0 10px 30px rgba(0, 0, 0, .045);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family:
+                Inter,
+                Arial,
+                Helvetica,
+                sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        button,
+        input,
+        select {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        /* ==================================================
+           APP
+        ================================================== */
+
+        .app {
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* ==================================================
+           SIDEBAR
+        ================================================== */
+
+        .sidebar {
+            width: 250px;
+            min-height: 100vh;
+            background: #fff;
+            border-right: 1px solid var(--border);
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 28px 24px 30px;
+        }
+
+        .logo-mark {
+            width: 42px;
+            height: 42px;
+            border-radius: 13px;
+            background: #111;
+            color: #fff;
+            display: grid;
+            place-items: center;
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .logo-name {
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: -.4px;
+        }
+
+        .logo-sub {
+            margin-top: 3px;
+            font-size: 9px;
+            letter-spacing: 1.5px;
+            color: #999;
+            font-weight: 700;
+        }
+
+        .section-label {
+            padding: 0 24px 12px;
+            font-size: 10px;
+            color: #aaa;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+        }
+
+        .nav {
+            padding: 0 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .nav-btn {
+            border: 0;
+            background: transparent;
+            width: 100%;
+            padding: 12px 13px;
+            border-radius: 11px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #777;
+            text-align: left;
+            transition: .2s ease;
+        }
+
+        .nav-btn:hover {
+            background: #f5f5f3;
+            color: #111;
+        }
+
+        .nav-btn.active {
+            background: #111;
+            color: #fff;
+        }
+
+        .nav-icon {
+            width: 25px;
+            text-align: center;
+            font-size: 17px;
+        }
+
+        .nav-text {
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .sidebar-bottom {
+            margin-top: auto;
+            padding: 18px;
+            border-top: 1px solid var(--border);
+        }
+
+        .admin-box {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+        }
+
+        .admin-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: #111;
+            color: white;
+            display: grid;
+            place-items: center;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .admin-name {
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .admin-role {
+            margin-top: 3px;
+            color: #999;
+            font-size: 10px;
+        }
+
+        /* ==================================================
+           MAIN
+        ================================================== */
+
+        .main {
+            margin-left: 250px;
+            width: calc(100% - 250px);
+            min-height: 100vh;
+        }
+
+        .topbar {
+            min-height: 88px;
+            background: rgba(255,255,255,.9);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 34px;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            backdrop-filter: blur(12px);
+        }
+
+        .title {
+            font-size: 26px;
+            letter-spacing: -.7px;
+        }
+
+        .subtitle {
+            margin-top: 5px;
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .top-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .date {
+            padding: 9px 13px;
+            background: #f7f7f5;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            font-size: 11px;
+            color: #666;
+        }
+
+        .top-btn {
+            width: 37px;
+            height: 37px;
+            border: 1px solid var(--border);
+            background: #fff;
+            border-radius: 10px;
+            color: #555;
+        }
+
+        .content {
+            padding: 30px 34px 50px;
+        }
+
+        /* ==================================================
+           PAGE
+        ================================================== */
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* ==================================================
+           CARDS
+        ================================================== */
+
+        .card,
+        .panel {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+        }
+
+        /* ==================================================
+           STATS
+        ================================================== */
+
+        .stats {
+            display: grid;
+            grid-template-columns:
+                repeat(4, minmax(0, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .stat {
+            padding: 20px;
+        }
+
+        .stat-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stat-label {
+            color: #777;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .stat-icon {
+            width: 31px;
+            height: 31px;
+            border-radius: 9px;
+            background: #f4f4f2;
+            display: grid;
+            place-items: center;
+            color: #444;
+        }
+
+        .stat-number {
+            margin-top: 18px;
+            font-size: 30px;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .stat-change {
+            margin-top: 7px;
+            font-size: 10px;
+            color: #888;
+        }
+
+        /* ==================================================
+           GRID
+        ================================================== */
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 20px;
+        }
+
+        .panel {
+            padding: 20px;
+        }
+
+        .panel-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .panel-title {
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .panel-sub {
+            margin-top: 5px;
+            font-size: 10px;
+            color: #999;
+        }
+
+        /* ==================================================
+           CHART
+        ================================================== */
+
+        .chart-box {
+            width: 100%;
+            height: 260px;
+            overflow: hidden;
+        }
+
+        .chart-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .chart-area {
+            fill: rgba(17,17,17,.06);
+        }
+
+        .chart-line {
+            fill: none;
+            stroke: #111;
+            stroke-width: 3;
+        }
+
+        .chart-dot {
+            fill: #111;
+        }
+
+        .chart-labels {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 2px 0;
+            color: #aaa;
+            font-size: 10px;
+        }
+
+        /* ==================================================
+           ACTIVITY
+        ================================================== */
+
+        .activity {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .activity-item:last-child {
+            border-bottom: 0;
+        }
+
+        .activity-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 9px;
+            background: #f4f4f2;
+            display: grid;
+            place-items: center;
+            font-size: 14px;
+        }
+
+        .activity-main {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .activity-time {
+            margin-top: 3px;
+            color: #aaa;
+            font-size: 9px;
+        }
+
+        .activity-value {
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        /* ==================================================
+           TOOLBAR
+        ================================================== */
+
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .search {
+            flex: 1;
+            max-width: 420px;
+            height: 43px;
+            padding: 0 14px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            outline: none;
+            background: #fff;
+            font-size: 12px;
+        }
+
+        .search:focus,
+        input:focus,
+        select:focus {
+            border-color: #999;
+        }
+
+        .primary,
+        .secondary {
+            min-height: 42px;
+            padding: 0 16px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .primary {
+            background: #111;
+            color: #fff;
+            border-color: #111;
+        }
+
+        .primary:hover {
+            background: #2a2a2a;
+        }
+
+        .secondary {
+            background: #fff;
+            color: #333;
+        }
+
+        .secondary:hover {
+            background: #f7f7f5;
+        }
+
+        /* ==================================================
+           TABLE
+        ================================================== */
+
+        .table-card {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 760px;
+        }
+
+        th {
+            text-align: left;
+            padding: 13px 12px;
+            background: #fafaf8;
+            color: #999;
+            font-size: 9px;
+            letter-spacing: .8px;
+            font-weight: 800;
+            border-bottom: 1px solid var(--border);
+        }
+
+        td {
+            padding: 14px 12px;
+            font-size: 11px;
+            border-bottom: 1px solid #eee;
+            vertical-align: middle;
+        }
+
+        tbody tr:hover {
+            background: #fafaf8;
+        }
+
+        .employee-cell {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .mini-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            background: #111;
+            color: #fff;
+            display: grid;
+            place-items: center;
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        .employee-name {
+            font-weight: 700;
+        }
+
+        .employee-email {
+            margin-top: 3px;
+            color: #aaa;
+            font-size: 9px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 8px;
+            border-radius: 999px;
+            font-size: 9px;
+            font-weight: 700;
+        }
+
+        .badge.active {
+            background: #e9f7ef;
+            color: var(--green);
+        }
+
+        .badge.pending {
+            background: #fff4dd;
+            color: var(--orange);
+        }
+
+        .badge.disabled,
+        .badge.offline {
+            background: #fbeaea;
+            color: var(--red);
+        }
+
+        .badge.available {
+            background: #e9f7ef;
+            color: var(--green);
+        }
+
+        .badge.ontrip {
+            background: #fff4dd;
+            color: var(--orange);
+        }
+
+        .actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .action-btn {
+            border: 1px solid var(--border);
+            background: #fff;
+            border-radius: 7px;
+            padding: 6px 9px;
+            font-size: 9px;
+            font-weight: 700;
+        }
+
+        .action-btn:hover {
+            background: #f4f4f2;
+        }
+
+        .action-btn.delete {
+            color: var(--red);
+        }
+
+        /* ==================================================
+           EMPTY / LOADING
+        ================================================== */
+
+        .state-row {
+            text-align: center;
+            padding: 45px 20px !important;
+            color: #999;
+        }
+
+        .state-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #555;
+        }
+
+        .state-text {
+            margin-top: 6px;
+            font-size: 10px;
+        }
+
+        /* ==================================================
+           REPORT
+        ================================================== */
+
+        .report-grid {
+            display: grid;
+            grid-template-columns:
+                repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .report-number {
+            padding: 22px;
+        }
+
+        .report-number small {
+            display: block;
+            color: #888;
+            font-size: 10px;
+        }
+
+        .report-number strong {
+            display: block;
+            margin-top: 13px;
+            font-size: 28px;
+        }
+
+        .report-number span {
+            display: block;
+            margin-top: 6px;
+            color: var(--green);
+            font-size: 10px;
+        }
+
+        .bar-row {
+            margin-bottom: 25px;
+        }
+
+        .bar-top {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 11px;
+        }
+
+        .bar-bg {
+            height: 8px;
+            border-radius: 999px;
+            background: #eee;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            background: #111;
+            border-radius: 999px;
+        }
+
+        /* ==================================================
+           SETTINGS
+        ================================================== */
+
+        .settings-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-card {
+            padding: 22px;
+        }
+
+        .form-title {
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .form-sub {
+            margin-top: 5px;
+            margin-bottom: 22px;
+            color: #999;
+            font-size: 10px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .field.full {
+            grid-column: 1 / -1;
+        }
+
+        .field label {
+            color: #888;
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: .7px;
+        }
+
+        .field input,
+        .field select {
+            width: 100%;
+            height: 42px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            padding: 0 12px;
+            outline: none;
+            background: #fff;
+            font-size: 11px;
+        }
+
+        .save {
+            margin-top: 20px;
+        }
+
+        /* ==================================================
+           MODAL
+        ================================================== */
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.45);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-box {
+            width: 100%;
+            max-width: 650px;
+            max-height: 90vh;
+            overflow-y: auto;
+            background: #fff;
+            border-radius: 18px;
+            padding: 24px;
+            box-shadow: 0 25px 80px rgba(0,0,0,.2);
+        }
+
+        .modal-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 22px;
+        }
+
+        .modal-title {
+            font-size: 17px;
+            font-weight: 800;
+        }
+
+        .close {
+            width: 34px;
+            height: 34px;
+            border: 0;
+            border-radius: 9px;
+            background: #f4f4f2;
+            font-size: 20px;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 9px;
+            margin-top: 22px;
+        }
+
+        /* ==================================================
+           TOAST
+        ================================================== */
+
+        .toast {
+            position: fixed;
+            right: 25px;
+            bottom: 25px;
+            min-width: 280px;
+            max-width: 400px;
+            padding: 14px 16px;
+            background: #111;
+            color: #fff;
+            border-radius: 11px;
+            box-shadow: 0 15px 50px rgba(0,0,0,.2);
+            font-size: 11px;
+            transform: translateY(120px);
+            opacity: 0;
+            pointer-events: none;
+            transition: .25s ease;
+            z-index: 2000;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast.error {
+            background: #b72d2d;
+        }
+
+        /* ==================================================
+           RESPONSIVE
+        ================================================== */
+
+        @media (max-width: 1100px) {
+
+            .stats {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .settings-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+        @media (max-width: 760px) {
+
+            .sidebar {
+                width: 70px;
+            }
+
+            .logo {
+                justify-content: center;
+                padding: 18px 10px;
+            }
+
+            .logo > div:last-child,
+            .section-label,
+            .nav-text,
+            .admin-box > div:last-child {
+                display: none;
+            }
+
+            .nav {
+                padding: 0 8px;
+            }
+
+            .nav-btn {
+                justify-content: center;
+                padding: 12px;
+            }
+
+            .sidebar-bottom {
+                padding: 12px;
+            }
+
+            .admin-box {
+                justify-content: center;
+            }
+
+            .main {
+                margin-left: 70px;
+                width: calc(100% - 70px);
+            }
+
+            .topbar {
+                padding: 18px;
+            }
+
+            .content {
+                padding: 20px 18px 40px;
+            }
+
+            .date {
+                display: none;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .toolbar {
+                flex-direction: column;
+            }
+
+            .search {
+                max-width: none;
+            }
+
+            .report-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .field.full {
+                grid-column: auto;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="app">
+
+
+    <!-- ==================================================
+         SIDEBAR
+    ================================================== -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+
+            <div class="logo-mark">
+                R
+            </div>
+
+            <div>
+
+                <div class="logo-name">
+                    RideSync
+                </div>
+
+                <div class="logo-sub">
+                    ADMIN PLATFORM
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="section-label">
+            MANAGEMENT
+        </div>
+
+
+        <nav class="nav">
+
+            <button
+                class="nav-btn active"
+                data-page="dashboard"
+            >
+                <span class="nav-icon">⌂</span>
+                <span class="nav-text">Dashboard</span>
+            </button>
+
+
+            <button
+                class="nav-btn"
+                data-page="employees"
+            >
+                <span class="nav-icon">♙</span>
+                <span class="nav-text">Employees</span>
+            </button>
+
+
+            <button
+                class="nav-btn"
+                data-page="vehicles"
+            >
+                <span class="nav-icon">▣</span>
+                <span class="nav-text">Vehicles</span>
+            </button>
+
+
+            <button
+                class="nav-btn"
+                data-page="rides"
+            >
+                <span class="nav-icon">↗</span>
+                <span class="nav-text">Rides</span>
+            </button>
+
+
+            <button
+                class="nav-btn"
+                data-page="reports"
+            >
+                <span class="nav-icon">▤</span>
+                <span class="nav-text">Reports</span>
+            </button>
+
+
+            <button
+                class="nav-btn"
+                data-page="settings"
+            >
+                <span class="nav-icon">⚙</span>
+                <span class="nav-text">Settings</span>
+            </button>
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <div class="admin-box">
+
+                <div class="admin-avatar">
+                    AG
+                </div>
+
+                <div>
+
+                    <div
+                        class="admin-name"
+                        id="adminName"
+                    >
+                        Admin
+                    </div>
+
+                    <div class="admin-role">
+                        Company Administrator
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- ==================================================
+         MAIN
+    ================================================== -->
+
+    <main class="main">
+
+
+        <header class="topbar">
+
+            <div>
+
+                <h1
+                    class="title"
+                    id="pageTitle"
+                >
+                    Dashboard
+                </h1>
+
+                <p
+                    class="subtitle"
+                    id="pageSubtitle"
+                >
+                    Monitor your organization's mobility network.
+                </p>
+
+            </div>
+
+
+            <div class="top-actions">
+
+                <div
+                    class="date"
+                    id="currentDate"
+                >
+                    Loading...
+                </div>
+
+                <button
+                    class="top-btn"
+                    id="notificationBtn"
+                    title="Notifications"
+                >
+                    ♧
+                </button>
+
+                <button
+                    class="top-btn"
+                    id="profileBtn"
+                    title="Profile"
+                >
+                    ◉
+                </button>
+
+            </div>
+
+        </header>
+
+
+
+        <section class="content">
+
+
+            <!-- ==================================================
+                 DASHBOARD PAGE
+            ================================================== -->
+
+            <div
+                class="page active"
+                id="page-dashboard"
+            >
+
+
+                <div class="stats">
+
+
+                    <div class="card stat">
+
+                        <div class="stat-top">
+
+                            <span class="stat-label">
+                                Total Employees
+                            </span>
+
+                            <span class="stat-icon">
+                                ♙
+                            </span>
+
+                        </div>
+
+                        <div
+                            class="stat-number"
+                            id="employeeCount"
+                        >
+                            —
+                        </div>
+
+                        <div class="stat-change">
+                            Live database count
+                        </div>
+
+                    </div>
+
+
+                    <div class="card stat">
+
+                        <div class="stat-top">
+
+                            <span class="stat-label">
+                                Registered Vehicles
+                            </span>
+
+                            <span class="stat-icon">
+                                ▣
+                            </span>
+
+                        </div>
+
+                        <div
+                            class="stat-number"
+                            id="vehicleCount"
+                        >
+                            —
+                        </div>
+
+                        <div class="stat-change">
+                            Live database count
+                        </div>
+
+                    </div>
+
+
+                    <div class="card stat">
+
+                        <div class="stat-top">
+
+                            <span class="stat-label">
+                                Rides This Month
+                            </span>
+
+                            <span class="stat-icon">
+                                ↗
+                            </span>
+
+                        </div>
+
+                        <div
+                            class="stat-number"
+                            id="rideCount"
+                        >
+                            —
+                        </div>
+
+                        <div class="stat-change">
+                            Live database count
+                        </div>
+
+                    </div>
+
+
+                    <div class="card stat">
+
+                        <div class="stat-top">
+
+                            <span class="stat-label">
+                                Active Today
+                            </span>
+
+                            <span class="stat-icon">
+                                ●
+                            </span>
+
+                        </div>
+
+                        <div
+                            class="stat-number"
+                            id="activeTodayCount"
+                        >
+                            —
+                        </div>
+
+                        <div class="stat-change">
+                            Current activity
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="grid">
+
+
+                    <div class="panel">
+
+                        <div class="panel-head">
+
+                            <div>
+
+                                <div class="panel-title">
+                                    Ride Activity
+                                </div>
+
+                                <div class="panel-sub">
+                                    Live ride activity
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="chart-box">
+
+                            <svg
+                                class="chart-svg"
+                                viewBox="0 0 700 290"
+                                preserveAspectRatio="none"
+                            >
+
+                                <path
+                                    class="chart-area"
+                                    d="
+                                    M0 175
+                                    C70 168 80 160 116 165
+                                    C165 170 188 150 233 153
+                                    C280 156 305 143 350 145
+                                    C395 147 425 132 466 138
+                                    C520 145 545 118 583 125
+                                    C625 132 655 116 700 120
+                                    L700 290
+                                    L0 290 Z
+                                    "
+                                />
+
+                                <path
+                                    class="chart-line"
+                                    d="
+                                    M0 175
+                                    C70 168 80 160 116 165
+                                    C165 170 188 150 233 153
+                                    C280 156 305 143 350 145
+                                    C395 147 425 132 466 138
+                                    C520 145 545 118 583 125
+                                    C625 132 655 116 700 120
+                                    "
+                                />
+
+                            </svg>
+
+                        </div>
+
+
+                        <div class="chart-labels">
+
+                            <span>Mon</span>
+                            <span>Tue</span>
+                            <span>Wed</span>
+                            <span>Thu</span>
+                            <span>Fri</span>
+                            <span>Sat</span>
+                            <span>Sun</span>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="panel">
+
+                        <div class="panel-head">
+
+                            <div>
+
+                                <div class="panel-title">
+                                    Recent Activity
+                                </div>
+
+                                <div class="panel-sub">
+                                    Live platform events
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div
+                            class="activity"
+                            id="activityList"
+                        >
+
+                            <div class="state-row">
+                                Loading activity...
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ==================================================
+                 EMPLOYEES PAGE
+            ================================================== -->
+
+            <div
+                class="page"
+                id="page-employees"
+            >
+
+
+                <div class="toolbar">
+
+                    <input
+                        class="search"
+                        id="employeeSearch"
+                        type="search"
+                        placeholder="Search employee..."
+                        autocomplete="off"
+                    >
+
+
+                    <button
+                        class="primary"
+                        id="addEmployeeBtn"
+                    >
+                        + Add Employee
+                    </button>
+
+                </div>
+
+
+                <div class="panel">
+
+                    <div class="table-card">
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        EMPLOYEE
+                                    </th>
+
+                                    <th>
+                                        DEPARTMENT
+                                    </th>
+
+                                    <th>
+                                        MANAGER
+                                    </th>
+
+                                    <th>
+                                        LOCATION
+                                    </th>
+
+                                    <th>
+                                        ACCESS
+                                    </th>
+
+                                    <th>
+                                        ACTIONS
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody
+                                id="employeeTable"
+                            >
+
+                                <tr>
+
+                                    <td
+                                        colspan="6"
+                                        class="state-row"
+                                    >
+                                        Loading employees...
+
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ==================================================
+                 VEHICLES PAGE
+            ================================================== -->
+
+            <div
+                class="page"
+                id="page-vehicles"
+            >
+
+
+                <div class="toolbar">
+
+                    <input
+                        class="search"
+                        id="vehicleSearch"
+                        type="search"
+                        placeholder="Search vehicle..."
+                    >
+
+
+                    <button
+                        class="primary"
+                        id="addVehicleBtn"
+                    >
+                        + Add Vehicle
+                    </button>
+
+                </div>
+
+
+                <div class="panel">
+
+                    <div class="table-card">
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        REGISTRATION
+                                    </th>
+
+                                    <th>
+                                        MODEL
+                                    </th>
+
+                                    <th>
+                                        SEATS
+                                    </th>
+
+                                    <th>
+                                        DRIVER
+                                    </th>
+
+                                    <th>
+                                        STATUS
+                                    </th>
+
+                                    <th>
+                                        ACTIONS
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody id="vehicleTable">
+
+                                <tr>
+
+                                    <td
+                                        colspan="6"
+                                        class="state-row"
+                                    >
+                                        No vehicles loaded.
+
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ==================================================
+                 RIDES PAGE
+            ================================================== -->
+
+            <div
+                class="page"
+                id="page-rides"
+            >
+
+
+                <div class="toolbar">
+
+                    <input
+                        class="search"
+                        id="rideSearch"
+                        type="search"
+                        placeholder="Search ride or route..."
+                    >
+
+
+                    <button
+                        class="secondary"
+                        id="exportRideBtn"
+                    >
+                        Export Report
+                    </button>
+
+                </div>
+
+
+                <div class="panel">
+
+                    <div class="table-card">
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        RIDE ID
+                                    </th>
+
+                                    <th>
+                                        DRIVER
+                                    </th>
+
+                                    <th>
+                                        ROUTE
+                                    </th>
+
+                                    <th>
+                                        DATE
+                                    </th>
+
+                                    <th>
+                                        FARE
+                                    </th>
+
+                                    <th>
+                                        STATUS
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody id="rideTable">
+
+                                <tr>
+
+                                    <td
+                                        colspan="6"
+                                        class="state-row"
+                                    >
+                                        No rides loaded.
+
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ==================================================
+                 REPORTS PAGE
+            ================================================== -->
+
+            <div
+                class="page"
+                id="page-reports"
+            >
+
+
+                <div class="report-grid">
+
+
+                    <div class="card report-number">
+
+                        <small>
+                            Total Trips
+                        </small>
+
+                        <strong id="reportTrips">
+                            —
+                        </strong>
+
+                        <span>
+                            Live database
+                        </span>
+
+                    </div>
+
+
+                    <div class="card report-number">
+
+                        <small>
+                            Total Distance
+                        </small>
+
+                        <strong id="reportDistance">
+                            —
+                        </strong>
+
+                        <span>
+                            Live database
+                        </span>
+
+                    </div>
+
+
+                    <div class="card report-number">
+
+                        <small>
+                            Fuel Saved
+                        </small>
+
+                        <strong id="reportFuel">
+                            —
+                        </strong>
+
+                        <span>
+                            Live database
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="panel">
+
+                    <div class="panel-head">
+
+                        <div>
+
+                            <div class="panel-title">
+                                Fleet Analytics
+                            </div>
+
+                            <div class="panel-sub">
+                                Live vehicle utilization
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div id="fleetAnalytics">
+
+                        <div class="state-row">
+                            No analytics data loaded.
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ==================================================
+                 SETTINGS PAGE
+            ================================================== -->
+
+            <div
+                class="page"
+                id="page-settings"
+            >
+
+
+                <div class="settings-grid">
+
+
+                    <div class="card form-card">
+
+                        <div class="form-title">
+                            Company Details
+                        </div>
+
+                        <div class="form-sub">
+                            Configure your organization information.
+                        </div>
+
+
+                        <div class="form-grid">
+
+
+                            <div class="field full">
+
+                                <label>
+                                    COMPANY NAME
+                                </label>
+
+                                <input
+                                    id="companyName"
+                                    autocomplete="organization"
+                                >
+
+                            </div>
+
+
+                            <div class="field">
+
+                                <label>
+                                    REGISTERED NUMBER
+                                </label>
+
+                                <input
+                                    id="companyReg"
+                                >
+
+                            </div>
+
+
+                            <div class="field">
+
+                                <label>
+                                    REGISTERED EMPLOYEES
+                                </label>
+
+                                <input
+                                    id="registeredEmployees"
+                                    type="number"
+                                    min="0"
+                                >
+
+                            </div>
+
+
+                            <div class="field full">
+
+                                <label>
+                                    INDUSTRY
+                                </label>
+
+                                <select id="industry">
+
+                                    <option value="">
+                                        Select industry
+                                    </option>
+
+                                    <option>
+                                        Information Technology
+                                    </option>
+
+                                    <option>
+                                        Finance
+                                    </option>
+
+                                    <option>
+                                        Manufacturing
+                                    </option>
+
+                                    <option>
+                                        Healthcare
+                                    </option>
+
+                                    <option>
+                                        Education
+                                    </option>
+
+                                    <option>
+                                        Other
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="field full">
+
+                                <label>
+                                    ADMIN CONTACT
+                                </label>
+
+                                <input
+                                    id="adminContact"
+                                    type="email"
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                        <button
+                            class="primary save"
+                            id="saveCompany"
+                        >
+                            Save Company Settings
+                        </button>
+
+                    </div>
+
+
+
+                    <div class="card form-card">
+
+                        <div class="form-title">
+                            Carpooling Configuration
+                        </div>
+
+                        <div class="form-sub">
+                            Configure travel and operating costs.
+                        </div>
+
+
+                        <div class="form-grid">
+
+
+                            <div class="field">
+
+                                <label>
+                                    FUEL COST / LITRE
+                                </label>
+
+                                <input
+                                    id="fuelCost"
+                                    type="number"
+                                    min="0"
+                                >
+
+                            </div>
+
+
+                            <div class="field">
+
+                                <label>
+                                    TRAVEL COST
+                                </label>
+
+                                <input
+                                    id="travelCost"
+                                    type="number"
+                                    min="0"
+                                >
+
+                            </div>
+
+
+                            <div class="field full">
+
+                                <label>
+                                    COST PER KM
+                                </label>
+
+                                <input
+                                    id="costPerKm"
+                                    type="number"
+                                    min="0"
+                                >
+
+                            </div>
+
+
+                            <div class="field full">
+
+                                <label>
+                                    MAXIMUM BOOKING SEATS
+                                </label>
+
+                                <select id="maxSeats">
+
+                                    <option value="1">
+                                        1
+                                    </option>
+
+                                    <option value="2">
+                                        2
+                                    </option>
+
+                                    <option value="3">
+                                        3
+                                    </option>
+
+                                    <option value="4">
+                                        4
+                                    </option>
+
+                                    <option value="5">
+                                        5
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+
+                        <button
+                            class="primary save"
+                            id="saveTravel"
+                        >
+                            Save Carpooling Settings
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+    </main>
+
+</div>
+
+
+
+<!-- ======================================================
+     EMPLOYEE MODAL
+====================================================== -->
+
+<div
+    class="modal"
+    id="employeeModal"
+>
+
+    <div class="modal-box">
+
+
+        <div class="modal-head">
+
+            <div
+                class="modal-title"
+                id="employeeModalTitle"
+            >
+                Add Employee
+            </div>
+
+
+            <button
+                class="close"
+                type="button"
+                data-close="employeeModal"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="employeeForm">
+
+
+            <div class="form-grid">
+
+
+                <div class="field">
+
+                    <label>
+                        FULL NAME
+                    </label>
+
+                    <input
+                        id="employeeName"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        EMAIL
+                    </label>
+
+                    <input
+                        id="employeeEmail"
+                        type="email"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        PHONE
+                    </label>
+
+                    <input
+                        id="employeePhone"
+                        type="tel"
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        DEPARTMENT
+                    </label>
+
+                    <input
+                        id="employeeDepartment"
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        MANAGER
+                    </label>
+
+                    <input
+                        id="employeeManager"
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        LOCATION
+                    </label>
+
+                    <input
+                        id="employeeLocation"
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        ROLE
+                    </label>
+
+                    <select id="employeeRole">
+
+                        <option value="EMPLOYEE">
+                            Employee
+                        </option>
+
+                        <option value="DRIVER">
+                            Driver
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        ACCESS
+                    </label>
+
+                    <select id="employeeAccess">
+
+                        <option value="ACTIVE">
+                            Active
+                        </option>
+
+                        <option value="PENDING">
+                            Pending
+                        </option>
+
+                        <option value="DISABLED">
+                            Disabled
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div
+                    class="field full"
+                    id="employeePasswordField"
+                >
+
+                    <label>
+                        TEMPORARY PASSWORD
+                    </label>
+
+                    <input
+                        id="employeePassword"
+                        type="password"
+                        minlength="6"
+                    >
+
+                </div>
+
+
+            </div>
+
+
+            <div class="modal-actions">
+
+                <button
+                    class="secondary"
+                    type="button"
+                    data-close="employeeModal"
+                >
+                    Cancel
+                </button>
+
+
+                <button
+                    class="primary"
+                    type="submit"
+                    id="saveEmployee"
+                >
+                    Save Employee
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+
+<!-- ======================================================
+     VEHICLE MODAL
+====================================================== -->
+
+<div
+    class="modal"
+    id="vehicleModal"
+>
+
+    <div class="modal-box">
+
+
+        <div class="modal-head">
+
+            <div class="modal-title">
+                Add Vehicle
+            </div>
+
+
+            <button
+                class="close"
+                type="button"
+                data-close="vehicleModal"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="vehicleForm">
+
+
+            <div class="form-grid">
+
+
+                <div class="field">
+
+                    <label>
+                        REGISTRATION NUMBER
+                    </label>
+
+                    <input
+                        id="vehicleReg"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        MODEL
+                    </label>
+
+                    <input
+                        id="vehicleModel"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        SEATING CAPACITY
+                    </label>
+
+                    <input
+                        id="vehicleSeats"
+                        type="number"
+                        min="1"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        DRIVER
+                    </label>
+
+                    <input
+                        id="vehicleDriver"
+                    >
+
+                </div>
+
+
+                <div class="field full">
+
+                    <label>
+                        DRIVER STATUS
+                    </label>
+
+                    <select id="vehicleStatus">
+
+                        <option value="AVAILABLE">
+                            Available
+                        </option>
+
+                        <option value="ON_TRIP">
+                            On Trip
+                        </option>
+
+                        <option value="OFFLINE">
+                            Offline
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-actions">
+
+                <button
+                    class="secondary"
+                    type="button"
+                    data-close="vehicleModal"
+                >
+                    Cancel
+                </button>
+
+
+                <button
+                    class="primary"
+                    type="submit"
+                    id="saveVehicle"
+                >
+                    Save Vehicle
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+
+<div
+    class="toast"
+    id="toast"
+></div>
+
+
+
+<script>
+
+/* =========================================================
+   RIDESYNC ADMIN DASHBOARD
+   LIVE API VERSION — NO DEMO DATA
+========================================================= */
+
+
+/* =========================================================
+   API CONFIGURATION
+========================================================= */
+
+const API_BASE =
+    window.RIDESYNC_API_BASE ||
+    "http://localhost:5000";
+
+
+/*
+    IMPORTANT:
+
+    Change ONLY these paths if your backend uses
+    different routes.
+
+    Example:
+
+    /api/admin/employees
+
+    or
+
+    /api/employees
+*/
+
+const API = {
+
+    employees:
+        "/api/admin/employees",
+
+    vehicles:
+        "/api/admin/vehicles",
+
+    rides:
+        "/api/admin/rides",
+
+    dashboard:
+        "/api/admin/dashboard",
+
+    settings:
+        "/api/admin/settings"
+
+};
+
+
+/* =========================================================
+   AUTH
+========================================================= */
+
+function getToken() {
+
+    const possibleKeys = [
+
+        "token",
+        "accessToken",
+        "authToken",
+        "jwt",
+        "ridesync_token"
+
+    ];
+
+    for (const key of possibleKeys) {
+
+        const value =
+            localStorage.getItem(key);
+
+        if (value) {
+            return value;
+        }
+
+    }
+
+    return null;
+}
+
+
+/* =========================================================
+   API REQUEST
+========================================================= */
+
+async function apiRequest(
+    path,
+    options = {}
+) {
+
+    const token = getToken();
+
+    const headers = {
+
+        "Content-Type":
+            "application/json",
+
+        ...(options.headers || {})
+
+    };
+
+
+    if (token) {
+
+        headers.Authorization =
+            `Bearer ${token}`;
+
+    }
+
+
+    const response =
+        await fetch(
+            API_BASE + path,
+            {
+                ...options,
+                headers
+            }
+        );
+
+
+    let data = null;
+
+    const contentType =
+        response.headers.get(
+            "content-type"
+        );
+
+
+    if (
+        contentType &&
+        contentType.includes("application/json")
+    ) {
+
+        data =
+            await response.json();
+
+    } else {
+
+        const text =
+            await response.text();
+
+        data =
+            text
+                ? { message: text }
+                : null;
+
+    }
+
+
+    if (!response.ok) {
+
+        const message =
+            data?.message ||
+            data?.error ||
+            data?.errors?.[0]?.message ||
+            `API request failed (${response.status})`;
+
+        throw new Error(message);
+
+    }
+
+
+    return data;
+
+}
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function escapeHTML(value) {
+
+    if (
+        value === null ||
+        value === undefined
+    ) {
+        return "";
+    }
+
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+
+}
+
+
+function getInitials(name) {
+
+    if (!name) {
+        return "?";
+    }
+
+    return String(name)
+        .trim()
+        .split(/\s+/)
+        .slice(0, 2)
+        .map(
+            part =>
+                part
+                    .charAt(0)
+                    .toUpperCase()
+        )
+        .join("");
+
+}
+
+
+function showToast(
+    message,
+    error = false
+) {
+
+    const toast =
+        document.getElementById("toast");
+
+    toast.textContent =
+        message;
+
+    toast.classList.toggle(
+        "error",
+        error
+    );
+
+    toast.classList.add("show");
+
+
+    clearTimeout(
+        window.__toastTimer
+    );
+
+
+    window.__toastTimer =
+        setTimeout(() => {
+
+            toast.classList.remove(
+                "show"
+            );
+
+        }, 3500);
+
+}
+
+
+function setButtonLoading(
+    button,
+    loading,
+    loadingText = "Saving..."
+) {
+
+    if (!button) {
+        return;
+    }
+
+    if (loading) {
+
+        button.dataset.originalText =
+            button.textContent;
+
+        button.disabled = true;
+
+        button.textContent =
+            loadingText;
+
+    } else {
+
+        button.disabled = false;
+
+        button.textContent =
+            button.dataset.originalText ||
+            "Save";
+
+    }
+
+}
+
+
+/* =========================================================
+   DATE
+========================================================= */
+
+function updateDate() {
+
+    const el =
+        document.getElementById(
+            "currentDate"
+        );
+
+
+    const date =
+        new Date();
+
+
+    el.textContent =
+        date.toLocaleDateString(
+            "en-IN",
+            {
+                month: "long",
+                year: "numeric"
+            }
+        );
+
+}
+
+
+updateDate();
+
+
+/* =========================================================
+   PAGE NAVIGATION
+========================================================= */
+
+const pageMeta = {
+
+    dashboard: {
+
+        title:
+            "Dashboard",
+
+        subtitle:
+            "Monitor your organization's mobility network."
+
+    },
+
+    employees: {
+
+        title:
+            "Employees",
+
+        subtitle:
+            "Manage employees connected to RideSync."
+
+    },
+
+    vehicles: {
+
+        title:
+            "Vehicles",
+
+        subtitle:
+            "Manage registered company vehicles."
+
+    },
+
+    rides: {
+
+        title:
+            "Rides",
+
+        subtitle:
+            "Monitor platform rides and trip activity."
+
+    },
+
+    reports: {
+
+        title:
+            "Reports",
+
+        subtitle:
+            "Review live mobility analytics."
+
+    },
+
+    settings: {
+
+        title:
+            "Settings",
+
+        subtitle:
+            "Configure your RideSync organization."
+
+    }
+
+};
+
+
+document
+    .querySelectorAll(".nav-btn")
+    .forEach(button => {
+
+        button.addEventListener(
+            "click",
+            async () => {
+
+                const page =
+                    button.dataset.page;
+
+
+                document
+                    .querySelectorAll(".nav-btn")
+                    .forEach(btn =>
+                        btn.classList.remove(
+                            "active"
+                        )
+                    );
+
+
+                button.classList.add(
+                    "active"
+                );
+
+
+                document
+                    .querySelectorAll(".page")
+                    .forEach(section =>
+                        section.classList.remove(
+                            "active"
+                        )
+                    );
+
+
+                const pageElement =
+                    document.getElementById(
+                        `page-${page}`
+                    );
+
+
+                if (pageElement) {
+
+                    pageElement.classList.add(
+                        "active"
+                    );
+
+                }
+
+
+                document.getElementById(
+                    "pageTitle"
+                ).textContent =
+                    pageMeta[page].title;
+
+
+                document.getElementById(
+                    "pageSubtitle"
+                ).textContent =
+                    pageMeta[page].subtitle;
+
+
+                if (page === "employees") {
+
+                    await loadEmployees();
+
+                }
+
+
+                if (page === "vehicles") {
+
+                    await loadVehicles();
+
+                }
+
+
+                if (page === "rides") {
+
+                    await loadRides();
+
+                }
+
+
+                if (page === "reports") {
+
+                    await loadReports();
+
+                }
+
+
+                if (page === "settings") {
+
+                    await loadSettings();
+
+                }
+
+            }
+        );
+
+    });
+
+
+/* =========================================================
+   EMPLOYEES
+========================================================= */
+
+let employees = [];
+
+let editingEmployeeId = null;
+
+
+function normalizeEmployee(item) {
+
+    return {
+
+        id:
+            item.id ??
+            item.userId ??
+            item._id,
+
+        name:
+            item.name ??
+            item.fullName ??
+            item.full_name ??
+            "",
+
+        email:
+            item.email ??
+            "",
+
+        phone:
+            item.phone ??
+            "",
+
+        department:
+            item.department ??
+            item.dept ??
+            "",
+
+        manager:
+            item.manager ??
+            item.managerName ??
+            "",
+
+        location:
+            item.location ??
+            "",
+
+        role:
+            item.role ??
+            "EMPLOYEE",
+
+        status:
+            item.status ??
+            item.access ??
+            "ACTIVE"
+
+    };
+
+}
+
+
+function getEmployeesArray(data) {
+
+    if (Array.isArray(data)) {
+        return data;
+    }
+
+    if (
+        Array.isArray(data?.employees)
+    ) {
+        return data.employees;
+    }
+
+    if (
+        Array.isArray(data?.users)
+    ) {
+        return data.users;
+    }
+
+    if (
+        Array.isArray(data?.data)
+    ) {
+        return data.data;
+    }
+
+    if (
+        Array.isArray(data?.data?.employees)
+    ) {
+        return data.data.employees;
+    }
+
+    return [];
+
+}
+
+
+async function loadEmployees() {
+
+    const table =
+        document.getElementById(
+            "employeeTable"
+        );
+
+
+    table.innerHTML = `
+
+        <tr>
+
+            <td
+                colspan="6"
+                class="state-row"
+            >
+
+                Loading employees...
+
+            </td>
+
+        </tr>
+
+    `;
+
+
+    try {
+
+        const data =
+            await apiRequest(
+                API.employees
+            );
+
+
+        employees =
+            getEmployeesArray(data)
+                .map(
+                    normalizeEmployee
+                );
+
+
+        renderEmployees();
+
+        updateEmployeeCount();
+
+
+    } catch (error) {
+
+        console.error(
+            "Employee API error:",
+            error
+        );
+
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="6"
+                    class="state-row"
+                >
+
+                    <div class="state-title">
+                        Unable to load employees
+                    </div>
+
+                    <div class="state-text">
+                        ${escapeHTML(
+                            error.message
+                        )}
+                    </div>
+
+                </td>
+
+            </tr>
+
+        `;
+
+        showToast(
+            "Employee API error: " +
+            error.message,
+            true
+        );
+
+    }
+
+}
+
+
+function renderEmployees(
+    list = employees
+) {
+
+    const table =
+        document.getElementById(
+            "employeeTable"
+        );
+
+
+    if (!list.length) {
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="6"
+                    class="state-row"
+                >
+
+                    <div class="state-title">
+                        No employees found
+                    </div>
+
+                    <div class="state-text">
+                        Add an employee to your live database.
+                    </div>
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    table.innerHTML =
+        list
+            .map(employee => {
+
+                const status =
+                    String(
+                        employee.status ||
+                        "ACTIVE"
+                    )
+                        .toUpperCase();
+
+
+                const statusClass =
+                    status
+                        .toLowerCase()
+                        .replace(
+                            " ",
+                            ""
+                        );
+
+
+                return `
+
+                    <tr>
+
+                        <td>
+
+                            <div class="employee-cell">
+
+                                <div class="mini-avatar">
+                                    ${escapeHTML(
+                                        getInitials(
+                                            employee.name
+                                        )
+                                    )}
+                                </div>
+
+                                <div>
+
+                                    <div class="employee-name">
+                                        ${escapeHTML(
+                                            employee.name ||
+                                            "Unnamed"
+                                        )}
+                                    </div>
+
+                                    <div class="employee-email">
+                                        ${escapeHTML(
+                                            employee.email
+                                        )}
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <td>
+                            ${escapeHTML(
+                                employee.department ||
+                                "—"
+                            )}
+                        </td>
+
+
+                        <td>
+                            ${escapeHTML(
+                                employee.manager ||
+                                "—"
+                            )}
+                        </td>
+
+
+                        <td>
+                            ${escapeHTML(
+                                employee.location ||
+                                "—"
+                            )}
+                        </td>
+
+
+                        <td>
+
+                            <span
+                                class="badge ${statusClass}"
+                            >
+                                ${escapeHTML(
+                                    status
+                                )}
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <div class="actions">
+
+                                <button
+                                    class="action-btn"
+                                    data-edit-employee="${escapeHTML(
+                                        employee.id
+                                    )}"
+                                >
+                                    Edit
+                                </button>
+
+
+                                <button
+                                    class="action-btn delete"
+                                    data-delete-employee="${escapeHTML(
+                                        employee.id
+                                    )}"
+                                >
+                                    Delete
+                                </button>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+            })
+            .join("");
+
+}
+
+
+function updateEmployeeCount() {
+
+    const count =
+        document.getElementById(
+            "employeeCount"
+        );
+
+
+    count.textContent =
+        employees.length;
+
+}
+
+
+/* =========================================================
+   SEARCH EMPLOYEES
+========================================================= */
+
+document
+    .getElementById(
+        "employeeSearch"
+    )
+    .addEventListener(
+        "input",
+        event => {
+
+            const query =
+                event.target.value
+                    .trim()
+                    .toLowerCase();
+
+
+            if (!query) {
+
+                renderEmployees(
+                    employees
+                );
+
+                return;
+
+            }
+
+
+            const filtered =
+                employees.filter(
+                    employee =>
+                        [
+                            employee.name,
+                            employee.email,
+                            employee.phone,
+                            employee.department,
+                            employee.manager,
+                            employee.location,
+                            employee.role,
+                            employee.status
+                        ]
+                            .filter(Boolean)
+                            .some(
+                                value =>
+                                    String(value)
+                                        .toLowerCase()
+                                        .includes(
+                                            query
+                                        )
+                            )
+                );
+
+
+            renderEmployees(
+                filtered
+            );
+
+        }
+    );
+
+
+/* =========================================================
+   OPEN EMPLOYEE MODAL
+========================================================= */
+
+function openEmployeeModal(
+    employee = null
+) {
+
+    const modal =
+        document.getElementById(
+            "employeeModal"
+        );
+
+
+    const title =
+        document.getElementById(
+            "employeeModalTitle"
+        );
+
+
+    const form =
+        document.getElementById(
+            "employeeForm"
+        );
+
+
+    form.reset();
+
+
+    editingEmployeeId =
+        employee?.id ??
+        null;
+
+
+    if (employee) {
+
+        title.textContent =
+            "Edit Employee";
+
+
+        document.getElementById(
+            "employeeName"
+        ).value =
+            employee.name || "";
+
+
+        document.getElementById(
+            "employeeEmail"
+        ).value =
+            employee.email || "";
+
+
+        document.getElementById(
+            "employeePhone"
+        ).value =
+            employee.phone || "";
+
+
+        document.getElementById(
+            "employeeDepartment"
+        ).value =
+            employee.department || "";
+
+
+        document.getElementById(
+            "employeeManager"
+        ).value =
+            employee.manager || "";
+
+
+        document.getElementById(
+            "employeeLocation"
+        ).value =
+            employee.location || "";
+
+
+        document.getElementById(
+            "employeeRole"
+        ).value =
+            employee.role ||
+            "EMPLOYEE";
+
+
+        document.getElementById(
+            "employeeAccess"
+        ).value =
+            employee.status ||
+            "ACTIVE";
+
+
+        document.getElementById(
+            "employeePasswordField"
+        ).style.display =
+            "none";
+
+
+    } else {
+
+        title.textContent =
+            "Add Employee";
+
+
+        document.getElementById(
+            "employeePasswordField"
+        ).style.display =
+            "flex";
+
+    }
+
+
+    modal.classList.add(
+        "show"
+    );
+
+}
+
+
+document
+    .getElementById(
+        "addEmployeeBtn"
+    )
+    .addEventListener(
+        "click",
+        () => {
+
+            openEmployeeModal();
+
+        }
+    );
+
+
+/* =========================================================
+   SAVE EMPLOYEE
+========================================================= */
+
+document
+    .getElementById(
+        "employeeForm"
+    )
+    .addEventListener(
+        "submit",
+        async event => {
+
+            event.preventDefault();
+
+
+            const button =
+                document.getElementById(
+                    "saveEmployee"
+                );
+
+
+            const name =
+                document.getElementById(
+                    "employeeName"
+                ).value.trim();
+
+
+            const email =
+                document.getElementById(
+                    "employeeEmail"
+                ).value
+                    .trim()
+                    .toLowerCase();
+
+
+            const phone =
+                document.getElementById(
+                    "employeePhone"
+                ).value.trim();
+
+
+            const department =
+                document.getElementById(
+                    "employeeDepartment"
+                ).value.trim();
+
+
+            const manager =
+                document.getElementById(
+                    "employeeManager"
+                ).value.trim();
+
+
+            const location =
+                document.getElementById(
+                    "employeeLocation"
+                ).value.trim();
+
+
+            const role =
+                document.getElementById(
+                    "employeeRole"
+                ).value;
+
+
+            const status =
+                document.getElementById(
+                    "employeeAccess"
+                ).value;
+
+
+            const password =
+                document.getElementById(
+                    "employeePassword"
+                ).value;
+
+
+            if (!name || !email) {
+
+                showToast(
+                    "Name and email are required.",
+                    true
+                );
+
+                return;
+
+            }
+
+
+            /*
+                IMPORTANT:
+
+                This payload contains both
+                fullName AND name.
+
+                Your backend error showed:
+
+                prisma.user.create()
+                Argument `name` is missing.
+
+                So `name` is explicitly sent here.
+            */
+
+            const payload = {
+
+                name: name,
+
+                fullName: name,
+
+                email: email,
+
+                phone: phone || null,
+
+                department:
+                    department || null,
+
+                manager:
+                    manager || null,
+
+                location:
+                    location || null,
+
+                role: role,
+
+                status: status
+
+            };
+
+
+            /*
+                Password is sent only while
+                creating a new employee.
+            */
+
+            if (!editingEmployeeId) {
+
+                if (password) {
+
+                    payload.password =
+                        password;
+
+                }
+
+            }
+
+
+            setButtonLoading(
+                button,
+                true,
+                editingEmployeeId
+                    ? "Updating..."
+                    : "Creating..."
+            );
+
+
+            try {
+
+                if (editingEmployeeId) {
+
+                    await apiRequest(
+                        `${API.employees}/${encodeURIComponent(
+                            editingEmployeeId
+                        )}`,
+                        {
+                            method: "PUT",
+                            body:
+                                JSON.stringify(
+                                    payload
+                                )
+                        }
+                    );
+
+
+                    showToast(
+                        "Employee updated successfully."
+                    );
+
+                } else {
+
+                    await apiRequest(
+                        API.employees,
+                        {
+                            method: "POST",
+                            body:
+                                JSON.stringify(
+                                    payload
+                                )
+                        }
+                    );
+
+
+                    showToast(
+                        "Employee added successfully."
+                    );
+
+                }
+
+
+                closeModal(
+                    "employeeModal"
+                );
+
+
+                /*
+                    VERY IMPORTANT:
+
+                    Don't manually add a fake row
+                    to the table.
+
+                    Fetch the real database again.
+                */
+
+                await loadEmployees();
+
+                await loadDashboard();
+
+
+            } catch (error) {
+
+                console.error(
+                    "Save employee error:",
+                    error
+                );
+
+
+                showToast(
+                    error.message ||
+                    "Unable to save employee.",
+                    true
+                );
+
+            } finally {
+
+                setButtonLoading(
+                    button,
+                    false
+                );
+
+            }
+
+        }
+    );
+
+
+/* =========================================================
+   EMPLOYEE EDIT / DELETE
+========================================================= */
+
+document.addEventListener(
+    "click",
+    async event => {
+
+
+        const editButton =
+            event.target.closest(
+                "[data-edit-employee]"
+            );
+
+
+        if (editButton) {
+
+            const id =
+                editButton.dataset
+                    .editEmployee;
+
+
+            const employee =
+                employees.find(
+                    item =>
+                        String(item.id) ===
+                        String(id)
+                );
+
+
+            if (employee) {
+
+                openEmployeeModal(
+                    employee
+                );
+
+            }
+
+            return;
+
+        }
+
+
+        const deleteButton =
+            event.target.closest(
+                "[data-delete-employee]"
+            );
+
+
+        if (deleteButton) {
+
+            const id =
+                deleteButton.dataset
+                    .deleteEmployee;
+
+
+            const employee =
+                employees.find(
+                    item =>
+                        String(item.id) ===
+                        String(id)
+                );
+
+
+            if (!employee) {
+                return;
+            }
+
+
+            const confirmed =
+                confirm(
+                    `Delete employee "${employee.name}"?`
+                );
+
+
+            if (!confirmed) {
+                return;
+            }
+
+
+            try {
+
+                await apiRequest(
+                    `${API.employees}/${encodeURIComponent(
+                        id
+                    )}`,
+                    {
+                        method: "DELETE"
+                    }
+                );
+
+
+                showToast(
+                    "Employee deleted successfully."
+                );
+
+
+                await loadEmployees();
+
+                await loadDashboard();
+
+
+            } catch (error) {
+
+                console.error(
+                    "Delete employee error:",
+                    error
+                );
+
+
+                showToast(
+                    error.message,
+                    true
+                );
+
+            }
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   VEHICLES
+========================================================= */
+
+let vehicles = [];
+
+
+function normalizeVehicle(item) {
+
+    return {
+
+        id:
+            item.id ??
+            item._id,
+
+        registration:
+            item.registration ??
+            item.registrationNumber ??
+            item.regNumber ??
+            "",
+
+        model:
+            item.model ??
+            item.carModel ??
+            "",
+
+        seats:
+            item.seats ??
+            item.seatingCapacity ??
+            "",
+
+        driver:
+            item.driver ??
+            item.driverName ??
+            "",
+
+        status:
+            item.status ??
+            "OFFLINE"
+
+    };
+
+}
+
+
+function getArray(
+    data,
+    keys
+) {
+
+    if (Array.isArray(data)) {
+        return data;
+    }
+
+
+    for (const key of keys) {
+
+        if (
+            Array.isArray(
+                data?.[key]
+            )
+        ) {
+
+            return data[key];
+
+        }
+
+    }
+
+
+    if (
+        Array.isArray(
+            data?.data
+        )
+    ) {
+
+        return data.data;
+
+    }
+
+
+    return [];
+
+}
+
+
+async function loadVehicles() {
+
+    const table =
+        document.getElementById(
+            "vehicleTable"
+        );
+
+
+    table.innerHTML = `
+
+        <tr>
+
+            <td
+                colspan="6"
+                class="state-row"
+            >
+                Loading vehicles...
+            </td>
+
+        </tr>
+
+    `;
+
+
+    try {
+
+        const data =
+            await apiRequest(
+                API.vehicles
+            );
+
+
+        vehicles =
+            getArray(
+                data,
+                [
+                    "vehicles"
+                ]
+            )
+                .map(
+                    normalizeVehicle
+                );
+
+
+        renderVehicles();
+
+
+        document.getElementById(
+            "vehicleCount"
+        ).textContent =
+            vehicles.length;
+
+
+    } catch (error) {
+
+        console.error(
+            error
+        );
+
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="6"
+                    class="state-row"
+                >
+
+                    <div class="state-title">
+                        Unable to load vehicles
+                    </div>
+
+                    <div class="state-text">
+                        ${escapeHTML(
+                            error.message
+                        )}
+                    </div>
+
+                </td>
+
+            </tr>
+
+        `;
+
+    }
+
+}
+
+
+function renderVehicles(
+    list = vehicles
+) {
+
+    const table =
+        document.getElementById(
+            "vehicleTable"
+        );
+
+
+    if (!list.length) {
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="6"
+                    class="state-row"
+                >
+                    No vehicles found in database.
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    table.innerHTML =
+        list
+            .map(vehicle => {
+
+                const status =
+                    String(
+                        vehicle.status
+                    ).toUpperCase();
+
+
+                let className =
+                    "offline";
+
+
+                if (
+                    status ===
+                    "AVAILABLE"
+                ) {
+
+                    className =
+                        "available";
+
+                }
+
+
+                if (
+                    status ===
+                    "ON_TRIP"
+                ) {
+
+                    className =
+                        "ontrip";
+
+                }
+
+
+                return `
+
+                    <tr>
+
+                        <td>
+                            <strong>
+                                ${escapeHTML(
+                                    vehicle.registration
+                                )}
+                            </strong>
+                        </td>
+
+                        <td>
+                            ${escapeHTML(
+                                vehicle.model ||
+                                "—"
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHTML(
+                                vehicle.seats ||
+                                "—"
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHTML(
+                                vehicle.driver ||
+                                "—"
+                            )}
+                        </td>
+
+                        <td>
+
+                            <span
+                                class="badge ${className}"
+                            >
+                                ${escapeHTML(
+                                    status
+                                )}
+                            </span>
+
+                        </td>
+
+                        <td>
+                            <span
+                                style="
+                                    color:#999;
+                                    font-size:10px;
+                                "
+                            >
+                                —
+                            </span>
+                        </td>
+
+                    </tr>
+
+                `;
+
+            })
+            .join("");
+
+}
+
+
+/* =========================================================
+   VEHICLE MODAL
+========================================================= */
+
+document
+    .getElementById(
+        "addVehicleBtn"
+    )
+    .addEventListener(
+        "click",
+        () => {
+
+            document
+                .getElementById(
+                    "vehicleForm"
+                )
+                .reset();
+
+
+            document
+                .getElementById(
+                    "vehicleModal"
+                )
+                .classList.add(
+                    "show"
+                );
+
+        }
+    );
+
+
+document
+    .getElementById(
+        "vehicleForm"
+    )
+    .addEventListener(
+        "submit",
+        async event => {
+
+            event.preventDefault();
+
+
+            const button =
+                document.getElementById(
+                    "saveVehicle"
+                );
+
+
+            const payload = {
+
+                registrationNumber:
+                    document.getElementById(
+                        "vehicleReg"
+                    ).value.trim(),
+
+                model:
+                    document.getElementById(
+                        "vehicleModel"
+                    ).value.trim(),
+
+                seatingCapacity:
+                    Number(
+                        document.getElementById(
+                            "vehicleSeats"
+                        ).value
+                    ),
+
+                driver:
+                    document.getElementById(
+                        "vehicleDriver"
+                    ).value.trim(),
+
+                status:
+                    document.getElementById(
+                        "vehicleStatus"
+                    ).value
+
+            };
+
+
+            setButtonLoading(
+                button,
+                true,
+                "Saving..."
+            );
+
+
+            try {
+
+                await apiRequest(
+                    API.vehicles,
+                    {
+                        method: "POST",
+                        body:
+                            JSON.stringify(
+                                payload
+                            )
+                    }
+                );
+
+
+                showToast(
+                    "Vehicle added successfully."
+                );
+
+
+                closeModal(
+                    "vehicleModal"
+                );
+
+
+                await loadVehicles();
+
+                await loadDashboard();
+
+
+            } catch (error) {
+
+                showToast(
+                    error.message,
+                    true
+                );
+
+            } finally {
+
+                setButtonLoading(
+                    button,
+                    false
+                );
+
+            }
+
+        }
+    );
+
+
+/* =========================================================
+   RIDES
+========================================================= */
+
+let rides = [];
+
+
+async function loadRides() {
+
+    const table =
+        document.getElementById(
+            "rideTable"
+        );
+
+
+    table.innerHTML = `
+
+        <tr>
+
+            <td
+                colspan="6"
+                class="state-row"
+            >
+                Loading rides...
+            </td>
+
+        </tr>
+
+    `;
+
+
+    try {
+
+        const data =
+            await apiRequest(
+                API.rides
+            );
+
+
+        rides =
+            getArray(
+                data,
+                [
+                    "rides"
+                ]
+            );
+
+
+        renderRides();
+
+
+        document.getElementById(
+            "rideCount"
+        ).textContent =
+            rides.length;
+
+
+    } catch (error) {
+
+        console.error(
+            error
+        );
+
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="6"
+                    class="state-row"
+                >
+
+                    <div class="state-title">
+                        Unable to load rides
+                    </div>
+
+                    <div class="state-text">
+                        ${escapeHTML(
+                            error.message
+                        )}
+                    </div>
+
+                </td>
+
+            </tr>
+
+        `;
+
+    }
+
+}
+
+
+function renderRides(
+    list = rides
+) {
+
+    const table =
+        document.getElementById(
+            "rideTable"
+        );
+
+
+    if (!list.length) {
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="6"
+                    class="state-row"
+                >
+                    No rides found in database.
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    table.innerHTML =
+        list
+            .map(ride => {
+
+                const id =
+                    ride.id ??
+                    ride.rideId ??
+                    ride._id ??
+                    "—";
+
+
+                const driver =
+                    ride.driverName ??
+                    ride.driver?.name ??
+                    ride.driver ??
+                    "—";
+
+
+                const route =
+                    ride.route ??
+                    (
+                        ride.pickup &&
+                        ride.destination
+                            ? `${ride.pickup} → ${ride.destination}`
+                            : "—"
+                    );
+
+
+                const date =
+                    ride.date ??
+                    ride.createdAt ??
+                    "—";
+
+
+                const fare =
+                    ride.fare ??
+                    ride.amount ??
+                    "—";
+
+
+                const status =
+                    ride.status ??
+                    "—";
+
+
+                return `
+
+                    <tr>
+
+                        <td>
+                            ${escapeHTML(id)}
+                        </td>
+
+                        <td>
+                            ${escapeHTML(driver)}
+                        </td>
+
+                        <td>
+                            ${escapeHTML(route)}
+                        </td>
+
+                        <td>
+                            ${escapeHTML(date)}
+                        </td>
+
+                        <td>
+                            ${escapeHTML(fare)}
+                        </td>
+
+                        <td>
+                            ${escapeHTML(status)}
+                        </td>
+
+                    </tr>
+
+                `;
+
+            })
+            .join("");
+
+}
+
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+
+async function loadDashboard() {
+
+    try {
+
+        /*
+            If your backend has dashboard endpoint,
+            this will use live dashboard data.
+        */
+
+        const data =
+            await apiRequest(
+                API.dashboard
+            );
+
+
+        const source =
+            data?.data ??
+            data;
+
+
+        if (
+            source &&
+            typeof source ===
+            "object"
+        ) {
+
+            if (
+                source.employeeCount !==
+                undefined
+            ) {
+
+                document.getElementById(
+                    "employeeCount"
+                ).textContent =
+                    source.employeeCount;
+
+            }
+
+
+            if (
+                source.vehicleCount !==
+                undefined
+            ) {
+
+                document.getElementById(
+                    "vehicleCount"
+                ).textContent =
+                    source.vehicleCount;
+
+            }
+
+
+            if (
+                source.rideCount !==
+                undefined
+            ) {
+
+                document.getElementById(
+                    "rideCount"
+                ).textContent =
+                    source.rideCount;
+
+            }
+
+
+            if (
+                source.activeToday !==
+                undefined
+            ) {
+
+                document.getElementById(
+                    "activeTodayCount"
+                ).textContent =
+                    source.activeToday;
+
+            }
+
+        }
+
+
+    } catch (error) {
+
+        /*
+            Dashboard endpoint may not exist
+            in every backend.
+
+            Don't break Employees page
+            because dashboard endpoint failed.
+        */
+
+        console.warn(
+            "Dashboard API unavailable:",
+            error.message
+        );
+
+
+        /*
+            Employee count can still come
+            from the real employee API.
+        */
+
+        try {
+
+            await loadEmployees();
+
+        } catch (_) {}
+
+    }
+
+}
+
+
+/* =========================================================
+   REPORTS
+========================================================= */
+
+async function loadReports() {
+
+    try {
+
+        const data =
+            await apiRequest(
+                API.dashboard
+            );
+
+
+        const source =
+            data?.reports ??
+            data?.data?.reports ??
+            data?.data ??
+            data;
+
+
+        if (
+            source?.totalTrips !==
+            undefined
+        ) {
+
+            document.getElementById(
+                "reportTrips"
+            ).textContent =
+                source.totalTrips;
+
+        }
+
+
+        if (
+            source?.totalDistance !==
+            undefined
+        ) {
+
+            document.getElementById(
+                "reportDistance"
+            ).textContent =
+                source.totalDistance;
+
+        }
+
+
+        if (
+            source?.fuelSaved !==
+            undefined
+        ) {
+
+            document.getElementById(
+                "reportFuel"
+            ).textContent =
+                source.fuelSaved;
+
+        }
+
+
+    } catch (error) {
+
+        console.warn(
+            "Reports API unavailable:",
+            error.message
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   SETTINGS
+========================================================= */
+
+async function loadSettings() {
+
+    try {
+
+        const data =
+            await apiRequest(
+                API.settings
+            );
+
+
+        const settings =
+            data?.settings ??
+            data?.data ??
+            data;
+
+
+        if (!settings) {
+            return;
+        }
+
+
+        const fields = {
+
+            companyName:
+                settings.companyName,
+
+            companyReg:
+                settings.companyReg ??
+                settings.registeredNumber,
+
+            registeredEmployees:
+                settings.registeredEmployees,
+
+            industry:
+                settings.industry,
+
+            adminContact:
+                settings.adminContact,
+
+            fuelCost:
+                settings.fuelCost,
+
+            travelCost:
+                settings.travelCost,
+
+            costPerKm:
+                settings.costPerKm,
+
+            maxSeats:
+                settings.maxSeats
+
+        };
+
+
+        Object.entries(fields)
+            .forEach(
+                ([id, value]) => {
+
+                    const element =
+                        document.getElementById(
+                            id
+                        );
+
+
+                    if (
+                        element &&
+                        value !== undefined &&
+                        value !== null
+                    ) {
+
+                        element.value =
+                            value;
+
+                    }
+
+                }
+            );
+
+
+    } catch (error) {
+
+        console.warn(
+            "Settings API unavailable:",
+            error.message
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   SAVE COMPANY SETTINGS
+========================================================= */
+
+document
+    .getElementById(
+        "saveCompany"
+    )
+    .addEventListener(
+        "click",
+        async () => {
+
+            const button =
+                document.getElementById(
+                    "saveCompany"
+                );
+
+
+            const payload = {
+
+                companyName:
+                    document.getElementById(
+                        "companyName"
+                    ).value.trim(),
+
+                registeredNumber:
+                    document.getElementById(
+                        "companyReg"
+                    ).value.trim(),
+
+                registeredEmployees:
+                    Number(
+                        document.getElementById(
+                            "registeredEmployees"
+                        ).value
+                    ),
+
+                industry:
+                    document.getElementById(
+                        "industry"
+                    ).value,
+
+                adminContact:
+                    document.getElementById(
+                        "adminContact"
+                    ).value.trim()
+
+            };
+
+
+            setButtonLoading(
+                button,
+                true,
+                "Saving..."
+            );
+
+
+            try {
+
+                await apiRequest(
+                    API.settings,
+                    {
+                        method: "PUT",
+                        body:
+                            JSON.stringify(
+                                payload
+                            )
+                    }
+                );
+
+
+                showToast(
+                    "Company settings updated."
+                );
+
+
+            } catch (error) {
+
+                showToast(
+                    error.message,
+                    true
+                );
+
+            } finally {
+
+                setButtonLoading(
+                    button,
+                    false
+                );
+
+            }
+
+        }
+    );
+
+
+/* =========================================================
+   SAVE TRAVEL SETTINGS
+========================================================= */
+
+document
+    .getElementById(
+        "saveTravel"
+    )
+    .addEventListener(
+        "click",
+        async () => {
+
+            const button =
+                document.getElementById(
+                    "saveTravel"
+                );
+
+
+            const payload = {
+
+                fuelCost:
+                    Number(
+                        document.getElementById(
+                            "fuelCost"
+                        ).value
+                    ),
+
+                travelCost:
+                    Number(
+                        document.getElementById(
+                            "travelCost"
+                        ).value
+                    ),
+
+                costPerKm:
+                    Number(
+                        document.getElementById(
+                            "costPerKm"
+                        ).value
+                    ),
+
+                maxSeats:
+                    Number(
+                        document.getElementById(
+                            "maxSeats"
+                        ).value
+                    )
+
+            };
+
+
+            setButtonLoading(
+                button,
+                true,
+                "Saving..."
+            );
+
+
+            try {
+
+                await apiRequest(
+                    API.settings,
+                    {
+                        method: "PUT",
+                        body:
+                            JSON.stringify(
+                                payload
+                            )
+                    }
+                );
+
+
+                showToast(
+                    "Carpooling settings updated."
+                );
+
+
+            } catch (error) {
+
+                showToast(
+                    error.message,
+                    true
+                );
+
+            } finally {
+
+                setButtonLoading(
+                    button,
+                    false
+                );
+
+            }
+
+        }
+    );
+
+
+/* =========================================================
+   SEARCH VEHICLES
+========================================================= */
+
+document
+    .getElementById(
+        "vehicleSearch"
+    )
+    .addEventListener(
+        "input",
+        event => {
+
+            const query =
+                event.target.value
+                    .trim()
+                    .toLowerCase();
+
+
+            if (!query) {
+
+                renderVehicles();
+
+                return;
+
+            }
+
+
+            const filtered =
+                vehicles.filter(
+                    vehicle =>
+                        [
+                            vehicle.registration,
+                            vehicle.model,
+                            vehicle.driver,
+                            vehicle.status
+                        ]
+                            .filter(Boolean)
+                            .some(
+                                value =>
+                                    String(value)
+                                        .toLowerCase()
+                                        .includes(
+                                            query
+                                        )
+                            )
+                );
+
+
+            renderVehicles(
+                filtered
+            );
+
+        }
+    );
+
+
+/* =========================================================
+   SEARCH RIDES
+========================================================= */
+
+document
+    .getElementById(
+        "rideSearch"
+    )
+    .addEventListener(
+        "input",
+        event => {
+
+            const query =
+                event.target.value
+                    .trim()
+                    .toLowerCase();
+
+
+            if (!query) {
+
+                renderRides();
+
+                return;
+
+            }
+
+
+            const filtered =
+                rides.filter(
+                    ride =>
+                        JSON.stringify(
+                            ride
+                        )
+                            .toLowerCase()
+                            .includes(
+                                query
+                            )
+                );
+
+
+            renderRides(
+                filtered
+            );
+
+        }
+    );
+
+
+/* =========================================================
+   MODAL CLOSE
+========================================================= */
+
+function closeModal(
+    id
+) {
+
+    const modal =
+        document.getElementById(
+            id
+        );
+
+
+    if (modal) {
+
+        modal.classList.remove(
+            "show"
+        );
+
+    }
+
+}
+
+
+document
+    .querySelectorAll(
+        "[data-close]"
+    )
+    .forEach(button => {
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                closeModal(
+                    button.dataset.close
+                );
+
+            }
+        );
+
+    });
+
+
+document
+    .querySelectorAll(
+        ".modal"
+    )
+    .forEach(modal => {
+
+        modal.addEventListener(
+            "click",
+            event => {
+
+                if (
+                    event.target ===
+                    modal
+                ) {
+
+                    modal.classList.remove(
+                        "show"
+                    );
+
+                }
+
+            }
+        );
+
+    });
+
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.key ===
+            "Escape"
+        ) {
+
+            document
+                .querySelectorAll(
+                    ".modal.show"
+                )
+                .forEach(
+                    modal =>
+                        modal.classList.remove(
+                            "show"
+                        )
+                );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   EXPORT RIDES
+========================================================= */
+
+document
+    .getElementById(
+        "exportRideBtn"
+    )
+    .addEventListener(
+        "click",
+        () => {
+
+            if (!rides.length) {
+
+                showToast(
+                    "There are no rides to export.",
+                    true
+                );
+
+                return;
+
+            }
+
+
+            const rows = [
+
+                [
+                    "Ride ID",
+                    "Driver",
+                    "Route",
+                    "Date",
+                    "Fare",
+                    "Status"
+                ]
+
+            ];
+
+
+            rides.forEach(ride => {
+
+                rows.push([
+
+                    ride.id ??
+                    ride.rideId ??
+                    ride._id ??
+                    "",
+
+                    ride.driverName ??
+                    ride.driver?.name ??
+                    ride.driver ??
+                    "",
+
+                    ride.route ??
+                    "",
+
+                    ride.date ??
+                    ride.createdAt ??
+                    "",
+
+                    ride.fare ??
+                    ride.amount ??
+                    "",
+
+                    ride.status ??
+                    ""
+
+                ]);
+
+            });
+
+
+            const csv =
+                rows
+                    .map(
+                        row =>
+                            row
+                                .map(
+                                    value =>
+                                        `"${String(value)
+                                            .replaceAll(
+                                                '"',
+                                                '""'
+                                            )}"`
+                                )
+                                .join(",")
+                    )
+                    .join("\n");
+
+
+            const blob =
+                new Blob(
+                    [csv],
+                    {
+                        type:
+                            "text/csv;charset=utf-8;"
+                    }
+                );
+
+
+            const url =
+                URL.createObjectURL(
+                    blob
+                );
+
+
+            const a =
+                document.createElement(
+                    "a"
+                );
+
+
+            a.href =
+                url;
+
+            a.download =
+                "ridesync-rides.csv";
+
+            a.click();
+
+
+            URL.revokeObjectURL(
+                url
+            );
+
+        }
+    );
+
+
+/* =========================================================
+   TOP BUTTONS
+========================================================= */
+
+document
+    .getElementById(
+        "notificationBtn"
+    )
+    .addEventListener(
+        "click",
+        () => {
+
+            showToast(
+                "Notifications are connected to the live dashboard."
+            );
+
+        }
+    );
+
+
+document
+    .getElementById(
+        "profileBtn"
+    )
+    .addEventListener(
+        "click",
+        () => {
+
+            showToast(
+                "Admin profile."
+            );
+
+        }
+    );
+
+
+/* =========================================================
+   INITIAL LOAD
+========================================================= */
+
+async function initializeDashboard() {
+
+    /*
+        No fake data is inserted here.
+    */
+
+    await loadDashboard();
+
+    await loadEmployees();
+
+}
+
+
+initializeDashboard();
+
+
+/* =========================================================
+   AUTO REFRESH
+========================================================= */
+
+setInterval(
+    async () => {
+
+        /*
+            Refresh real database data.
+            No demo data.
+        */
+
+        try {
+
+            await loadEmployees();
+
+        } catch (_) {}
+
+    },
+    30000
+);
+
+</script>
+
+
+</body>
+
+</html>

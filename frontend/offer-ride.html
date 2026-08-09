@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Offer a Ride — RideSync</title>
+  <meta name="description" content="Offer a carpool ride on RideSync">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box
+    }
+
+    :root {
+      --blue: #1677ff;
+      --blue-dark: #075ed7;
+      --blue-light: #eaf3ff;
+      --text: #11151b;
+      --muted: #737d8c;
+      --muted-light: #9aa3af;
+      --border: #e7ebf0;
+      --bg: #f7f9fc;
+      --white: #fff;
+      --green: #20a464;
+      --orange: #ef8a22;
+      --shadow: 0 20px 60px rgba(15, 25, 40, .07);
+    }
+
+    html {
+      scroll-behavior: smooth
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: "Inter", sans-serif;
+      color: var(--text);
+      background: radial-gradient(circle at 80% 0%, rgba(22, 119, 255, .07), transparent 28%), var(--bg);
+      overflow-x: hidden
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none
+    }
+
+    button {
+      cursor: pointer;
+      font-family: inherit
+    }
+
+    input,
+    select,
+    textarea {
+      font-family: inherit
+    }
+
+    .app {
+      min-height: 100vh;
+      display: flex
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 260px;
+      background: rgba(255, 255, 255, .94);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      z-index: 100;
+      backdrop-filter: blur(20px)
+    }
+
+    .brand {
+      height: 90px;
+      padding: 0 25px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid var(--border)
+    }
+
+    .brand-logo {
+      width: 43px;
+      height: 43px;
+      display: grid;
+      place-items: center;
+      border-radius: 13px;
+      background: linear-gradient(145deg, #050505, #252a31);
+      color: white;
+      font-size: 22px;
+      font-weight: 900;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, .15)
+    }
+
+    .brand-name {
+      font-size: 21px;
+      font-weight: 900;
+      letter-spacing: -1px
+    }
+
+    .brand-name span {
+      color: var(--blue)
+    }
+
+    .navigation {
+      flex: 1;
+      padding: 25px 15px;
+      overflow-y: auto
+    }
+
+    .nav-label {
+      padding: 0 12px;
+      margin-bottom: 11px;
+      color: #a0a8b4;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 1.6px;
+      text-transform: uppercase
+    }
+
+    .nav-item {
+      position: relative;
+      width: 100%;
+      min-height: 48px;
+      padding: 0 13px;
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      border: 0;
+      border-radius: 12px;
+      background: transparent;
+      color: #697382;
+      font-size: 12px;
+      font-weight: 700;
+      text-align: left;
+      transition: all .2s;
+      cursor: pointer;
+      text-decoration: none
+    }
+
+    .nav-item:hover {
+      background: #f4f7fb;
+      color: var(--text);
+      transform: translateX(2px)
+    }
+
+    .nav-item.active {
+      background: var(--blue-light);
+      color: var(--blue)
+    }
+
+    .nav-item.active::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      width: 3px;
+      height: 22px;
+      border-radius: 0 5px 5px 0;
+      background: var(--blue)
+    }
+
+    .nav-icon {
+      width: 25px;
+      height: 25px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      font-size: 13px;
+      flex-shrink: 0
+    }
+
+    .sidebar-bottom {
+      padding: 15px;
+      border-top: 1px solid var(--border)
+    }
+
+    .profile-mini {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      border-radius: 13px;
+      background: #f7f9fc
+    }
+
+    .avatar {
+      width: 37px;
+      height: 37px;
+      display: grid;
+      place-items: center;
+      border-radius: 11px;
+      background: linear-gradient(145deg, #111, #30343b);
+      color: white;
+      font-size: 12px;
+      font-weight: 800
+    }
+
+    .profile-info {
+      min-width: 0;
+      flex: 1
+    }
+
+    .profile-name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: #20252d;
+      font-size: 11px;
+      font-weight: 800
+    }
+
+    .profile-role {
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 9px
+    }
+
+    /* MAIN */
+    .main {
+      width: calc(100% - 260px);
+      margin-left: 260px;
+      min-height: 100vh
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      height: 75px;
+      padding: 0 38px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255, 255, 255, .88);
+      border-bottom: 1px solid rgba(225, 230, 237, .8);
+      backdrop-filter: blur(18px);
+      z-index: 50
+    }
+
+    .page-title {
+      font-size: 19px;
+      font-weight: 850;
+      letter-spacing: -.5px
+    }
+
+    .page-kicker {
+      color: var(--blue);
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 1.5px
+    }
+
+    .content {
+      padding: 35px 38px 60px;
+      max-width: 1100px;
+      margin: auto;
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 30px
+    }
+
+    /* FORM CARD */
+    .form-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 36px;
+      box-shadow: var(--shadow)
+    }
+
+    .form-title {
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: -.5px;
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      gap: 10px
+    }
+
+    .form-section {
+      margin-bottom: 28px
+    }
+
+    .section-label {
+      font-size: 9px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--muted);
+      margin-bottom: 14px
+    }
+
+    .field {
+      margin-bottom: 16px
+    }
+
+    .field label {
+      display: block;
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      width: 100%;
+      padding: 13px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 13px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      background: var(--bg);
+      outline: none;
+      transition: border-color .2s, box-shadow .2s
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(22, 119, 255, .1);
+      background: white
+    }
+
+    .field textarea {
+      resize: vertical;
+      min-height: 80px
+    }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px
+    }
+
+    .field-row-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 14px
+    }
+
+    .loc-input-wrap {
+      position: relative
+    }
+
+    .loc-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 16px
+    }
+
+    .loc-input-wrap input {
+      padding-left: 42px
+    }
+
+    /* MAP PREVIEW */
+    .map-wrap {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      overflow: hidden;
+      height: 400px;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 100px
+    }
+
+    #offerMap {
+      width: 100%;
+      height: 100%
+    }
+
+    .map-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: var(--bg);
+      color: var(--muted)
+    }
+
+    .map-placeholder-icon {
+      font-size: 48px
+    }
+
+    .map-placeholder-text {
+      font-size: 14px;
+      font-weight: 600
+    }
+
+    /* FARE ESTIMATE */
+    .fare-estimate {
+      background: linear-gradient(135deg, var(--blue), var(--blue-dark));
+      color: white;
+      border-radius: 16px;
+      padding: 20px 22px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between
+    }
+
+    .fare-est-label {
+      font-size: 11px;
+      font-weight: 700;
+      opacity: .8
+    }
+
+    .fare-est-value {
+      font-size: 24px;
+      font-weight: 900
+    }
+
+    /* SUBMIT BTN */
+    .submit-btn {
+      width: 100%;
+      padding: 16px;
+      border-radius: 14px;
+      border: 0;
+      background: linear-gradient(135deg, var(--blue), var(--blue-dark));
+      color: white;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all .2s;
+      box-shadow: 0 8px 25px rgba(22, 119, 255, .3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 35px rgba(22, 119, 255, .4)
+    }
+
+    .submit-btn:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+      transform: none
+    }
+
+    .submit-btn.loading::after {
+      content: "";
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255, 255, 255, .5);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin .7s linear infinite
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg)
+      }
+    }
+
+    /* VEHICLE SELECT */
+    .vehicle-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 4px
+    }
+
+    .vehicle-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 13px;
+      cursor: pointer;
+      transition: all .2s
+    }
+
+    .vehicle-card.selected {
+      border-color: var(--blue);
+      background: var(--blue-light)
+    }
+
+    .vehicle-card:hover:not(.selected) {
+      border-color: var(--muted-light)
+    }
+
+    .vehicle-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: var(--bg);
+      display: grid;
+      place-items: center;
+      font-size: 20px
+    }
+
+    .vehicle-name {
+      font-size: 13px;
+      font-weight: 800
+    }
+
+    .vehicle-plate {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px
+    }
+
+    @media(max-width:900px) {
+      .content {
+        grid-template-columns: 1fr
+      }
+
+      .map-wrap {
+        height: 280px;
+        position: static
+      }
+
+      .sidebar {
+        display: none
+      }
+
+      .main {
+        width: 100%;
+        margin-left: 0
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-logo">R</div>
+        <div>
+          <div class="brand-name">Ride<span>Sync</span></div>
+          <span
+            style="display:block;margin-top:2px;color:#9aa3af;font-size:8px;font-weight:800;letter-spacing:1.2px">CARPOOLING</span>
+        </div>
+      </div>
+      <nav class="navigation">
+        <div class="nav-label">Main</div>
+        <a href="user-dashboard.html" class="nav-item"><span class="nav-icon">🏠</span> Dashboard</a>
+        <a href="find-ride.html" class="nav-item"><span class="nav-icon">🔍</span> Find Ride</a>
+        <a href="offer-ride.html" class="nav-item active"><span class="nav-icon">🚗</span> Offer Ride</a>
+        <div class="nav-label" style="margin-top:20px">Account</div>
+        <a href="my-trips.html" class="nav-item"><span class="nav-icon">🗺️</span> My Trips</a>
+        <a href="ride-history.html" class="nav-item"><span class="nav-icon">📋</span> Ride History</a>
+        <a href="wallet.html" class="nav-item"><span class="nav-icon">💳</span> Wallet</a>
+        <a href="my_vehicle.html" class="nav-item"><span class="nav-icon">🚙</span> My Vehicle</a>
+        <a href="settings.html" class="nav-item"><span class="nav-icon">⚙️</span> Settings</a>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="profile-mini">
+          <div class="avatar" id="avatarInitials">U</div>
+          <div class="profile-info">
+            <div class="profile-name" id="sidebarName">Loading...</div>
+            <div class="profile-role" id="sidebarRole">Employee</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+      <div class="topbar">
+        <div>
+          <div class="page-kicker">DRIVER · OFFER A RIDE</div>
+          <h1 class="page-title">Offer a Ride</h1>
+        </div>
+        <button onclick="API.auth.logout()"
+          style="padding:9px 18px;border-radius:10px;border:1px solid var(--border);background:white;font-size:12px;font-weight:700;color:var(--muted)">Logout</button>
+      </div>
+
+      <div class="content">
+
+        <!-- FORM -->
+        <div class="form-card">
+          <div class="form-title">🚗 Create a Ride</div>
+
+          <form id="offerForm" onsubmit="submitOffer(event)">
+
+            <!-- ROUTE -->
+            <div class="form-section">
+              <div class="section-label">📍 Route</div>
+              <div class="field">
+                <label>Pickup Location</label>
+                <div class="loc-input-wrap">
+                  <span class="loc-icon">🟢</span>
+                  <input type="text" id="pickup" placeholder="Enter pickup address" autocomplete="off" required>
+                </div>
+              </div>
+              <div class="field">
+                <label>Destination</label>
+                <div class="loc-input-wrap">
+                  <span class="loc-icon">🔴</span>
+                  <input type="text" id="destination" placeholder="Enter drop-off address" autocomplete="off" required>
+                </div>
+              </div>
+            </div>
+
+            <!-- SCHEDULE -->
+            <div class="form-section">
+              <div class="section-label">📅 Schedule</div>
+              <div class="field-row">
+                <div class="field">
+                  <label>Date</label>
+                  <input type="date" id="rideDate" required>
+                </div>
+                <div class="field">
+                  <label>Time</label>
+                  <input type="time" id="rideTime" required>
+                </div>
+              </div>
+            </div>
+
+            <!-- VEHICLE -->
+            <div class="form-section">
+              <div class="section-label">🚗 Vehicle</div>
+              <div id="vehicleList" class="vehicle-cards">
+                <div style="color:var(--muted);font-size:13px;padding:10px">Loading your vehicles...</div>
+              </div>
+              <input type="hidden" id="vehicleId">
+            </div>
+
+            <!-- SEATS & PRICE -->
+            <div class="form-section">
+              <div class="section-label">💺 Seats & Pricing</div>
+              <div class="field-row">
+                <div class="field">
+                  <label>Total Seats</label>
+                  <input type="number" id="totalSeats" min="1" max="8" value="3" required>
+                </div>
+                <div class="field">
+                  <label>Fare per Seat (₹)</label>
+                  <input type="number" id="farePerSeat" min="1" step="0.01" placeholder="e.g. 150" required>
+                </div>
+              </div>
+            </div>
+
+            <!-- PREFERENCES -->
+            <div class="form-section">
+              <div class="section-label">✅ Preferences</div>
+              <div class="field-row">
+                <div class="field">
+                  <label>Music</label>
+                  <select id="musicPref">
+                    <option value="NO_PREFERENCE">No Preference</option>
+                    <option value="ALLOWED">Allowed</option>
+                    <option value="NOT_ALLOWED">Not Allowed</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Smoking</label>
+                  <select id="smokingPref">
+                    <option value="NOT_ALLOWED">Not Allowed</option>
+                    <option value="ALLOWED">Allowed</option>
+                    <option value="NO_PREFERENCE">No Preference</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- NOTES -->
+            <div class="field">
+              <label>Additional Notes (Optional)</label>
+              <textarea id="notes" placeholder="e.g. Meet at the main gate, no extra luggage..."></textarea>
+            </div>
+
+            <!-- FARE ESTIMATE (auto-calculated) -->
+            <div id="fareEstimate" style="display:none" class="fare-estimate">
+              <div>
+                <div class="fare-est-label">Estimated Total Revenue</div>
+                <div class="fare-est-value" id="fareEstVal">₹0</div>
+              </div>
+              <div>
+                <div class="fare-est-label">Per Seat</div>
+                <div class="fare-est-value" id="farePerSeatDisplay">₹0</div>
+              </div>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submitBtn">
+              <span>🚗</span> Post Ride
+            </button>
+          </form>
+        </div>
+
+        <!-- MAP PREVIEW -->
+        <div>
+          <div class="map-wrap">
+            <div id="mapPlaceholder" class="map-placeholder">
+              <div class="map-placeholder-icon">🗺️</div>
+              <div class="map-placeholder-text">Enter locations to see route</div>
+            </div>
+            <div id="offerMap" style="display:none"></div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Google Maps -->
+  <script>
+    const MAPS_KEY = 'AIzaSyCV0e64xLCJgtbwo2WB_mBVwJDOzda26CQ';
+    let map, directionsService, directionsRenderer, pickupAutocomplete, destAutocomplete;
+    let selectedVehicleId = null;
+    let pickupLatLng = null, destLatLng = null;
+
+    function initMap() {
+      map = new google.maps.Map(document.getElementById('offerMap'), {
+        center: { lat: 22.5726, lng: 88.3639 }, // Default: Kolkata
+        zoom: 12,
+        styles: [
+          { featureType: 'poi', elementType: 'labels', stylers: [{ visibility: 'off' }] }
+        ]
+      });
+      directionsService = new google.maps.DirectionsService();
+      directionsRenderer = new google.maps.DirectionsRenderer({ suppressMarkers: false });
+      directionsRenderer.setMap(map);
+
+      // Autocomplete for pickup
+      pickupAutocomplete = new google.maps.places.Autocomplete(document.getElementById('pickup'));
+      pickupAutocomplete.addListener('place_changed', () => {
+        const place = pickupAutocomplete.getPlace();
+        if (place.geometry) {
+          pickupLatLng = { lat: place.geometry.location.lat(), lng: place.geometry.location.lng() };
+          tryRoute();
+        }
+      });
+
+      // Autocomplete for destination
+      destAutocomplete = new google.maps.places.Autocomplete(document.getElementById('destination'));
+      destAutocomplete.addListener('place_changed', () => {
+        const place = destAutocomplete.getPlace();
+        if (place.geometry) {
+          destLatLng = { lat: place.geometry.location.lat(), lng: place.geometry.location.lng() };
+          tryRoute();
+        }
+      });
+
+      document.getElementById('offerMap').style.display = 'block';
+      document.getElementById('mapPlaceholder').style.display = 'none';
+    }
+
+    function tryRoute() {
+      if (!pickupLatLng || !destLatLng) return;
+      directionsService.route({
+        origin: pickupLatLng,
+        destination: destLatLng,
+        travelMode: google.maps.TravelMode.DRIVING
+      }, (result, status) => {
+        if (status === 'OK') {
+          directionsRenderer.setDirections(result);
+        }
+      });
+    }
+  </script>
+  <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCV0e64xLCJgtbwo2WB_mBVwJDOzda26CQ&libraries=places&callback=initMap"
+    onerror="document.getElementById('mapPlaceholder').innerHTML='<div class=map-placeholder><div class=map-placeholder-icon>🗺️</div><div class=map-placeholder-text>Map unavailable — enter addresses manually</div></div>'">
+    </script>
+
+  <script src="api.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      API.requireAuth();
+
+      // Set today as minimum date
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('rideDate').min = today;
+      document.getElementById('rideDate').value = today;
+      // Set current time + 1 hour
+      const now = new Date(); now.setHours(now.getHours() + 1);
+      document.getElementById('rideTime').value = now.toTimeString().slice(0, 5);
+
+      // Load user
+      const me = API.getUser();
+      if (me) {
+        document.getElementById('sidebarName').textContent = me.name || 'User';
+        document.getElementById('sidebarRole').textContent = me.role || 'EMPLOYEE';
+        document.getElementById('avatarInitials').textContent = (me.name || 'U').charAt(0).toUpperCase();
+      }
+
+      // Load vehicles
+      await loadVehicles();
+
+      // Auto-calculate fare estimate
+      ['farePerSeat', 'totalSeats'].forEach(id => {
+        document.getElementById(id).addEventListener('input', updateFareEstimate);
+      });
+    });
+
+    async function loadVehicles() {
+      try {
+        const res = await API.vehicles.myVehicles();
+        const vehicles = res.data || res.vehicles || [];
+        const container = document.getElementById('vehicleList');
+
+        if (!vehicles.length) {
+          container.innerHTML = `
+          <div style="text-align:center;padding:20px;background:var(--bg);border-radius:13px;border:1px dashed var(--border)">
+            <div style="font-size:24px;margin-bottom:8px">🚗</div>
+            <div style="font-size:13px;font-weight:700;color:var(--text)">No vehicles registered</div>
+            <a href="register_vehicle.html" style="display:inline-block;margin-top:10px;font-size:12px;font-weight:700;color:var(--blue)">Register a vehicle →</a>
+          </div>`;
+          return;
+        }
+
+        container.innerHTML = vehicles.map((v, i) => `
+        <div class="vehicle-card ${i === 0 ? 'selected' : ''}" id="vc-${v.id}" onclick="selectVehicle('${v.id}')">
+          <div class="vehicle-icon">🚗</div>
+          <div>
+            <div class="vehicle-name">${v.make} ${v.model} ${v.year || ''}</div>
+            <div class="vehicle-plate">${v.licensePlate || v.registrationNumber || '—'} · ${v.color || ''}</div>
+          </div>
+        </div>
+      `).join('');
+
+        // Auto-select first
+        if (vehicles.length > 0) {
+          selectedVehicleId = vehicles[0].id;
+          document.getElementById('vehicleId').value = selectedVehicleId;
+        }
+      } catch (err) {
+        document.getElementById('vehicleList').innerHTML = `<div style="color:var(--muted);font-size:13px">${err.message}</div>`;
+      }
+    }
+
+    function selectVehicle(id) {
+      selectedVehicleId = id;
+      document.getElementById('vehicleId').value = id;
+      document.querySelectorAll('.vehicle-card').forEach(c => c.classList.remove('selected'));
+      document.getElementById('vc-' + id)?.classList.add('selected');
+    }
+
+    function updateFareEstimate() {
+      const fare = parseFloat(document.getElementById('farePerSeat').value) || 0;
+      const seats = parseInt(document.getElementById('totalSeats').value) || 0;
+      if (fare > 0 && seats > 0) {
+        document.getElementById('fareEstimate').style.display = 'flex';
+        document.getElementById('fareEstVal').textContent = `₹${(fare * seats).toFixed(0)}`;
+        document.getElementById('farePerSeatDisplay').textContent = `₹${fare}`;
+      } else {
+        document.getElementById('fareEstimate').style.display = 'none';
+      }
+    }
+
+    async function submitOffer(event) {
+      event.preventDefault();
+      const btn = document.getElementById('submitBtn');
+      btn.disabled = true;
+      btn.classList.add('loading');
+      btn.querySelector('span').textContent = 'Posting...';
+
+      const pickup = document.getElementById('pickup').value.trim();
+      const destination = document.getElementById('destination').value.trim();
+      const rideDate = document.getElementById('rideDate').value;
+      const rideTime = document.getElementById('rideTime').value;
+      const totalSeats = parseInt(document.getElementById('totalSeats').value);
+      const farePerSeat = parseFloat(document.getElementById('farePerSeat').value);
+      const notes = document.getElementById('notes').value.trim();
+
+      if (!pickup || !destination) {
+        API.toast('Please enter pickup and destination locations', 'warning');
+        btn.disabled = false; btn.classList.remove('loading');
+        btn.querySelector('span').textContent = '🚗';
+        return;
+      }
+
+      const payload = {
+        pickupLocation: pickup,
+        destination,
+        rideDate,
+        rideTime,
+        totalSeats,
+        farePerSeat,
+        ...(selectedVehicleId && { vehicleId: selectedVehicleId }),
+        preferences: {
+          music: document.getElementById('musicPref').value,
+          smoking: document.getElementById('smokingPref').value,
+        },
+        ...(notes && { notes }),
+        ...(pickupLatLng && { pickupLat: pickupLatLng.lat, pickupLng: pickupLatLng.lng }),
+        ...(destLatLng && { destinationLat: destLatLng.lat, destinationLng: destLatLng.lng }),
+      };
+
+      try {
+        await API.rides.create(payload);
+        API.toast('Ride posted successfully! 🎉', 'success');
+        setTimeout(() => { window.location.href = 'my-trips.html'; }, 1500);
+      } catch (err) {
+        API.toast(err.message || 'Failed to post ride', 'error');
+        btn.disabled = false; btn.classList.remove('loading');
+        btn.querySelector('span').textContent = '🚗';
+      }
+    }
+  </script>
+</body>
+
+</html>

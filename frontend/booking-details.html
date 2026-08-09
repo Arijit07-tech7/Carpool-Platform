@@ -1,0 +1,2236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="RideSync Booking Details"
+    >
+
+    <title>Booking Details — RideSync</title>
+
+
+    <!-- =====================================================
+         GOOGLE FONT
+         ===================================================== -->
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <!-- =====================================================
+         PDF LIBRARY
+         ===================================================== -->
+
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"
+        defer
+    ></script>
+
+
+    <style>
+
+        /* =====================================================
+           ROOT
+           ===================================================== */
+
+        :root {
+
+            --blue: #2563eb;
+            --blue-light: #3b82f6;
+            --blue-dark: #1d4ed8;
+
+            --blue-soft:
+                rgba(37, 99, 235, 0.07);
+
+            --blue-border:
+                rgba(37, 99, 235, 0.14);
+
+            --blue-glow:
+                rgba(37, 99, 235, 0.18);
+
+            --text: #0f172a;
+            --soft: #475569;
+            --muted: #64748b;
+
+            --border:
+                rgba(37, 99, 235, 0.10);
+
+            --white: #ffffff;
+
+            --shadow:
+                0 25px 70px
+                rgba(30, 64, 175, 0.11);
+
+            --shadow-soft:
+                0 10px 30px
+                rgba(30, 64, 175, 0.07);
+        }
+
+
+        /* =====================================================
+           RESET
+           ===================================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+
+            min-height: 100vh;
+
+            background:
+
+                radial-gradient(
+                    circle at 8% 5%,
+                    rgba(37, 99, 235, 0.10),
+                    transparent 28%
+                ),
+
+                radial-gradient(
+                    circle at 92% 15%,
+                    rgba(59, 130, 246, 0.08),
+                    transparent 25%
+                ),
+
+                linear-gradient(
+                    180deg,
+                    #f8fbff 0%,
+                    #f2f6ff 50%,
+                    #ffffff 100%
+                );
+
+            color:
+                var(--text);
+
+            font-family:
+                Inter,
+                Arial,
+                sans-serif;
+
+            -webkit-font-smoothing:
+                antialiased;
+        }
+
+
+        button {
+            font-family: inherit;
+        }
+
+
+        /* =====================================================
+           PAGE
+           ===================================================== */
+
+        .page {
+
+            width:
+                min(
+                    950px,
+                    calc(100% - 30px)
+                );
+
+            min-height:
+                100vh;
+
+            margin:
+                auto;
+        }
+
+
+        /* =====================================================
+           HEADER
+           ===================================================== */
+
+        header {
+
+            height:
+                78px;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                space-between;
+
+            border-bottom:
+                1px solid var(--border);
+        }
+
+
+        .logo {
+
+            color:
+                var(--blue);
+
+            font-size:
+                13px;
+
+            font-weight:
+                900;
+
+            letter-spacing:
+                0.20em;
+        }
+
+
+        .back {
+
+            border:
+                1px solid var(--blue-border);
+
+            background:
+                rgba(255, 255, 255, 0.80);
+
+            backdrop-filter:
+                blur(14px);
+
+            -webkit-backdrop-filter:
+                blur(14px);
+
+            color:
+                var(--blue);
+
+            padding:
+                10px 15px;
+
+            border-radius:
+                10px;
+
+            cursor:
+                pointer;
+
+            font-size:
+                9px;
+
+            font-weight:
+                800;
+
+            transition:
+                0.2s ease;
+        }
+
+
+        .back:hover {
+
+            background:
+                var(--blue);
+
+            color:
+                white;
+
+            transform:
+                translateX(-2px);
+
+            box-shadow:
+                0 8px 20px
+                rgba(37, 99, 235, 0.18);
+        }
+
+
+        /* =====================================================
+           MAIN
+           ===================================================== */
+
+        main {
+
+            padding:
+                40px 0 60px;
+        }
+
+
+        .heading {
+
+            margin-bottom:
+                24px;
+        }
+
+
+        .eyebrow {
+
+            color:
+                var(--blue);
+
+            font-size:
+                9px;
+
+            font-weight:
+                900;
+
+            letter-spacing:
+                0.18em;
+        }
+
+
+        h1 {
+
+            margin-top:
+                8px;
+
+            font-size:
+                32px;
+
+            letter-spacing:
+                -0.04em;
+
+            font-weight:
+                900;
+        }
+
+
+        .heading p {
+
+            margin-top:
+                8px;
+
+            color:
+                var(--muted);
+
+            font-size:
+                10px;
+        }
+
+
+        /* =====================================================
+           SUCCESS BANNER
+           ===================================================== */
+
+        .success-banner {
+
+            padding:
+                18px 20px;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                14px;
+
+            border:
+                1px solid var(--blue-border);
+
+            border-radius:
+                18px;
+
+            background:
+                rgba(255, 255, 255, 0.82);
+
+            backdrop-filter:
+                blur(18px);
+
+            -webkit-backdrop-filter:
+                blur(18px);
+
+            box-shadow:
+                0 10px 30px
+                rgba(30, 64, 175, 0.06);
+        }
+
+
+        .success-icon {
+
+            width:
+                42px;
+
+            height:
+                42px;
+
+            flex-shrink:
+                0;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            border-radius:
+                50%;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--blue),
+                    var(--blue-light)
+                );
+
+            color:
+                white;
+
+            font-weight:
+                900;
+
+            box-shadow:
+                0 8px 22px
+                rgba(37, 99, 235, 0.22);
+        }
+
+
+        .success-title {
+
+            font-size:
+                11px;
+
+            font-weight:
+                850;
+        }
+
+
+        .success-sub {
+
+            margin-top:
+                4px;
+
+            color:
+                var(--muted);
+
+            font-size:
+                9px;
+        }
+
+
+        /* =====================================================
+           GRID
+           ===================================================== */
+
+        .grid {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                1.15fr 0.85fr;
+
+            gap:
+                18px;
+
+            margin-top:
+                18px;
+        }
+
+
+        /* =====================================================
+           CARD
+           ===================================================== */
+
+        .card {
+
+            padding:
+                22px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                22px;
+
+            background:
+                rgba(255, 255, 255, 0.82);
+
+            backdrop-filter:
+                blur(20px);
+
+            -webkit-backdrop-filter:
+                blur(20px);
+
+            box-shadow:
+                var(--shadow);
+
+            transition:
+                0.2s ease;
+        }
+
+
+        .card:hover {
+
+            border-color:
+                var(--blue-border);
+
+            transform:
+                translateY(-2px);
+        }
+
+
+        .card-title {
+
+            margin-bottom:
+                20px;
+
+            font-size:
+                12px;
+
+            font-weight:
+                850;
+        }
+
+
+        /* =====================================================
+           ROUTE
+           ===================================================== */
+
+        .route {
+
+            display:
+                flex;
+
+            flex-direction:
+                column;
+        }
+
+
+        .route-point {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                13px;
+        }
+
+
+        .dot {
+
+            width:
+                12px;
+
+            height:
+                12px;
+
+            border-radius:
+                50%;
+
+            border:
+                2px solid var(--blue);
+
+            background:
+                white;
+
+            box-shadow:
+                0 0 0 4px
+                rgba(37, 99, 235, 0.06);
+        }
+
+
+        .dot.end {
+
+            border-radius:
+                4px;
+
+            background:
+                var(--blue);
+        }
+
+
+        .route-label {
+
+            color:
+                var(--muted);
+
+            font-size:
+                8px;
+
+            font-weight:
+                700;
+        }
+
+
+        .route-name {
+
+            margin-top:
+                3px;
+
+            font-size:
+                12px;
+
+            font-weight:
+                750;
+        }
+
+
+        .route-line {
+
+            width:
+                1px;
+
+            height:
+                34px;
+
+            margin:
+                4px 0 4px 5px;
+
+            background:
+                linear-gradient(
+                    var(--blue),
+                    rgba(37, 99, 235, 0.12)
+                );
+        }
+
+
+        /* =====================================================
+           INFO
+           ===================================================== */
+
+        .info-grid {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap:
+                10px;
+
+            margin-top:
+                24px;
+        }
+
+
+        .info {
+
+            padding:
+                13px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                13px;
+
+            background:
+                rgba(248, 250, 252, 0.65);
+
+            transition:
+                0.2s ease;
+        }
+
+
+        .info:hover {
+
+            border-color:
+                var(--blue-border);
+
+            background:
+                var(--blue-soft);
+        }
+
+
+        .info span {
+
+            display:
+                block;
+
+            color:
+                var(--muted);
+
+            font-size:
+                8px;
+        }
+
+
+        .info strong {
+
+            display:
+                block;
+
+            margin-top:
+                5px;
+
+            font-size:
+                10px;
+        }
+
+
+        /* =====================================================
+           PAYMENT
+           ===================================================== */
+
+        .payment-row {
+
+            padding:
+                14px 0;
+
+            display:
+                flex;
+
+            justify-content:
+                space-between;
+
+            align-items:
+                center;
+
+            border-bottom:
+                1px solid var(--border);
+        }
+
+
+        .payment-row:last-child {
+
+            border-bottom:
+                none;
+        }
+
+
+        .payment-row span {
+
+            color:
+                var(--muted);
+
+            font-size:
+                9px;
+        }
+
+
+        .payment-row strong {
+
+            font-size:
+                10px;
+
+            text-align:
+                right;
+        }
+
+
+        .paid {
+
+            color:
+                var(--blue);
+        }
+
+
+        .method {
+
+            padding:
+                6px 10px;
+
+            border-radius:
+                999px;
+
+            color:
+                var(--blue);
+
+            background:
+                var(--blue-soft);
+
+            border:
+                1px solid var(--blue-border);
+
+            font-size:
+                8px;
+
+            font-weight:
+                850;
+        }
+
+
+        /* =====================================================
+           BILL
+           ===================================================== */
+
+        .bill {
+
+            margin-top:
+                18px;
+
+            display:
+                flex;
+
+            justify-content:
+                space-between;
+
+            align-items:
+                center;
+
+            gap:
+                15px;
+
+            padding:
+                18px;
+
+            border:
+                1px solid var(--blue-border);
+
+            border-radius:
+                18px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #eff6ff,
+                    #ffffff
+                );
+
+            box-shadow:
+                var(--shadow-soft);
+        }
+
+
+        .bill strong {
+
+            font-size:
+                10px;
+        }
+
+
+        .bill span {
+
+            display:
+                block;
+
+            margin-top:
+                4px;
+
+            color:
+                var(--muted);
+
+            font-size:
+                8px;
+        }
+
+
+        /* =====================================================
+           DOWNLOAD BUTTON
+           ===================================================== */
+
+        .download {
+
+            border:
+                none;
+
+            padding:
+                11px 15px;
+
+            border-radius:
+                10px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--blue),
+                    var(--blue-light)
+                );
+
+            color:
+                white;
+
+            font-size:
+                8px;
+
+            font-weight:
+                850;
+
+            cursor:
+                pointer;
+
+            box-shadow:
+                0 8px 20px
+                rgba(37, 99, 235, 0.20);
+
+            transition:
+                0.2s ease;
+        }
+
+
+        .download:hover {
+
+            background:
+                var(--blue-dark);
+
+            transform:
+                translateY(-1px);
+
+            box-shadow:
+                0 12px 25px
+                rgba(37, 99, 235, 0.26);
+        }
+
+
+        .download:disabled {
+
+            opacity:
+                0.65;
+
+            cursor:
+                wait;
+
+            transform:
+                none;
+        }
+
+
+        /* =====================================================
+           FOOTER
+           ===================================================== */
+
+        footer {
+
+            padding:
+                20px 0;
+
+            border-top:
+                1px solid var(--border);
+
+            color:
+                var(--muted);
+
+            font-size:
+                8px;
+
+            display:
+                flex;
+
+            justify-content:
+                space-between;
+        }
+
+
+        /* =====================================================
+           MOBILE
+           ===================================================== */
+
+        @media(max-width: 700px) {
+
+            .grid {
+
+                grid-template-columns:
+                    1fr;
+            }
+
+            h1 {
+
+                font-size:
+                    27px;
+            }
+        }
+
+
+        @media(max-width: 480px) {
+
+            .page {
+
+                width:
+                    calc(100% - 20px);
+            }
+
+            .info-grid {
+
+                grid-template-columns:
+                    1fr;
+            }
+
+            .bill {
+
+                flex-direction:
+                    column;
+
+                align-items:
+                    flex-start;
+            }
+
+            .download {
+
+                width:
+                    100%;
+            }
+
+            footer {
+
+                flex-direction:
+                    column;
+
+                gap:
+                    6px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="page">
+
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <header>
+
+        <div class="logo">
+            RIDESYNC
+        </div>
+
+
+        <button
+            class="back"
+            onclick="goBack()"
+        >
+            ← BACK TO PAYMENT
+        </button>
+
+    </header>
+
+
+    <!-- =====================================================
+         MAIN
+         ===================================================== -->
+
+    <main>
+
+
+        <div class="heading">
+
+            <span class="eyebrow">
+                BOOKING CONFIRMED
+            </span>
+
+
+            <h1>
+                Your Ride Details
+            </h1>
+
+
+            <p>
+                Everything about your completed RideSync booking in one place.
+            </p>
+
+        </div>
+
+
+        <!-- =================================================
+             SUCCESS
+             ================================================= -->
+
+        <div class="success-banner">
+
+            <div class="success-icon">
+                ✓
+            </div>
+
+
+            <div>
+
+                <div class="success-title">
+                    Payment Successful & Booking Confirmed
+                </div>
+
+
+                <div class="success-sub">
+                    Your payment has been securely recorded.
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             GRID
+             ================================================= -->
+
+        <div class="grid">
+
+
+            <!-- =================================================
+                 RIDE DETAILS
+                 ================================================= -->
+
+            <section class="card">
+
+                <div class="card-title">
+                    Ride Details
+                </div>
+
+
+                <div class="route">
+
+
+                    <div class="route-point">
+
+                        <div class="dot"></div>
+
+
+                        <div>
+
+                            <div class="route-label">
+                                PICKUP
+                            </div>
+
+
+                            <div
+                                class="route-name"
+                                id="from"
+                            >
+                                Kolkata
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="route-line"></div>
+
+
+                    <div class="route-point">
+
+                        <div class="dot end"></div>
+
+
+                        <div>
+
+                            <div class="route-label">
+                                DROP
+                            </div>
+
+
+                            <div
+                                class="route-name"
+                                id="to"
+                            >
+                                Salt Lake
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="info-grid">
+
+
+                    <div class="info">
+
+                        <span>
+                            BOOKING ID
+                        </span>
+
+
+                        <strong id="bookingId">
+                            RSBK000000
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info">
+
+                        <span>
+                            DATE
+                        </span>
+
+
+                        <strong id="rideDate">
+                            08 Aug 2026
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info">
+
+                        <span>
+                            TIME
+                        </span>
+
+
+                        <strong id="rideTime">
+                            03:30 PM
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info">
+
+                        <span>
+                            VEHICLE
+                        </span>
+
+
+                        <strong id="vehicle">
+                            Sedan
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info">
+
+                        <span>
+                            DRIVER
+                        </span>
+
+
+                        <strong id="driver">
+                            RideSync Driver
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info">
+
+                        <span>
+                            RIDE STATUS
+                        </span>
+
+
+                        <strong
+                            style="color:#2563eb;"
+                        >
+                            COMPLETED
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 PAYMENT DETAILS
+                 ================================================= -->
+
+            <section class="card">
+
+                <div class="card-title">
+                    Payment Details
+                </div>
+
+
+                <div class="payment-row">
+
+                    <span>
+                        Total Fare
+                    </span>
+
+
+                    <strong id="fare">
+                        ₹180
+                    </strong>
+
+                </div>
+
+
+                <div class="payment-row">
+
+                    <span>
+                        Payment Method
+                    </span>
+
+
+                    <strong
+                        class="method"
+                        id="method"
+                    >
+                        UPI
+                    </strong>
+
+                </div>
+
+
+                <div class="payment-row">
+
+                    <span>
+                        Transaction ID
+                    </span>
+
+
+                    <strong id="transaction">
+                        RS000000
+                    </strong>
+
+                </div>
+
+
+                <div class="payment-row">
+
+                    <span>
+                        Payment Status
+                    </span>
+
+
+                    <strong class="paid">
+                        ✓ SUCCESSFUL
+                    </strong>
+
+                </div>
+
+
+                <div class="payment-row">
+
+                    <span>
+                        Payment Date
+                    </span>
+
+
+                    <strong id="paymentDate">
+                        08 Aug 2026
+                    </strong>
+
+                </div>
+
+            </section>
+
+        </div>
+
+
+        <!-- =================================================
+             BILL
+             ================================================= -->
+
+        <div class="bill">
+
+            <div>
+
+                <strong>
+                    RideSync Digital Receipt
+                </strong>
+
+
+                <span>
+                    Your premium payment receipt is available for this booking.
+                </span>
+
+            </div>
+
+
+            <button
+                class="download"
+                id="downloadButton"
+                onclick="downloadBill()"
+            >
+                ↓ DOWNLOAD PDF BILL
+            </button>
+
+        </div>
+
+
+    </main>
+
+
+    <!-- =====================================================
+         FOOTER
+         ===================================================== -->
+
+    <footer>
+
+        <span>
+            © 2026 RideSync
+        </span>
+
+
+        <span>
+            Premium Carpool Experience
+        </span>
+
+    </footer>
+
+
+</div>
+
+
+<script>
+
+    /* =====================================================
+       GLOBAL PAYMENT DATA
+       ===================================================== */
+
+    let payment = null;
+
+
+    /* =====================================================
+       SAFE JSON PARSER
+       ===================================================== */
+
+    try {
+
+        const savedPayment =
+            localStorage.getItem(
+                "ridesync_last_payment"
+            );
+
+
+        if (savedPayment) {
+
+            payment =
+                JSON.parse(
+                    savedPayment
+                );
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.warn(
+            "RideSync payment data could not be loaded.",
+            error
+        );
+
+        payment = null;
+
+    }
+
+
+    /* =====================================================
+       FALLBACK DATA
+       ===================================================== */
+
+    if (
+        !payment ||
+        typeof payment !== "object"
+    ) {
+
+        payment = {
+
+            amount: 180,
+
+            method: "UPI",
+
+            transactionId:
+                "RS" +
+                Date.now(),
+
+            date:
+                new Date().toISOString(),
+
+            ride: {
+
+                from:
+                    "Kolkata",
+
+                to:
+                    "Salt Lake",
+
+                date:
+                    "08 Aug 2026",
+
+                time:
+                    "03:30 PM",
+
+                driver:
+                    "RideSync Driver",
+
+                vehicle:
+                    "Sedan",
+
+                bookingId:
+                    "RSBK" +
+                    Date.now()
+                        .toString()
+                        .slice(-6)
+
+            }
+
+        };
+
+    }
+
+
+    /* =====================================================
+       RIDE DATA
+       ===================================================== */
+
+    const ride =
+        payment.ride &&
+        typeof payment.ride === "object"
+            ? payment.ride
+            : {};
+
+
+    /* =====================================================
+       FINAL VALUES
+       ===================================================== */
+
+    const amount =
+        Number(
+            payment.amount || 180
+        );
+
+
+    const method =
+        payment.method ||
+        "UPI";
+
+
+    const transactionId =
+        payment.transactionId ||
+        "RS" +
+        Date.now();
+
+
+    const paymentDate =
+        payment.date ||
+        new Date().toISOString();
+
+
+    const from =
+        ride.from ||
+        "Kolkata";
+
+
+    const to =
+        ride.to ||
+        "Salt Lake";
+
+
+    const rideDate =
+        ride.date ||
+        "08 Aug 2026";
+
+
+    const rideTime =
+        ride.time ||
+        "03:30 PM";
+
+
+    const driver =
+        ride.driver ||
+        "RideSync Driver";
+
+
+    const vehicle =
+        ride.vehicle ||
+        "Sedan";
+
+
+    const bookingId =
+        ride.bookingId ||
+        "RSBK" +
+        Date.now()
+            .toString()
+            .slice(-6);
+
+
+    /* =====================================================
+       DISPLAY DATA
+       ===================================================== */
+
+    document.getElementById(
+        "fare"
+    ).textContent =
+        "₹" +
+        amount.toLocaleString(
+            "en-IN"
+        );
+
+
+    document.getElementById(
+        "method"
+    ).textContent =
+        method;
+
+
+    document.getElementById(
+        "transaction"
+    ).textContent =
+        transactionId;
+
+
+    document.getElementById(
+        "paymentDate"
+    ).textContent =
+        formatDate(
+            paymentDate
+        );
+
+
+    document.getElementById(
+        "from"
+    ).textContent =
+        from;
+
+
+    document.getElementById(
+        "to"
+    ).textContent =
+        to;
+
+
+    document.getElementById(
+        "rideDate"
+    ).textContent =
+        rideDate;
+
+
+    document.getElementById(
+        "rideTime"
+    ).textContent =
+        rideTime;
+
+
+    document.getElementById(
+        "driver"
+    ).textContent =
+        driver;
+
+
+    document.getElementById(
+        "vehicle"
+    ).textContent =
+        vehicle;
+
+
+    document.getElementById(
+        "bookingId"
+    ).textContent =
+        bookingId;
+
+
+    /* =====================================================
+       DATE FORMATTER
+       ===================================================== */
+
+    function formatDate(
+        value
+    ) {
+
+        const date =
+            new Date(value);
+
+
+        if (
+            Number.isNaN(
+                date.getTime()
+            )
+        ) {
+
+            return String(value);
+
+        }
+
+
+        return date.toLocaleDateString(
+            "en-IN",
+            {
+                day:
+                    "2-digit",
+
+                month:
+                    "short",
+
+                year:
+                    "numeric"
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       BACK BUTTON
+       ===================================================== */
+
+    function goBack() {
+
+        window.location.href =
+            "payment-success.html";
+
+    }
+
+
+    /* =====================================================
+       DOWNLOAD PREMIUM PDF
+       ===================================================== */
+
+    async function downloadBill() {
+
+        const button =
+            document.getElementById(
+                "downloadButton"
+            );
+
+
+        /* ---------------------------------------------
+           CHECK PDF LIBRARY
+           --------------------------------------------- */
+
+        if (
+            !window.jspdf ||
+            !window.jspdf.jsPDF
+        ) {
+
+            alert(
+                "PDF generator is still loading. Please try again."
+            );
+
+            return;
+
+        }
+
+
+        /* ---------------------------------------------
+           BUTTON STATE
+           --------------------------------------------- */
+
+        button.disabled =
+            true;
+
+        button.textContent =
+            "GENERATING PDF...";
+
+
+        try {
+
+            const {
+                jsPDF
+            } = window.jspdf;
+
+
+            const doc =
+                new jsPDF(
+                    {
+                        orientation:
+                            "portrait",
+
+                        unit:
+                            "mm",
+
+                        format:
+                            "a4"
+                    }
+                );
+
+
+            /* =================================================
+               PAGE BACKGROUND
+               ================================================= */
+
+            doc.setFillColor(
+                248,
+                251,
+                255
+            );
+
+            doc.rect(
+                0,
+                0,
+                210,
+                297,
+                "F"
+            );
+
+
+            /* =================================================
+               HEADER BLUE
+               ================================================= */
+
+            doc.setFillColor(
+                37,
+                99,
+                235
+            );
+
+            doc.roundedRect(
+                15,
+                15,
+                180,
+                36,
+                6,
+                6,
+                "F"
+            );
+
+
+            doc.setTextColor(
+                255,
+                255,
+                255
+            );
+
+
+            doc.setFont(
+                "helvetica",
+                "bold"
+            );
+
+
+            doc.setFontSize(
+                20
+            );
+
+
+            doc.text(
+                "RIDESYNC",
+                25,
+                31
+            );
+
+
+            doc.setFontSize(
+                8
+            );
+
+
+            doc.setFont(
+                "helvetica",
+                "normal"
+            );
+
+
+            doc.text(
+                "PREMIUM RIDE PAYMENT RECEIPT",
+                25,
+                42
+            );
+
+
+            /* =================================================
+               SUCCESS BOX
+               ================================================= */
+
+            doc.setFillColor(
+                239,
+                246,
+                255
+            );
+
+
+            doc.roundedRect(
+                15,
+                60,
+                180,
+                28,
+                6,
+                6,
+                "F"
+            );
+
+
+            doc.setTextColor(
+                37,
+                99,
+                235
+            );
+
+
+            doc.setFont(
+                "helvetica",
+                "bold"
+            );
+
+
+            doc.setFontSize(
+                12
+            );
+
+
+            doc.text(
+                "✓ PAYMENT SUCCESSFUL",
+                25,
+                77
+            );
+
+
+            doc.setFontSize(
+                8
+            );
+
+
+            doc.setFont(
+                "helvetica",
+                "normal"
+            );
+
+
+            doc.setTextColor(
+                71,
+                85,
+                105
+            );
+
+
+            doc.text(
+                "Your RideSync booking payment has been securely recorded.",
+                25,
+                83
+            );
+
+
+            /* =================================================
+               HELPER
+               ================================================= */
+
+            function drawSectionTitle(
+                title,
+                y
+            ) {
+
+                doc.setTextColor(
+                    15,
+                    23,
+                    42
+                );
+
+
+                doc.setFont(
+                    "helvetica",
+                    "bold"
+                );
+
+
+                doc.setFontSize(
+                    12
+                );
+
+
+                doc.text(
+                    title,
+                    20,
+                    y
+                );
+
+            }
+
+
+            function drawRow(
+                label,
+                value,
+                y
+            ) {
+
+                doc.setFont(
+                    "helvetica",
+                    "normal"
+                );
+
+
+                doc.setFontSize(
+                    8
+                );
+
+
+                doc.setTextColor(
+                    100,
+                    116,
+                    139
+                );
+
+
+                doc.text(
+                    label,
+                    25,
+                    y
+                );
+
+
+                doc.setFont(
+                    "helvetica",
+                    "bold"
+                );
+
+
+                doc.setTextColor(
+                    15,
+                    23,
+                    42
+                );
+
+
+                doc.text(
+                    String(value),
+                    110,
+                    y
+                );
+
+
+                doc.setDrawColor(
+                    226,
+                    232,
+                    240
+                );
+
+
+                doc.line(
+                    20,
+                    y + 4,
+                    190,
+                    y + 4
+                );
+
+            }
+
+
+            /* =================================================
+               BOOKING DETAILS
+               ================================================= */
+
+            drawSectionTitle(
+                "BOOKING DETAILS",
+                105
+            );
+
+
+            drawRow(
+                "Booking ID",
+                bookingId,
+                119
+            );
+
+
+            drawRow(
+                "Pickup",
+                from,
+                131
+            );
+
+
+            drawRow(
+                "Drop",
+                to,
+                143
+            );
+
+
+            drawRow(
+                "Ride Date",
+                rideDate,
+                155
+            );
+
+
+            drawRow(
+                "Ride Time",
+                rideTime,
+                167
+            );
+
+
+            drawRow(
+                "Vehicle",
+                vehicle,
+                179
+            );
+
+
+            drawRow(
+                "Driver",
+                driver,
+                191
+            );
+
+
+            /* =================================================
+               PAYMENT DETAILS
+               ================================================= */
+
+            drawSectionTitle(
+                "PAYMENT DETAILS",
+                217
+            );
+
+
+            drawRow(
+                "Payment Method",
+                method,
+                231
+            );
+
+
+            drawRow(
+                "Transaction ID",
+                transactionId,
+                243
+            );
+
+
+            drawRow(
+                "Payment Date",
+                formatDate(paymentDate),
+                255
+            );
+
+
+            /* =================================================
+               TOTAL BOX
+               ================================================= */
+
+            doc.setFillColor(
+                37,
+                99,
+                235
+            );
+
+
+            doc.roundedRect(
+                15,
+                266,
+                180,
+                19,
+                5,
+                5,
+                "F"
+            );
+
+
+            doc.setTextColor(
+                255,
+                255,
+                255
+            );
+
+
+            doc.setFont(
+                "helvetica",
+                "bold"
+            );
+
+
+            doc.setFontSize(
+                9
+            );
+
+
+            doc.text(
+                "TOTAL PAID",
+                25,
+                278
+            );
+
+
+            doc.setFontSize(
+                15
+            );
+
+
+            doc.text(
+                "₹" +
+                amount.toLocaleString(
+                    "en-IN"
+                ),
+                160,
+                278
+            );
+
+
+            /* =================================================
+               FOOTER
+               ================================================= */
+
+            doc.setTextColor(
+                100,
+                116,
+                139
+            );
+
+
+            doc.setFont(
+                "helvetica",
+                "normal"
+            );
+
+
+            doc.setFontSize(
+                7
+            );
+
+
+            doc.text(
+                "Thank you for choosing RideSync.",
+                105,
+                292,
+                {
+                    align:
+                        "center"
+                }
+            );
+
+
+            /* =================================================
+               SAVE PDF
+               ================================================= */
+
+            doc.save(
+                "RideSync-Bill-" +
+                bookingId +
+                ".pdf"
+            );
+
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "PDF generation failed:",
+                error
+            );
+
+
+            alert(
+                "Unable to generate the PDF bill. Please try again."
+            );
+
+        }
+
+
+        finally {
+
+            button.disabled =
+                false;
+
+            button.textContent =
+                "↓ DOWNLOAD PDF BILL";
+
+        }
+
+    }
+
+</script>
+
+
+</body>
+
+</html>

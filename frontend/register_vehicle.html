@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+
+<html lang="en" class="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+```
+<title>Register Vehicle - Step 1 | RideSync</title>
+
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- Google Font -->
+<link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+>
+
+<!-- Material Icons -->
+<link
+    href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
+    rel="stylesheet"
+>
+
+<!-- Tailwind Configuration -->
+<script>
+    tailwind.config = {
+        darkMode: "class",
+
+        theme: {
+            extend: {
+                colors: {
+                    primary: "#0052ff",
+                    "primary-container": "#dbeafe",
+                    "on-primary-container": "#001a41",
+
+                    surface: "#f9f9f9",
+                    "surface-container": "#f3f3f3",
+                    "surface-container-low": "#f9f9f9",
+                    "surface-container-high": "#ececec",
+
+                    "on-surface": "#1a1a1a",
+                    "on-surface-variant": "#444444",
+
+                    outline: "#dadada",
+                    "outline-variant": "#eeeeee"
+                },
+
+                fontFamily: {
+                    sans: ["Plus Jakarta Sans", "sans-serif"]
+                },
+
+                borderRadius: {
+                    xl: "12px",
+                    "2xl": "16px",
+                    "3xl": "24px"
+                }
+            }
+        }
+    };
+</script>
+
+
+<!-- Custom CSS -->
+<style>
+    body {
+        font-family: "Plus Jakarta Sans", sans-serif;
+    }
+
+    .glass-sidebar {
+        border-right: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .active-nav {
+        background: rgba(0, 82, 255, 0.06);
+        color: #0052ff;
+        font-weight: 600;
+    }
+
+    .type-card {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .type-card.selected {
+        border-color: #0052ff;
+        background: rgba(0, 82, 255, 0.02);
+        box-shadow: 0 20px 30px rgba(0, 82, 255, 0.05);
+    }
+
+    .radio-indicator {
+        transition: all 0.2s ease;
+    }
+</style>
+```
+
+</head>
+
+<body class="bg-surface text-on-surface flex h-screen overflow-hidden">
+
+```
+<!-- =====================================================
+     SIDEBAR NAVIGATION
+====================================================== -->
+<aside class="w-64 glass-sidebar bg-white flex flex-col shrink-0">
+
+    <!-- Logo -->
+    <div class="p-8 pb-4">
+        <h1 class="text-2xl font-extrabold tracking-tighter text-primary">
+            RideSync
+        </h1>
+    </div>
+
+
+    <!-- Navigation -->
+    <nav class="flex-1 px-4 mt-8 space-y-1">
+
+        <!-- Dashboard -->
+        <a
+            href="#"
+            class="flex items-center px-4 py-3
+                   text-on-surface-variant
+                   hover:bg-surface-container
+                   rounded-xl transition-colors"
+        >
+            <span class="material-icons-outlined mr-3">
+                dashboard
+            </span>
+
+            <span class="text-sm font-medium">
+                Dashboard
+            </span>
+        </a>
+
+
+        <!-- Account -->
+        <a
+            href="#"
+            class="flex items-center px-4 py-3
+                   active-nav rounded-xl"
+        >
+            <span class="material-icons-outlined mr-3">
+                person
+            </span>
+
+            <span class="text-sm">
+                Account
+            </span>
+        </a>
+
+    </nav>
+
+
+    <!-- Profile -->
+    <div
+        class="p-6 mt-auto border-t border-outline-variant
+               flex items-center"
+    >
+
+        <img
+            src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=100"
+            alt="Mrigank Sharma"
+            class="w-10 h-10 rounded-full object-cover mr-3"
+        >
+
+        <div class="overflow-hidden">
+
+            <p class="text-xs font-bold truncate">
+                Mrigank Sharma
+            </p>
+
+            <p class="text-[10px] text-on-surface-variant font-medium">
+                Driver Partner
+            </p>
+
+        </div>
+
+    </div>
+
+</aside>
+
+
+<!-- =====================================================
+     MAIN CONTENT
+====================================================== -->
+<main class="flex-1 bg-white ml-1 flex flex-col">
+
+
+    <!-- =================================================
+         HEADER / BACK BUTTON / PROGRESS
+    ================================================== -->
+    <div class="px-10 py-8">
+
+        <!-- Back Button -->
+        <button
+            type="button"
+            onclick="goBack()"
+            class="flex items-center text-sm font-semibold
+                   text-on-surface-variant
+                   hover:text-primary transition-colors mb-8"
+        >
+
+            <span class="material-icons-outlined text-lg mr-2">
+                arrow_back
+            </span>
+
+            Back
+
+        </button>
+
+
+        <!-- Progress -->
+        <div class="max-w-4xl">
+
+            <div
+                class="flex items-center justify-between mb-4"
+            >
+
+                <span
+                    class="text-[10px] font-bold
+                           uppercase tracking-widest text-primary"
+                >
+                    Step 1 of 3
+                </span>
+
+                <span
+                    class="text-[10px] font-bold
+                           uppercase tracking-widest
+                           text-on-surface-variant"
+                >
+                    Vehicle Details
+                </span>
+
+            </div>
+
+
+            <!-- Progress Bar -->
+            <div
+                class="w-full h-1.5 bg-surface-container
+                       rounded-full overflow-hidden"
+            >
+
+                <div
+                    class="w-1/3 h-full bg-primary
+                           rounded-full"
+                ></div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         SELECTION CONTENT
+    ================================================== -->
+    <div class="flex-1 px-10 overflow-y-auto">
+
+        <div class="max-w-4xl pb-10">
+
+            <!-- Heading -->
+            <h2 class="text-4xl font-extrabold tracking-tight mb-3">
+                Select Vehicle Type
+            </h2>
+
+            <p
+                class="text-on-surface-variant font-medium mb-12"
+            >
+                Choose the type of vehicle you will be registering
+                to drive on the RideSync platform.
+            </p>
+
+
+            <!-- =================================================
+                 VEHICLE TYPE OPTIONS
+            ================================================== -->
+            <div
+                class="grid grid-cols-1 md:grid-cols-3
+                       gap-6 mb-12"
+            >
+
+
+                <!-- =================================================
+                     CAR
+                ================================================== -->
+                <label
+                    class="type-card selected relative cursor-pointer
+                           border-2 border-primary
+                           rounded-[32px] p-8 flex flex-col
+                           h-full hover:shadow-xl
+                           hover:shadow-primary/5"
+                >
+
+                    <input
+                        type="radio"
+                        name="vehicle_type"
+                        value="car"
+                        checked
+                        class="hidden"
+                    >
+
+
+                    <!-- Selection Indicator -->
+                    <div
+                        class="selection-indicator absolute
+                               top-6 right-6 w-6 h-6
+                               bg-primary text-white
+                               rounded-full flex items-center
+                               justify-center"
+                    >
+
+                        <span class="material-icons-outlined text-sm">
+                            check
+                        </span>
+
+                    </div>
+
+
+                    <!-- Icon -->
+                    <div
+                        class="w-14 h-14
+                               bg-surface-container-high
+                               rounded-2xl flex items-center
+                               justify-center mb-10"
+                    >
+
+                        <span class="material-icons-outlined text-3xl">
+                            directions_car
+                        </span>
+
+                    </div>
+
+
+                    <h3 class="text-2xl font-bold mb-3">
+                        Car
+                    </h3>
+
+                    <p
+                        class="text-sm text-on-surface-variant
+                               leading-relaxed"
+                    >
+                        Standard 4-door vehicle. Best for
+                        passenger rides and high earnings.
+                    </p>
+
+                </label>
+
+
+                <!-- =================================================
+                     BIKE
+                ================================================== -->
+                <label
+                    class="type-card relative cursor-pointer
+                           border-2 border-outline
+                           rounded-[32px] p-8 flex flex-col
+                           h-full hover:border-primary/40
+                           hover:bg-primary/[0.02]"
+                >
+
+                    <input
+                        type="radio"
+                        name="vehicle_type"
+                        value="bike"
+                        class="hidden"
+                    >
+
+
+                    <!-- Selection Indicator -->
+                    <div
+                        class="selection-indicator absolute
+                               top-6 right-6 w-6 h-6
+                               border-2 border-outline
+                               rounded-full flex items-center
+                               justify-center"
+                    ></div>
+
+
+                    <!-- Icon -->
+                    <div
+                        class="w-14 h-14
+                               bg-surface-container-high
+                               rounded-2xl flex items-center
+                               justify-center mb-10"
+                    >
+
+                        <span class="material-icons-outlined text-3xl">
+                            two_wheeler
+                        </span>
+
+                    </div>
+
+
+                    <h3 class="text-2xl font-bold mb-3">
+                        Bike
+                    </h3>
+
+                    <p
+                        class="text-sm text-on-surface-variant
+                               leading-relaxed"
+                    >
+                        Motorcycle or moped. Ideal for quick
+                        city navigation and deliveries.
+                    </p>
+
+                </label>
+
+
+                <!-- =================================================
+                     SCOOTER
+                ================================================== -->
+                <label
+                    class="type-card relative cursor-pointer
+                           border-2 border-outline
+                           rounded-[32px] p-8 flex flex-col
+                           h-full hover:border-primary/40
+                           hover:bg-primary/[0.02]"
+                >
+
+                    <input
+                        type="radio"
+                        name="vehicle_type"
+                        value="scooter"
+                        class="hidden"
+                    >
+
+
+                    <!-- Selection Indicator -->
+                    <div
+                        class="selection-indicator absolute
+                               top-6 right-6 w-6 h-6
+                               border-2 border-outline
+                               rounded-full flex items-center
+                               justify-center"
+                    ></div>
+
+
+                    <!-- Icon -->
+                    <div
+                        class="w-14 h-14
+                               bg-surface-container-high
+                               rounded-2xl flex items-center
+                               justify-center mb-10"
+                    >
+
+                        <span class="material-icons-outlined text-3xl">
+                            electric_scooter
+                        </span>
+
+                    </div>
+
+
+                    <h3 class="text-2xl font-bold mb-3">
+                        Scooter
+                    </h3>
+
+                    <p
+                        class="text-sm text-on-surface-variant
+                               leading-relaxed"
+                    >
+                        Electric or manual scooter. Perfect
+                        for short-distance micro-mobility tasks.
+                    </p>
+
+                </label>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         FOOTER CTA
+    ================================================== -->
+    <div
+        class="p-10 border-t border-outline-variant
+               bg-white flex justify-end"
+    >
+
+        <button
+            type="button"
+            onclick="continueToDetails()"
+            class="bg-primary text-white px-10 py-4
+                   rounded-2xl font-bold flex items-center
+                   hover:opacity-90 active:scale-95
+                   transition-all shadow-lg
+                   shadow-blue-500/20"
+        >
+
+            Continue to Details
+
+            <span class="material-icons-outlined ml-2">
+                arrow_forward
+            </span>
+
+        </button>
+
+    </div>
+
+</main>
+
+
+<!-- =====================================================
+     JAVASCRIPT
+====================================================== -->
+<script>
+
+    /*
+     * Vehicle Type Selection
+     */
+    const vehicleCards =
+        document.querySelectorAll(".type-card");
+
+    const vehicleInputs =
+        document.querySelectorAll(
+            'input[name="vehicle_type"]'
+        );
+
+
+    vehicleInputs.forEach(function (input) {
+
+        input.addEventListener("change", function () {
+
+            /*
+             * Remove selected state from all cards
+             */
+            vehicleCards.forEach(function (card) {
+
+                card.classList.remove("selected");
+
+                const indicator =
+                    card.querySelector(
+                        ".selection-indicator"
+                    );
+
+                indicator.classList.remove(
+                    "bg-primary",
+                    "text-white"
+                );
+
+                indicator.classList.add(
+                    "border-2",
+                    "border-outline"
+                );
+
+                indicator.innerHTML = "";
+
+            });
+
+
+            /*
+             * Add selected state to current card
+             */
+            const selectedCard =
+                input.closest(".type-card");
+
+            selectedCard.classList.add("selected");
+
+
+            const selectedIndicator =
+                selectedCard.querySelector(
+                    ".selection-indicator"
+                );
+
+
+            selectedIndicator.classList.remove(
+                "border-2",
+                "border-outline"
+            );
+
+            selectedIndicator.classList.add(
+                "bg-primary",
+                "text-white"
+            );
+
+
+            selectedIndicator.innerHTML = `
+                <span class="material-icons-outlined text-sm">
+                    check
+                </span>
+            `;
+
+        });
+
+    });
+
+
+    /*
+     * Continue to Step 2
+     */
+    function continueToDetails() {
+
+        const selectedVehicle =
+            document.querySelector(
+                'input[name="vehicle_type"]:checked'
+            );
+
+
+        if (!selectedVehicle) {
+
+            alert(
+                "Please select a vehicle type first."
+            );
+
+            return;
+        }
+
+
+        const vehicleType =
+            selectedVehicle.value;
+
+
+        /*
+         * Store selection for the next step.
+         * This can later be replaced with a backend/API call.
+         */
+        localStorage.setItem(
+            "ridesync_vehicle_type",
+            vehicleType
+        );
+
+
+        /*
+         * Temporary demonstration.
+         * Replace this with your Step 2 page URL.
+         */
+        alert(
+            `You selected: ${
+                vehicleType.charAt(0).toUpperCase() +
+                vehicleType.slice(1)
+            }\n\nProceeding to vehicle details...`
+        );
+
+    }
+
+
+    /*
+     * Back Button
+     */
+    function goBack() {
+
+        /*
+         * If browser history exists, go back.
+         * Otherwise show a message.
+         */
+        if (window.history.length > 1) {
+
+            window.history.back();
+
+        } else {
+
+            alert(
+                "There is no previous page."
+            );
+
+        }
+
+    }
+
+</script>
+```
+
+</body>
+
+</html>

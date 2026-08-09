@@ -1,0 +1,2175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#ffffff"
+    >
+
+    <meta
+        name="description"
+        content="RideSync Trip Booking"
+    >
+
+    <title>RideSync â€” Confirm Trip</title>
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <style>
+
+        /* =====================================================
+           RIDESYNC
+           PREMIUM TRIP BOOKING
+           SINGLE FILE
+        ===================================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        :root {
+
+            --black: #07090c;
+            --black-2: #11151b;
+
+            --blue: #1677ff;
+            --blue-dark: #075ed7;
+            --blue-soft: #edf5ff;
+
+            --white: #ffffff;
+            --bg: #f5f7fb;
+
+            --text: #10141a;
+            --muted: #778190;
+            --border: #e6eaf0;
+
+            --green: #20a464;
+            --red: #dc4b4b;
+
+            --shadow:
+                0 25px 70px rgba(10, 20, 35, .08);
+
+        }
+
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+
+            min-height: 100vh;
+
+            font-family:
+                "Inter",
+                sans-serif;
+
+            color: var(--text);
+
+            background:
+                radial-gradient(
+                    circle at 85% 5%,
+                    rgba(22,119,255,.09),
+                    transparent 30%
+                ),
+                var(--bg);
+
+            overflow-x: hidden;
+
+        }
+
+
+        button {
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+
+        /* =====================================================
+           HEADER
+        ===================================================== */
+
+        .topbar {
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 100;
+
+            height: 76px;
+
+            padding: 0 42px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            background:
+                rgba(255,255,255,.90);
+
+            border-bottom:
+                1px solid
+                rgba(225,230,237,.9);
+
+            backdrop-filter:
+                blur(20px);
+
+        }
+
+
+        .brand {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 11px;
+
+        }
+
+
+        .brand-logo {
+
+            width: 42px;
+            height: 42px;
+
+            display: grid;
+
+            place-items: center;
+
+            border-radius: 12px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #050505,
+                    #292f37
+                );
+
+            color: white;
+
+            font-size: 20px;
+
+            font-weight: 900;
+
+            box-shadow:
+                0 9px 25px
+                rgba(0,0,0,.14);
+
+        }
+
+
+        .brand-name {
+
+            font-size: 20px;
+
+            font-weight: 900;
+
+            letter-spacing: -1px;
+
+        }
+
+
+        .brand-name span {
+            color: var(--blue);
+        }
+
+
+        .secure-badge {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            padding: 9px 13px;
+
+            border:
+                1px solid
+                #dfeee6;
+
+            border-radius: 10px;
+
+            background: #f4fbf7;
+
+            color: var(--green);
+
+            font-size: 9px;
+
+            font-weight: 800;
+
+            letter-spacing: .5px;
+
+        }
+
+
+        .secure-dot {
+
+            width: 7px;
+            height: 7px;
+
+            border-radius: 50%;
+
+            background: var(--green);
+
+            box-shadow:
+                0 0 0 4px
+                rgba(32,164,100,.10);
+
+        }
+
+
+        /* =====================================================
+           PAGE
+        ===================================================== */
+
+        .page {
+
+            width: 100%;
+
+            max-width: 1250px;
+
+            margin: auto;
+
+            padding:
+                42px 30px 70px;
+
+        }
+
+
+        .back-button {
+
+            border: 0;
+
+            background: transparent;
+
+            color: #687280;
+
+            font-size: 11px;
+
+            font-weight: 800;
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            margin-bottom: 25px;
+
+            transition: .2s;
+
+        }
+
+
+        .back-button:hover {
+            color: var(--blue);
+            transform: translateX(-3px);
+        }
+
+
+        .eyebrow {
+
+            color: var(--blue);
+
+            font-size: 9px;
+
+            font-weight: 900;
+
+            letter-spacing: 2px;
+
+        }
+
+
+        .page-title {
+
+            margin-top: 8px;
+
+            font-size:
+                clamp(28px, 4vw, 43px);
+
+            line-height: 1.05;
+
+            letter-spacing: -1.8px;
+
+            font-weight: 900;
+
+        }
+
+
+        .page-title span {
+            color: var(--blue);
+        }
+
+
+        .page-subtitle {
+
+            max-width: 620px;
+
+            margin-top: 10px;
+
+            color: var(--muted);
+
+            font-size: 12px;
+
+            line-height: 1.7;
+
+        }
+
+
+        /* =====================================================
+           MAIN GRID
+        ===================================================== */
+
+        .booking-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                minmax(0, 1.45fr)
+                minmax(330px, .75fr);
+
+            gap: 22px;
+
+            margin-top: 32px;
+
+        }
+
+
+        /* =====================================================
+           CARD
+        ===================================================== */
+
+        .card {
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius: 22px;
+
+            background:
+                rgba(255,255,255,.95);
+
+            box-shadow:
+                var(--shadow);
+
+            overflow: hidden;
+
+        }
+
+
+        .card-header {
+
+            padding: 23px 25px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            border-bottom:
+                1px solid
+                var(--border);
+
+        }
+
+
+        .card-title {
+
+            font-size: 14px;
+
+            font-weight: 900;
+
+        }
+
+
+        .card-subtitle {
+
+            margin-top: 4px;
+
+            color: var(--muted);
+
+            font-size: 9px;
+
+        }
+
+
+        .status-pill {
+
+            padding:
+                7px 10px;
+
+            border-radius: 8px;
+
+            background:
+                var(--blue-soft);
+
+            color:
+                var(--blue);
+
+            font-size: 8px;
+
+            font-weight: 900;
+
+            letter-spacing: .7px;
+
+        }
+
+
+        .card-body {
+            padding: 25px;
+        }
+
+
+        /* =====================================================
+           ROUTE
+        ===================================================== */
+
+        .route-box {
+
+            padding: 21px;
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius: 17px;
+
+            background:
+                #fafbfd;
+
+        }
+
+
+        .route-row {
+
+            position: relative;
+
+            display: flex;
+
+            gap: 16px;
+
+            min-height: 75px;
+
+        }
+
+
+        .route-line {
+
+            position: absolute;
+
+            left: 6px;
+
+            top: 16px;
+
+            bottom: 16px;
+
+            width: 2px;
+
+            background:
+                linear-gradient(
+                    to bottom,
+                    var(--blue),
+                    #16191d
+                );
+
+        }
+
+
+        .route-marker {
+
+            position: relative;
+
+            z-index: 2;
+
+            width: 14px;
+            height: 14px;
+
+            margin-top: 3px;
+
+            flex-shrink: 0;
+
+            border:
+                4px solid
+                var(--blue);
+
+            border-radius: 50%;
+
+            background: white;
+
+        }
+
+
+        .route-marker.destination {
+
+            border-color:
+                var(--black);
+
+        }
+
+
+        .route-content {
+
+            min-width: 0;
+
+        }
+
+
+        .route-label {
+
+            color:
+                #9aa3af;
+
+            font-size: 8px;
+
+            font-weight: 900;
+
+            letter-spacing: 1px;
+
+        }
+
+
+        .route-location {
+
+            margin-top: 5px;
+
+            color:
+                var(--text);
+
+            font-size: 13px;
+
+            line-height: 1.45;
+
+            font-weight: 800;
+
+            word-break: break-word;
+
+        }
+
+
+        /* =====================================================
+           JOURNEY META
+        ===================================================== */
+
+        .journey-meta {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 10px;
+
+            margin-top: 18px;
+
+        }
+
+
+        .meta-item {
+
+            padding: 14px;
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius: 13px;
+
+            background: white;
+
+        }
+
+
+        .meta-label {
+
+            color:
+                #9aa3af;
+
+            font-size: 8px;
+
+            font-weight: 800;
+
+            letter-spacing: .7px;
+
+        }
+
+
+        .meta-value {
+
+            margin-top: 6px;
+
+            color:
+                var(--text);
+
+            font-size: 11px;
+
+            font-weight: 850;
+
+        }
+
+
+        /* =====================================================
+           DRIVER
+        ===================================================== */
+
+        .driver-section {
+
+            margin-top: 22px;
+
+        }
+
+
+        .driver-card {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 14px;
+
+            padding: 17px;
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius: 15px;
+
+            background: white;
+
+        }
+
+
+        .driver-avatar {
+
+            width: 49px;
+            height: 49px;
+
+            display: grid;
+
+            place-items: center;
+
+            border-radius: 14px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #111318,
+                    #303640
+                );
+
+            color: white;
+
+            font-size: 14px;
+
+            font-weight: 900;
+
+            flex-shrink: 0;
+
+        }
+
+
+        .driver-info {
+
+            flex: 1;
+
+            min-width: 0;
+
+        }
+
+
+        .driver-name {
+
+            font-size: 12px;
+
+            font-weight: 900;
+
+        }
+
+
+        .driver-role {
+
+            margin-top: 4px;
+
+            color: var(--muted);
+
+            font-size: 9px;
+
+        }
+
+
+        .verified {
+
+            padding:
+                6px 9px;
+
+            border-radius: 8px;
+
+            background:
+                #effaf5;
+
+            color:
+                var(--green);
+
+            font-size: 8px;
+
+            font-weight: 900;
+
+        }
+
+
+        /* =====================================================
+           VEHICLE
+        ===================================================== */
+
+        .vehicle-card {
+
+            margin-top: 12px;
+
+            padding: 17px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 14px;
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius: 15px;
+
+            background:
+                #fafbfd;
+
+        }
+
+
+        .vehicle-icon {
+
+            width: 44px;
+            height: 44px;
+
+            display: grid;
+
+            place-items: center;
+
+            border-radius: 12px;
+
+            background:
+                var(--blue-soft);
+
+            color:
+                var(--blue);
+
+            font-size: 20px;
+
+        }
+
+
+        .vehicle-info {
+            flex: 1;
+        }
+
+
+        .vehicle-name {
+
+            font-size: 11px;
+
+            font-weight: 850;
+
+        }
+
+
+        .vehicle-number {
+
+            margin-top: 4px;
+
+            color: var(--muted);
+
+            font-size: 9px;
+
+        }
+
+
+        /* =====================================================
+           RIGHT SUMMARY
+        ===================================================== */
+
+        .summary-card {
+
+            position: sticky;
+
+            top: 100px;
+
+        }
+
+
+        .summary-top {
+
+            padding: 27px;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #07090c,
+                    #151b24
+                );
+
+        }
+
+
+        .summary-kicker {
+
+            color:
+                #70afff;
+
+            font-size: 8px;
+
+            font-weight: 900;
+
+            letter-spacing: 1.8px;
+
+        }
+
+
+        .summary-heading {
+
+            margin-top: 8px;
+
+            font-size: 23px;
+
+            font-weight: 900;
+
+            letter-spacing: -.8px;
+
+        }
+
+
+        .summary-heading span {
+            color: #55a5ff;
+        }
+
+
+        .fare-box {
+
+            margin-top: 24px;
+
+            padding: 19px;
+
+            border:
+                1px solid
+                rgba(255,255,255,.1);
+
+            border-radius: 15px;
+
+            background:
+                rgba(255,255,255,.055);
+
+        }
+
+
+        .fare-label {
+
+            color:
+                #98a2b0;
+
+            font-size: 8px;
+
+            font-weight: 800;
+
+            letter-spacing: 1px;
+
+        }
+
+
+        .fare {
+
+            margin-top: 5px;
+
+            font-size: 34px;
+
+            font-weight: 900;
+
+            letter-spacing: -1.5px;
+
+        }
+
+
+        .fare-note {
+
+            margin-top: 3px;
+
+            color:
+                #8e98a6;
+
+            font-size: 8px;
+
+        }
+
+
+        .summary-body {
+
+            padding: 22px;
+
+        }
+
+
+        .summary-line {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding: 12px 0;
+
+            border-bottom:
+                1px solid
+                #eef1f5;
+
+        }
+
+
+        .summary-line:last-child {
+            border-bottom: 0;
+        }
+
+
+        .summary-label {
+
+            color:
+                var(--muted);
+
+            font-size: 10px;
+
+        }
+
+
+        .summary-value {
+
+            color:
+                var(--text);
+
+            font-size: 10px;
+
+            font-weight: 800;
+
+            text-align: right;
+
+            max-width: 190px;
+
+        }
+
+
+        /* =====================================================
+           CONFIRM
+        ===================================================== */
+
+        .confirm-area {
+
+            padding: 0 22px 22px;
+
+        }
+
+
+        .confirm-button {
+
+            width: 100%;
+
+            height: 55px;
+
+            border: 0;
+
+            border-radius: 14px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #050505,
+                    #242a32
+                );
+
+            color: white;
+
+            font-size: 11px;
+
+            font-weight: 900;
+
+            letter-spacing: .3px;
+
+            box-shadow:
+                0 15px 30px
+                rgba(0,0,0,.16);
+
+            transition: .25s;
+
+        }
+
+
+        .confirm-button:hover {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--blue-dark),
+                    var(--blue)
+                );
+
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 18px 35px
+                rgba(22,119,255,.22);
+
+        }
+
+
+        .confirm-button:disabled {
+
+            opacity: .6;
+
+            cursor: not-allowed;
+
+            transform: none;
+
+        }
+
+
+        .security-note {
+
+            margin-top: 13px;
+
+            text-align: center;
+
+            color:
+                #9aa3af;
+
+            font-size: 8px;
+
+            line-height: 1.5;
+
+        }
+
+
+        /* =====================================================
+           ERROR
+        ===================================================== */
+
+        .error-state {
+
+            display: none;
+
+            max-width: 600px;
+
+            margin: 100px auto;
+
+            padding: 35px;
+
+            text-align: center;
+
+            border:
+                1px solid
+                #ffdada;
+
+            border-radius: 20px;
+
+            background: white;
+
+            box-shadow: var(--shadow);
+
+        }
+
+
+        .error-state.show {
+            display: block;
+        }
+
+
+        .error-icon {
+
+            width: 55px;
+            height: 55px;
+
+            margin: auto;
+
+            display: grid;
+
+            place-items: center;
+
+            border-radius: 16px;
+
+            background:
+                #fff1f1;
+
+            color:
+                var(--red);
+
+            font-size: 24px;
+
+        }
+
+
+        .error-state h2 {
+
+            margin-top: 17px;
+
+            font-size: 19px;
+
+        }
+
+
+        .error-state p {
+
+            margin-top: 8px;
+
+            color: var(--muted);
+
+            font-size: 11px;
+
+            line-height: 1.6;
+
+        }
+
+
+        .error-back {
+
+            margin-top: 20px;
+
+            height: 44px;
+
+            padding: 0 20px;
+
+            border: 0;
+
+            border-radius: 10px;
+
+            background:
+                var(--black);
+
+            color: white;
+
+            font-size: 10px;
+
+            font-weight: 800;
+
+        }
+
+
+        /* =====================================================
+           TOAST
+        ===================================================== */
+
+        .toast {
+
+            position: fixed;
+
+            right: 25px;
+
+            bottom: 25px;
+
+            z-index: 500;
+
+            max-width: 330px;
+
+            padding: 14px 17px;
+
+            border-radius: 13px;
+
+            background:
+                #080a0d;
+
+            color: white;
+
+            box-shadow:
+                0 18px 40px
+                rgba(0,0,0,.2);
+
+            font-size: 10px;
+
+            font-weight: 700;
+
+            opacity: 0;
+
+            pointer-events: none;
+
+            transform:
+                translateY(15px);
+
+            transition: .3s;
+
+        }
+
+
+        .toast.show {
+
+            opacity: 1;
+
+            transform:
+                translateY(0);
+
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 900px) {
+
+            .booking-grid {
+
+                grid-template-columns: 1fr;
+
+            }
+
+
+            .summary-card {
+
+                position: static;
+
+            }
+
+        }
+
+
+        @media (max-width: 650px) {
+
+            .topbar {
+
+                height: 68px;
+
+                padding:
+                    0 18px;
+
+            }
+
+
+            .secure-badge {
+                display: none;
+            }
+
+
+            .page {
+
+                padding:
+                    27px 15px 50px;
+
+            }
+
+
+            .page-title {
+
+                font-size: 31px;
+
+            }
+
+
+            .journey-meta {
+
+                grid-template-columns:
+                    1fr;
+
+            }
+
+
+            .card-body {
+
+                padding: 19px;
+
+            }
+
+
+            .card-header {
+
+                padding: 19px;
+
+            }
+
+
+            .summary-top {
+
+                padding: 22px;
+
+            }
+
+
+            .summary-body {
+
+                padding: 18px;
+
+            }
+
+
+            .confirm-area {
+
+                padding:
+                    0 18px 18px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         TOPBAR
+    ====================================================== -->
+
+    <header class="topbar">
+
+        <div class="brand">
+
+            <div class="brand-logo">
+                R
+            </div>
+
+            <div class="brand-name">
+                Ride<span>Sync</span>
+            </div>
+
+        </div>
+
+
+        <div class="secure-badge">
+
+            <span class="secure-dot"></span>
+
+            SECURE BOOKING
+
+        </div>
+
+    </header>
+
+
+    <!-- =====================================================
+         PAGE
+    ====================================================== -->
+
+    <main class="page">
+
+
+        <button
+            class="back-button"
+            id="backButton"
+        >
+            â† Back to rides
+        </button>
+
+
+        <div class="eyebrow">
+            TRIP BOOKING
+        </div>
+
+
+        <h1 class="page-title">
+            Confirm your <span>journey.</span>
+        </h1>
+
+
+        <p class="page-subtitle">
+
+            Review your route, schedule, vehicle and fare
+            before confirming your RideSync booking.
+
+        </p>
+
+
+        <!-- =================================================
+             ERROR STATE
+        ================================================== -->
+
+        <section
+            class="error-state"
+            id="errorState"
+        >
+
+            <div class="error-icon">
+                !
+            </div>
+
+            <h2>
+                No ride selected
+            </h2>
+
+            <p>
+                We couldn't find a selected RideSync trip.
+                Please go back to Find Ride or Offer Ride
+                and select a journey first.
+            </p>
+
+            <button
+                class="error-back"
+                id="errorBack"
+            >
+                â† Choose a ride
+            </button>
+
+        </section>
+
+
+        <!-- =================================================
+             BOOKING CONTENT
+        ================================================== -->
+
+        <section
+            class="booking-grid"
+            id="bookingContent"
+        >
+
+
+            <!-- =================================================
+                 LEFT
+            ================================================== -->
+
+            <div>
+
+
+                <!-- ROUTE CARD -->
+
+                <article class="card">
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <div class="card-title">
+                                Your journey
+                            </div>
+
+                            <div class="card-subtitle">
+                                Route selected from RideSync
+                            </div>
+
+                        </div>
+
+
+                        <div class="status-pill">
+                            ROUTE SELECTED
+                        </div>
+
+                    </div>
+
+
+                    <div class="card-body">
+
+
+                        <div class="route-box">
+
+
+                            <div class="route-row">
+
+                                <div class="route-line"></div>
+
+
+                                <div class="route-marker"></div>
+
+
+                                <div class="route-content">
+
+                                    <div class="route-label">
+                                        START
+                                    </div>
+
+                                    <div
+                                        class="route-location"
+                                        id="startLocation"
+                                    >
+                                        â€”
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="route-row">
+
+                                <div
+                                    class="route-marker destination"
+                                ></div>
+
+
+                                <div class="route-content">
+
+                                    <div class="route-label">
+                                        DESTINATION
+                                    </div>
+
+                                    <div
+                                        class="route-location"
+                                        id="destinationLocation"
+                                    >
+                                        â€”
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+
+                        <!-- JOURNEY DETAILS -->
+
+                        <div class="journey-meta">
+
+
+                            <div class="meta-item">
+
+                                <div class="meta-label">
+                                    DATE
+                                </div>
+
+                                <div
+                                    class="meta-value"
+                                    id="travelDate"
+                                >
+                                    â€”
+                                </div>
+
+                            </div>
+
+
+                            <div class="meta-item">
+
+                                <div class="meta-label">
+                                    DEPARTURE
+                                </div>
+
+                                <div
+                                    class="meta-value"
+                                    id="travelTime"
+                                >
+                                    â€”
+                                </div>
+
+                            </div>
+
+
+                            <div class="meta-item">
+
+                                <div class="meta-label">
+                                    SEATS
+                                </div>
+
+                                <div
+                                    class="meta-value"
+                                    id="seatCount"
+                                >
+                                    â€”
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+
+                        <!-- DRIVER -->
+
+                        <div class="driver-section">
+
+
+                            <div class="card-title">
+                                Driver
+                            </div>
+
+
+                            <div class="driver-card">
+
+                                <div
+                                    class="driver-avatar"
+                                    id="driverAvatar"
+                                >
+                                    D
+                                </div>
+
+
+                                <div class="driver-info">
+
+                                    <div
+                                        class="driver-name"
+                                        id="driverName"
+                                    >
+                                        RideSync Driver
+                                    </div>
+
+                                    <div
+                                        class="driver-role"
+                                        id="driverRole"
+                                    >
+                                        Verified RideSync member
+                                    </div>
+
+                                </div>
+
+
+                                <div class="verified">
+                                    âœ“ VERIFIED
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+
+                        <!-- VEHICLE -->
+
+                        <div class="vehicle-card">
+
+                            <div class="vehicle-icon">
+                                ðŸš™
+                            </div>
+
+
+                            <div class="vehicle-info">
+
+                                <div
+                                    class="vehicle-name"
+                                    id="vehicleName"
+                                >
+                                    Vehicle information
+                                </div>
+
+                                <div
+                                    class="vehicle-number"
+                                    id="vehicleNumber"
+                                >
+                                    Registration details
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </article>
+
+
+            </div>
+
+
+            <!-- =================================================
+                 RIGHT SUMMARY
+            ================================================== -->
+
+            <aside class="card summary-card">
+
+
+                <div class="summary-top">
+
+
+                    <div class="summary-kicker">
+                        BOOKING SUMMARY
+                    </div>
+
+
+                    <div class="summary-heading">
+                        Ready to <span>ride?</span>
+                    </div>
+
+
+                    <div class="fare-box">
+
+                        <div class="fare-label">
+                            ESTIMATED FARE
+                        </div>
+
+                        <div
+                            class="fare"
+                            id="fareAmount"
+                        >
+                            â‚¹0
+                        </div>
+
+                        <div class="fare-note">
+                            Fare provided by the selected RideSync ride
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="summary-body">
+
+
+                    <div class="summary-line">
+
+                        <span class="summary-label">
+                            Ride type
+                        </span>
+
+                        <span
+                            class="summary-value"
+                            id="rideType"
+                        >
+                            â€”
+                        </span>
+
+                    </div>
+
+
+                    <div class="summary-line">
+
+                        <span class="summary-label">
+                            Route
+                        </span>
+
+                        <span
+                            class="summary-value"
+                            id="routeSummary"
+                        >
+                            â€”
+                        </span>
+
+                    </div>
+
+
+                    <div class="summary-line">
+
+                        <span class="summary-label">
+                            Distance
+                        </span>
+
+                        <span
+                            class="summary-value"
+                            id="distanceValue"
+                        >
+                            Not calculated
+                        </span>
+
+                    </div>
+
+
+                    <div class="summary-line">
+
+                        <span class="summary-label">
+                            Vehicle
+                        </span>
+
+                        <span
+                            class="summary-value"
+                            id="summaryVehicle"
+                        >
+                            â€”
+                        </span>
+
+                    </div>
+
+
+                    <div class="summary-line">
+
+                        <span class="summary-label">
+                            Seats
+                        </span>
+
+                        <span
+                            class="summary-value"
+                            id="summarySeats"
+                        >
+                            â€”
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="confirm-area">
+
+                    <button
+                        class="confirm-button"
+                        id="confirmBooking"
+                    >
+                        CONFIRM BOOKING â†’
+                    </button>
+
+
+                    <div class="security-note">
+
+                        âœ“ Your booking information is stored locally
+                        for this RideSync demo.
+
+                    </div>
+
+                </div>
+
+
+            </aside>
+
+
+        </section>
+
+
+    </main>
+
+
+    <!-- TOAST -->
+
+    <div
+        class="toast"
+        id="toast"
+    ></div>
+
+
+    <script src="api.js"></script>
+    <script>
+
+        /* =====================================================
+           RIDESYNC TRIP BOOKING â€” REAL API INTEGRATION
+        ===================================================== */
+
+        let rideData  = null;
+        let bookingId = null;
+        let selectedSeats = 1;
+        let selectedPayment = 'WALLET';
+
+        // -------------------------------------------------------
+        // HELPERS
+        // -------------------------------------------------------
+
+        function safeValue(val, fallback) {
+            return (val !== null && val !== undefined && val !== "") ? val : fallback;
+        }
+
+        function getInitials(name) {
+            if (!name) return "?";
+            return name.split(" ").map(w => w[0]).join("").toUpperCase().slice(0, 2);
+        }
+
+        function formatDate(d) {
+            if (!d) return "â€”";
+            return new Date(d).toLocaleDateString("en-IN", { weekday: "short", day: "numeric", month: "long", year: "numeric" });
+        }
+
+        function formatTime(t) {
+            if (!t) return "â€”";
+            if (t.includes("T")) return new Date(t).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" });
+            return t;
+        }
+
+
+        // -------------------------------------------------------
+        // LOAD RIDE FROM BACKEND (or localStorage fallback)
+        // -------------------------------------------------------
+
+        async function loadRide() {
+            const params = new URLSearchParams(window.location.search);
+            const rideId = params.get("rideId") || params.get("id");
+
+            if (rideId) {
+                try {
+                    const res = await API.rides.getById(rideId);
+                    rideData = res.data || res.ride || res;
+                    rideData.id = rideData.id || rideId;
+                    renderRide();
+                    return;
+                } catch(err) {
+                    console.warn("Could not fetch ride from backend:", err.message);
+                }
+            }
+
+            // Fallback to localStorage (for demo/testing)
+            const stored = localStorage.getItem("ridesyncSelectedRide") || localStorage.getItem("ridesync_selected_ride");
+            if (stored) {
+                try {
+                    rideData = JSON.parse(stored);
+                    renderRide();
+                    return;
+                } catch(_) {}
+            }
+
+            showError("No ride selected. Please go back and select a ride.");
+        }
+
+
+        // -------------------------------------------------------
+        // RENDER
+        // -------------------------------------------------------
+
+        function renderRide() {
+            if (!rideData) { showError("Ride data unavailable."); return; }
+
+            const start = safeValue(rideData.pickupLocation, safeValue(rideData.start, "â€”"));
+            const destination = safeValue(rideData.destination, "â€”");
+            const dateStr = formatDate(rideData.rideDate || rideData.date || rideData.startTime);
+            const timeStr = formatTime(rideData.rideTime || rideData.time || rideData.startTime);
+
+            // Update any element that exists in the page
+            const setEl = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+
+            setEl("startLocation", start);
+            setEl("endLocation", destination);
+            setEl("routeSummary", `${start} â†’ ${destination}`);
+            setEl("travelDate", dateStr);
+            setEl("travelTime", timeStr);
+            setEl("seatCount", `${selectedSeats} Seat${selectedSeats > 1 ? "s" : ""}`);
+            setEl("summarySeats", `${selectedSeats} seat${selectedSeats > 1 ? "s" : ""}`);
+
+            const driver = rideData.driver || {};
+            setEl("driverName", driver.name || "RideSync Driver");
+            setEl("driverRole", "Verified RideSync Member");
+            const driverAvEl = document.getElementById("driverAvatar");
+            if (driverAvEl) driverAvEl.textContent = getInitials(driver.name || "D");
+
+            const vehicle = rideData.vehicle || {};
+            setEl("vehicleModel", [vehicle.make, vehicle.model, vehicle.year].filter(Boolean).join(" ") || "â€”");
+            setEl("vehiclePlate", vehicle.licensePlate || vehicle.registrationNumber || "â€”");
+
+            updateFare();
+
+            // Hide loading, show content
+            const loading = document.getElementById("loadingState");
+            const content = document.getElementById("bookingContent");
+            if (loading) loading.style.display = "none";
+            if (content) content.style.display = "block";
+        }
+
+
+        function updateFare() {
+            if (!rideData) return;
+            const farePerSeat = parseFloat(rideData.farePerSeat || rideData.pricePerSeat || rideData.price || 0);
+            const total = farePerSeat * selectedSeats;
+
+            const setEl = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+            setEl("farePerSeat", `â‚¹${farePerSeat.toFixed(0)}`);
+            setEl("totalFare", `â‚¹${total.toFixed(0)}`);
+            setEl("summaryTotal", `â‚¹${total.toFixed(0)}`);
+        }
+
+
+        function showError(msg) {
+            const err = document.getElementById("errorState");
+            const content = document.getElementById("bookingContent");
+            const loading = document.getElementById("loadingState");
+            if (loading) loading.style.display = "none";
+            if (content) content.style.display = "none";
+            if (err) { err.style.display = "flex"; const m = err.querySelector("p"); if (m) m.textContent = msg; }
+        }
+
+
+        // -------------------------------------------------------
+        // SEAT COUNTER
+        // -------------------------------------------------------
+
+        function changeSeat(delta) {
+            const max = parseInt(rideData?.availableSeats || rideData?.totalSeats || 4);
+            selectedSeats = Math.max(1, Math.min(max, selectedSeats + delta));
+            const setEl = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+            setEl("seatCount", `${selectedSeats} Seat${selectedSeats > 1 ? "s" : ""}`);
+            setEl("summarySeats", `${selectedSeats} seat${selectedSeats > 1 ? "s" : ""}`);
+            setEl("seatDisplay", selectedSeats);
+            updateFare();
+        }
+
+        // Wire seat buttons if they exist
+        document.addEventListener("DOMContentLoaded", () => {
+            document.getElementById("seatMinus")?.addEventListener("click", () => changeSeat(-1));
+            document.getElementById("seatPlus")?.addEventListener("click", () => changeSeat(1));
+        });
+
+
+        // -------------------------------------------------------
+        // PAYMENT METHOD SELECTION
+        // -------------------------------------------------------
+
+        function selectPayment(method) {
+            selectedPayment = method;
+            document.querySelectorAll(".payment-option").forEach(el => el.classList.remove("selected"));
+            document.getElementById(`pay-${method}`)?.classList.add("selected");
+
+            const paypalContainer = document.getElementById("paypal-button-container");
+            if (paypalContainer) paypalContainer.style.display = method === "PAYPAL" ? "block" : "none";
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll(".payment-option").forEach(el => {
+                el.addEventListener("click", () => selectPayment(el.dataset.method || "WALLET"));
+            });
+        });
+
+
+        // -------------------------------------------------------
+        // CONFIRM BOOKING â€” REAL API
+        // -------------------------------------------------------
+
+        async function confirmBooking() {
+            if (!API.isLoggedIn()) { API.toast("Please login first", "warning"); window.location.href = "login.html"; return; }
+            if (!rideData) { API.toast("Ride data missing", "error"); return; }
+
+            const btn = document.getElementById("confirmBooking");
+            if (btn) { btn.disabled = true; btn.textContent = "Processing..."; }
+
+            try {
+                // 1. Create booking
+                const bookRes = await API.bookings.create(rideData.id, selectedSeats);
+                bookingId = bookRes.data?.id || bookRes.booking?.id || bookRes.id;
+
+                if (selectedPayment === "PAYPAL") {
+                    await processPayPal();
+                } else if (selectedPayment === "WALLET") {
+                    await API.patch("/wallet/pay", { bookingId, amount: calcTotal() });
+                    await createPayment("WALLET");
+                    onSuccess();
+                } else {
+                    // CASH â€” just confirm booking
+                    await createPayment("CASH");
+                    onSuccess();
+                }
+            } catch(err) {
+                API.toast(err.message || "Booking failed", "error");
+                if (btn) { btn.disabled = false; btn.textContent = "Confirm Booking"; }
+            }
+        }
+
+        async function createPayment(method) {
+            try {
+                await API.payments.create({ tripId: rideData.tripId || bookingId, paymentMethod: method });
+            } catch(e) {
+                console.warn("Payment record creation failed:", e.message);
+            }
+        }
+
+        function calcTotal() {
+            const fare = parseFloat(rideData.farePerSeat || rideData.pricePerSeat || 0);
+            return fare * selectedSeats;
+        }
+
+        async function processPayPal() {
+            const amount = calcTotal();
+            const orderRes = await API.payments.createPaypalOrder({ tripId: rideData.id, amount });
+            const approvalUrl = orderRes.data?.approvalUrl;
+            if (!approvalUrl) { API.toast("PayPal order creation failed", "error"); return; }
+
+            // Open PayPal in popup
+            const popup = window.open(approvalUrl, "paypal_checkout", "width=600,height=700");
+            const checkClosed = setInterval(async () => {
+                if (popup && popup.closed) {
+                    clearInterval(checkClosed);
+                    // Try to capture
+                    try {
+                        await API.payments.capturePaypal({ paymentId: bookingId, paypalOrderId: orderRes.data?.orderId });
+                        onSuccess();
+                    } catch(e) {
+                        API.toast("PayPal capture failed: " + e.message, "error");
+                    }
+                }
+            }, 1000);
+        }
+
+        function onSuccess() {
+            API.toast("Booking confirmed! Starting your trip... ðŸŽ‰", "success");
+            localStorage.setItem("ridesync_active_booking", JSON.stringify({ ...rideData, bookingId, status: "confirmed" }));
+            setTimeout(() => {
+                const tripId = rideData.tripId || bookingId;
+                window.location.href = tripId ? `live_tracking.html?tripId=${tripId}` : "my-trips.html";
+            }, 1500);
+        }
+
+
+        // -------------------------------------------------------
+        // BACK BUTTON
+        // -------------------------------------------------------
+
+        document.addEventListener("DOMContentLoaded", () => {
+            document.getElementById("backButton")?.addEventListener("click", () => window.history.back());
+            document.getElementById("errorBack")?.addEventListener("click", () => window.location.href = "find-ride.html");
+            document.getElementById("confirmBooking")?.addEventListener("click", confirmBooking);
+        });
+
+
+        // -------------------------------------------------------
+        // PAYPAL SDK
+        // -------------------------------------------------------
+
+        function initPayPal() {
+            if (typeof paypal === "undefined") return;
+            const container = document.getElementById("paypal-button-container");
+            if (!container) return;
+
+            paypal.Buttons({
+                createOrder: async () => {
+                    const amount = calcTotal();
+                    const res = await API.payments.createPaypalOrder({ tripId: rideData?.id, amount });
+                    return res.data?.orderId;
+                },
+                onApprove: async (data) => {
+                    await API.payments.capturePaypal({ paymentId: bookingId, paypalOrderId: data.orderID });
+                    onSuccess();
+                },
+                onError: (err) => {
+                    API.toast("PayPal error: " + err, "error");
+                }
+            }).render("#paypal-button-container");
+        }
+
+
+        // -------------------------------------------------------
+        // INIT
+        // -------------------------------------------------------
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            if (!API.isLoggedIn()) { window.location.href = "login.html"; return; }
+            await loadRide();
+        });
+
+        console.log("RideSync Trip Booking â€” API Integrated");
+
+    </script>
+
+</body>
+
+</html>

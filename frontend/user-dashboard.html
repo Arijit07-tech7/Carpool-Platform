@@ -1,0 +1,3130 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#080a0d"
+    >
+
+    <meta
+        name="description"
+        content="RideSync Employee Carpooling Dashboard"
+    >
+
+    <title>RideSync — Find a Ride</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --black: #080a0d;
+            --black-soft: #15181d;
+            --blue: #1677ff;
+            --blue-dark: #075ed7;
+            --blue-light: #eaf3ff;
+            --text: #11151b;
+            --muted: #737d8c;
+            --muted-light: #9aa3af;
+            --border: #e7ebf0;
+            --bg: #f7f9fc;
+            --white: #ffffff;
+            --green: #20a464;
+            --red: #dc4c4c;
+            --shadow: 0 20px 60px rgba(15, 25, 40, .07);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: "Inter", sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(
+                    circle at 80% 0%,
+                    rgba(22,119,255,.07),
+                    transparent 28%
+                ),
+                var(--bg);
+            overflow-x: hidden;
+        }
+
+        button,
+        input,
+        select {
+            font-family: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .app {
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 260px;
+            background: rgba(255,255,255,.96);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+            backdrop-filter: blur(20px);
+        }
+
+        .brand {
+            height: 90px;
+            padding: 0 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .brand-logo {
+            width: 43px;
+            height: 43px;
+            display: grid;
+            place-items: center;
+            border-radius: 13px;
+            background: linear-gradient(145deg,#050505,#252a31);
+            color: white;
+            font-size: 22px;
+            font-weight: 900;
+            box-shadow: 0 10px 25px rgba(0,0,0,.15);
+        }
+
+        .brand-name {
+            font-size: 21px;
+            font-weight: 900;
+            letter-spacing: -1px;
+        }
+
+        .brand-name span {
+            color: var(--blue);
+        }
+
+        .brand-subtitle {
+            display: block;
+            margin-top: 2px;
+            color: var(--muted-light);
+            font-size: 8px;
+            font-weight: 800;
+            letter-spacing: 1.2px;
+        }
+
+        .navigation {
+            flex: 1;
+            padding: 25px 15px;
+            overflow-y: auto;
+        }
+
+        .nav-label {
+            padding: 0 12px;
+            margin-bottom: 11px;
+            color: #a0a8b4;
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: 1.6px;
+        }
+
+        .nav-item {
+            position: relative;
+            width: 100%;
+            min-height: 48px;
+            padding: 0 13px;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            border: 0;
+            border-radius: 12px;
+            background: transparent;
+            color: #697382;
+            font-size: 12px;
+            font-weight: 700;
+            text-align: left;
+            transition: .2s;
+        }
+
+        .nav-item:hover {
+            background: #f4f7fb;
+            color: var(--text);
+            transform: translateX(2px);
+        }
+
+        .nav-item.active {
+            background: var(--blue-light);
+            color: var(--blue);
+        }
+
+        .nav-item.active::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            width: 3px;
+            height: 22px;
+            border-radius: 0 5px 5px 0;
+            background: var(--blue);
+        }
+
+        .nav-icon {
+            width: 25px;
+            height: 25px;
+            display: grid;
+            place-items: center;
+            border-radius: 8px;
+            font-size: 13px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-bottom {
+            padding: 15px;
+            border-top: 1px solid var(--border);
+        }
+
+        .profile-mini {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border-radius: 13px;
+            background: #f7f9fc;
+        }
+
+        .avatar {
+            width: 37px;
+            height: 37px;
+            display: grid;
+            place-items: center;
+            border-radius: 11px;
+            background: linear-gradient(145deg,#111,#30343b);
+            color: white;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .profile-info {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .profile-name {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color: #20252d;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .profile-role {
+            margin-top: 3px;
+            color: var(--muted);
+            font-size: 9px;
+        }
+
+        .profile-menu {
+            width: 34px;
+            height: 34px;
+            border: 0;
+            border-radius: 9px;
+            background: white;
+            color: #8b95a3;
+            font-size: 17px;
+        }
+
+        /* MAIN */
+
+        .main {
+            width: calc(100% - 260px);
+            margin-left: 260px;
+            min-height: 100vh;
+        }
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            height: 75px;
+            padding: 0 38px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255,255,255,.90);
+            border-bottom: 1px solid rgba(225,230,237,.8);
+            backdrop-filter: blur(18px);
+            z-index: 50;
+        }
+
+        .mobile-menu {
+            display: none;
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: white;
+            font-size: 18px;
+        }
+
+        .page-heading {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .page-kicker {
+            color: var(--blue);
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+        }
+
+        .page-title {
+            margin-top: 3px;
+            font-size: 19px;
+            font-weight: 850;
+            letter-spacing: -.5px;
+        }
+
+        .top-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .notification {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            display: grid;
+            place-items: center;
+            border: 1px solid var(--border);
+            border-radius: 11px;
+            background: white;
+            color: #687280;
+            font-size: 15px;
+        }
+
+        .notification::after {
+            content: "";
+            position: absolute;
+            top: 8px;
+            right: 9px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--blue);
+            border: 2px solid white;
+        }
+
+        /* CONTENT */
+
+        .content {
+            padding: 35px 38px 60px;
+            max-width: 1450px;
+            margin: auto;
+        }
+
+        /* HERO */
+
+        .hero {
+            position: relative;
+            min-height: 190px;
+            padding: 34px 38px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            overflow: hidden;
+            border-radius: 23px;
+            background: linear-gradient(
+                120deg,
+                #080a0d 0%,
+                #151a21 55%,
+                #101d2d 100%
+            );
+            box-shadow: 0 22px 50px rgba(8,10,13,.12);
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            right: -100px;
+            top: -180px;
+            border-radius: 50%;
+            background: radial-gradient(
+                circle,
+                rgba(22,119,255,.32),
+                transparent 65%
+            );
+            filter: blur(8px);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-kicker {
+            color: #6faeff;
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: 2px;
+        }
+
+        .hero h1 {
+            margin-top: 10px;
+            color: white;
+            font-size: clamp(26px, 3vw, 38px);
+            line-height: 1.08;
+            letter-spacing: -1.5px;
+            font-weight: 850;
+        }
+
+        .hero h1 span {
+            color: #55a5ff;
+        }
+
+        .hero p {
+            max-width: 570px;
+            margin-top: 10px;
+            color: #aeb7c5;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .hero-decoration {
+            position: relative;
+            width: 260px;
+            height: 150px;
+            flex-shrink: 0;
+        }
+
+        .route-orbit {
+            position: absolute;
+            width: 180px;
+            height: 100px;
+            right: 15px;
+            top: 25px;
+            border: 1px solid rgba(255,255,255,.16);
+            border-radius: 50%;
+            transform: rotate(-18deg);
+        }
+
+        .route-orbit::before {
+            content: "";
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #5aabff;
+            top: 5px;
+            left: 15px;
+            box-shadow: 0 0 18px #1677ff;
+        }
+
+        .route-orbit::after {
+            content: "";
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: white;
+            right: 7px;
+            bottom: 15px;
+            box-shadow: 0 0 18px white;
+        }
+
+        .hero-car {
+            position: absolute;
+            right: 76px;
+            top: 58px;
+            font-size: 42px;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,.35));
+            animation: carFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes carFloat {
+            0%,100% {
+                transform: translateY(0) rotate(-2deg);
+            }
+
+            50% {
+                transform: translateY(-6px) rotate(2deg);
+            }
+        }
+
+        /* SWITCH */
+
+        .ride-switch-card {
+            margin-top: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            background: white;
+            box-shadow: 0 10px 30px rgba(15,25,40,.035);
+        }
+
+        .ride-switch {
+            display: flex;
+            gap: 5px;
+        }
+
+        .ride-type {
+            height: 42px;
+            padding: 0 20px;
+            border: 0;
+            border-radius: 10px;
+            background: transparent;
+            color: #7c8694;
+            font-size: 11px;
+            font-weight: 800;
+            transition: .2s;
+        }
+
+        .ride-type:hover {
+            color: var(--text);
+        }
+
+        .ride-type.active {
+            background: var(--black);
+            color: white;
+            box-shadow: 0 8px 18px rgba(0,0,0,.12);
+        }
+
+        .switch-note {
+            padding-right: 12px;
+            color: #9aa3af;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        /* SEARCH */
+
+        .search-card {
+            position: relative;
+            margin-top: 18px;
+            padding: 27px;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            background: white;
+            box-shadow: var(--shadow);
+        }
+
+        .section-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 23px;
+        }
+
+        .section-title {
+            font-size: 15px;
+            font-weight: 850;
+        }
+
+        .section-subtitle {
+            margin-top: 4px;
+            color: var(--muted);
+            font-size: 10px;
+        }
+
+        .search-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 10px;
+            border-radius: 8px;
+            background: #effaf5;
+            color: var(--green);
+            font-size: 9px;
+            font-weight: 800;
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--green);
+        }
+
+        .location-grid {
+            position: relative;
+            display: grid;
+            grid-template-columns: 1fr 52px 1fr;
+            gap: 12px;
+            align-items: end;
+        }
+
+        .field-label {
+            display: block;
+            margin-bottom: 8px;
+            color: #4e5866;
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        .location-input-wrap {
+            position: relative;
+        }
+
+        .location-marker {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 9px;
+            height: 9px;
+            border: 3px solid var(--blue);
+            border-radius: 50%;
+        }
+
+        .destination-marker {
+            border-color: #171a1e;
+        }
+
+        .location-input {
+            width: 100%;
+            height: 54px;
+            padding: 0 15px 0 38px;
+            border: 1px solid var(--border);
+            border-radius: 13px;
+            outline: none;
+            background: #fafbfd;
+            color: var(--text);
+            font-size: 12px;
+            transition: .2s;
+        }
+
+        .location-input:focus {
+            background: white;
+            border-color: rgba(22,119,255,.55);
+            box-shadow: 0 0 0 4px rgba(22,119,255,.07);
+        }
+
+        .swap-container {
+            display: flex;
+            justify-content: center;
+            padding-bottom: 5px;
+        }
+
+        .swap-button {
+            width: 40px;
+            height: 40px;
+            display: grid;
+            place-items: center;
+            border: 1px solid var(--border);
+            border-radius: 11px;
+            background: white;
+            color: var(--blue);
+            font-size: 17px;
+            transition: .25s;
+            box-shadow: 0 5px 15px rgba(0,0,0,.04);
+        }
+
+        .swap-button:hover {
+            background: var(--blue);
+            color: white;
+            transform: rotate(180deg);
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1.3fr .7fr;
+            gap: 18px;
+            margin-top: 22px;
+        }
+
+        .date-time-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .input-field {
+            width: 100%;
+            height: 50px;
+            padding: 0 13px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            outline: none;
+            background: #fafbfd;
+            color: #303640;
+            font-size: 11px;
+        }
+
+        .input-field:focus {
+            background: white;
+            border-color: rgba(22,119,255,.5);
+            box-shadow: 0 0 0 4px rgba(22,119,255,.06);
+        }
+
+        /* RECURRING */
+
+        .recurring-section {
+            margin-top: 22px;
+            padding: 18px;
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            background: #fafbfd;
+        }
+
+        .recurring-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .recurring-info h4 {
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .recurring-info p {
+            margin-top: 4px;
+            color: var(--muted);
+            font-size: 9px;
+        }
+
+        .toggle {
+            position: relative;
+            width: 46px;
+            height: 25px;
+            flex-shrink: 0;
+        }
+
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            inset: 0;
+            border-radius: 100px;
+            background: #dce1e7;
+            cursor: pointer;
+            transition: .25s;
+        }
+
+        .toggle-slider::before {
+            content: "";
+            position: absolute;
+            width: 19px;
+            height: 19px;
+            left: 3px;
+            top: 3px;
+            border-radius: 50%;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,.15);
+            transition: .25s;
+        }
+
+        .toggle input:checked + .toggle-slider {
+            background: var(--blue);
+        }
+
+        .toggle input:checked + .toggle-slider::before {
+            transform: translateX(21px);
+        }
+
+        .weekdays {
+            display: none;
+            grid-template-columns: repeat(7,1fr);
+            gap: 7px;
+            margin-top: 17px;
+        }
+
+        .weekdays.show {
+            display: grid;
+        }
+
+        .day {
+            position: relative;
+        }
+
+        .day input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .day label {
+            height: 38px;
+            display: grid;
+            place-items: center;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            background: white;
+            color: #8a94a2;
+            font-size: 9px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .day input:checked + label {
+            background: var(--blue);
+            border-color: var(--blue);
+            color: white;
+            box-shadow: 0 6px 15px rgba(22,119,255,.2);
+        }
+
+        /* MESSAGE */
+
+        .message-box {
+            display: none;
+            margin-top: 18px;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .message-box.show {
+            display: block;
+        }
+
+        .message-box.error {
+            background: #fff2f2;
+            border: 1px solid #ffdada;
+            color: #c64747;
+        }
+
+        .message-box.success {
+            background: #effaf5;
+            border: 1px solid #d3f0e0;
+            color: #25855a;
+        }
+
+        /* ACTION */
+
+        .search-action {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 24px;
+        }
+
+        .find-button {
+            min-width: 210px;
+            height: 52px;
+            padding: 0 23px;
+            border: 0;
+            border-radius: 13px;
+            background: linear-gradient(135deg,#050505,#20242a);
+            color: white;
+            font-size: 11px;
+            font-weight: 800;
+            box-shadow: 0 13px 27px rgba(0,0,0,.14);
+            transition: .2s;
+        }
+
+        .find-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 17px 35px rgba(0,0,0,.18);
+        }
+
+        .find-button:disabled {
+            opacity: .65;
+            cursor: wait;
+            transform: none;
+        }
+
+        /* RESULTS */
+
+        #resultsSection {
+            display: none;
+            margin-top: 25px;
+        }
+
+        #resultsSection.show {
+            display: block;
+            animation: resultsIn .45s ease both;
+        }
+
+        @keyframes resultsIn {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .results-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .results-title {
+            font-size: 15px;
+            font-weight: 850;
+        }
+
+        .results-count {
+            color: var(--blue);
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        .ride-list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .ride-card {
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1.2fr 1fr auto;
+            gap: 20px;
+            align-items: center;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            background: white;
+            box-shadow: 0 8px 25px rgba(15,25,40,.035);
+            transition: .2s;
+        }
+
+        .ride-card:hover {
+            border-color: rgba(22,119,255,.25);
+            box-shadow: 0 15px 35px rgba(15,25,40,.07);
+            transform: translateY(-2px);
+        }
+
+        .driver {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .driver-avatar {
+            width: 43px;
+            height: 43px;
+            display: grid;
+            place-items: center;
+            border-radius: 12px;
+            background: #edf4ff;
+            color: var(--blue);
+            font-size: 12px;
+            font-weight: 900;
+        }
+
+        .driver-name {
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .driver-meta {
+            margin-top: 4px;
+            color: var(--muted);
+            font-size: 9px;
+        }
+
+        .route {
+            position: relative;
+            padding-left: 16px;
+        }
+
+        .route::before {
+            content: "";
+            position: absolute;
+            left: 2px;
+            top: 5px;
+            bottom: 5px;
+            width: 1px;
+            background: #d9e0e8;
+        }
+
+        .route-point {
+            position: relative;
+            margin-bottom: 9px;
+        }
+
+        .route-point:last-child {
+            margin-bottom: 0;
+        }
+
+        .route-point::before {
+            content: "";
+            position: absolute;
+            left: -18px;
+            top: 4px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--blue);
+        }
+
+        .route-point:last-child::before {
+            background: var(--black);
+        }
+
+        .route-label {
+            color: #9aa3af;
+            font-size: 8px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .route-location {
+            margin-top: 2px;
+            color: #303640;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .ride-info {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .ride-time {
+            color: var(--text);
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .ride-detail {
+            color: var(--muted);
+            font-size: 9px;
+        }
+
+        .ride-price {
+            color: var(--text);
+            font-size: 17px;
+            font-weight: 900;
+        }
+
+        .ride-price small {
+            color: var(--muted);
+            font-size: 8px;
+            font-weight: 600;
+        }
+
+        .ride-action {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .book-button {
+            min-width: 110px;
+            height: 40px;
+            border: 0;
+            border-radius: 10px;
+            background: var(--black);
+            color: white;
+            font-size: 10px;
+            font-weight: 800;
+            transition: .2s;
+        }
+
+        .book-button:hover {
+            background: var(--blue);
+            transform: translateY(-1px);
+        }
+
+        /* LOADING */
+
+        .loading {
+            padding: 35px;
+            text-align: center;
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            background: white;
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .spinner {
+            width: 25px;
+            height: 25px;
+            margin: 0 auto 12px;
+            border: 3px solid #e5eaf0;
+            border-top-color: var(--blue);
+            border-radius: 50%;
+            animation: spin .8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .empty {
+            padding: 40px 20px;
+            text-align: center;
+            border: 1px dashed #d9e0e8;
+            border-radius: 16px;
+            background: white;
+        }
+
+        .empty-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .empty h3 {
+            font-size: 14px;
+        }
+
+        .empty p {
+            margin-top: 7px;
+            color: var(--muted);
+            font-size: 10px;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 1050px) {
+
+            .hero-decoration {
+                display: none;
+            }
+
+            .hero {
+                min-height: 175px;
+            }
+
+            .ride-card {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .ride-action {
+                grid-column: 1 / -1;
+            }
+
+            .book-button {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 850px) {
+
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform .3s;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main {
+                width: 100%;
+                margin-left: 0;
+            }
+
+            .mobile-menu {
+                display: grid;
+                place-items: center;
+            }
+
+            .topbar {
+                padding: 0 20px;
+            }
+
+            .content {
+                padding: 25px 20px 50px;
+            }
+
+            .page-heading {
+                margin-left: 10px;
+                flex: 1;
+            }
+        }
+
+        @media (max-width: 650px) {
+
+            .hero {
+                padding: 27px 23px;
+                border-radius: 18px;
+            }
+
+            .hero h1 {
+                font-size: 27px;
+            }
+
+            .ride-switch-card {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            .ride-switch {
+                width: 100%;
+            }
+
+            .ride-type {
+                flex: 1;
+            }
+
+            .switch-note {
+                padding: 0 8px 8px;
+            }
+
+            .search-card {
+                padding: 20px;
+            }
+
+            .location-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .swap-container {
+                padding: 0;
+            }
+
+            .swap-button {
+                transform: rotate(90deg);
+            }
+
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .weekdays {
+                grid-template-columns: repeat(4,1fr);
+            }
+
+            .search-action {
+                justify-content: stretch;
+            }
+
+            .find-button {
+                width: 100%;
+            }
+
+            .ride-card {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .ride-action {
+                grid-column: auto;
+            }
+
+            .top-actions {
+                display: none;
+            }
+        }
+
+        @media (max-width: 420px) {
+
+            .content {
+                padding: 18px 13px 40px;
+            }
+
+            .topbar {
+                padding: 0 13px;
+            }
+
+            .brand {
+                padding: 0 20px;
+            }
+
+            .date-time-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="app">
+
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <aside
+        class="sidebar"
+        id="sidebar"
+    >
+
+        <div class="brand">
+
+            <div class="brand-logo">
+                R
+            </div>
+
+            <div>
+
+                <div class="brand-name">
+                    Ride<span>Sync</span>
+                </div>
+
+                <span class="brand-subtitle">
+                    SMART MOBILITY PLATFORM
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <nav class="navigation">
+
+            <div class="nav-label">
+                MAIN MENU
+            </div>
+
+
+            <button
+                class="nav-item active"
+                type="button"
+            >
+                <span class="nav-icon">◉</span>
+                Carpooling
+            </button>
+
+
+            <a
+                class="nav-item"
+                href="my-trips.html"
+            >
+                <span class="nav-icon">↗</span>
+                My Trips
+            </a>
+
+
+            <a
+                class="nav-item"
+                href="my_vehicle.html"
+            >
+                <span class="nav-icon">▣</span>
+                My Vehicle
+            </a>
+
+
+            <a
+                class="nav-item"
+                href="ride-history.html"
+            >
+                <span class="nav-icon">◷</span>
+                Ride History
+            </a>
+
+
+            <a
+                class="nav-item"
+                href="wallet.html"
+            >
+                <span class="nav-icon">◇</span>
+                Wallet
+            </a>
+
+
+            <a
+                class="nav-item"
+                href="settings.html"
+            >
+                <span class="nav-icon">⚙</span>
+                Settings
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <div class="profile-mini">
+
+                <div
+                    class="avatar"
+                    id="sidebarAvatar"
+                >
+                    U
+                </div>
+
+
+                <div class="profile-info">
+
+                    <div
+                        class="profile-name"
+                        id="sidebarName"
+                    >
+                        Employee
+                    </div>
+
+                    <div class="profile-role">
+                        Employee Account
+                    </div>
+
+                </div>
+
+
+                <button
+                    class="profile-menu"
+                    id="logoutButton"
+                    title="Logout"
+                    type="button"
+                >
+                    ↪
+                </button>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
+
+    <main class="main">
+
+
+        <header class="topbar">
+
+            <button
+                class="mobile-menu"
+                id="mobileMenu"
+                type="button"
+            >
+                ☰
+            </button>
+
+
+            <div class="page-heading">
+
+                <span class="page-kicker">
+                    CARPOOLING
+                </span>
+
+                <h2 class="page-title">
+                    Find a Ride
+                </h2>
+
+            </div>
+
+
+            <div class="top-actions">
+
+                <button
+                    class="notification"
+                    id="notificationButton"
+                    type="button"
+                    title="Notifications"
+                >
+                    ♧
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <section class="content">
+
+
+            <!-- HERO -->
+
+            <div class="hero">
+
+                <div class="hero-content">
+
+                    <div class="hero-kicker">
+                        SMART RIDE MATCHING
+                    </div>
+
+                    <h1>
+                        Find a ride that
+                        <span>fits your route.</span>
+                    </h1>
+
+                    <p>
+                        Search real RideSync rides created by
+                        employees and book a suitable ride.
+                    </p>
+
+                </div>
+
+
+                <div class="hero-decoration">
+
+                    <div class="route-orbit"></div>
+
+                    <div class="hero-car">
+                        🚙
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- RIDE TYPE -->
+
+            <div class="ride-switch-card">
+
+                <div class="ride-switch">
+
+                    <button
+                        class="ride-type active"
+                        id="findRideTab"
+                        type="button"
+                    >
+                        Find Ride
+                    </button>
+
+
+                    <button
+                        class="ride-type"
+                        id="offerRideTab"
+                        type="button"
+                    >
+                        Offer Ride
+                    </button>
+
+                </div>
+
+
+                <div class="switch-note">
+                    Choose how you want to travel
+                </div>
+
+            </div>
+
+
+            <!-- SEARCH CARD -->
+
+            <div class="search-card">
+
+
+                <div class="section-head">
+
+                    <div>
+
+                        <div class="section-title">
+                            Plan your journey
+                        </div>
+
+                        <div class="section-subtitle">
+                            Search rides available on your route.
+                        </div>
+
+                    </div>
+
+
+                    <div class="search-status">
+
+                        <span class="status-dot"></span>
+
+                        Live data
+
+                    </div>
+
+                </div>
+
+
+                <!-- LOCATIONS -->
+
+                <div class="location-grid">
+
+
+                    <div class="location-field">
+
+                        <label class="field-label">
+                            START LOCATION
+                        </label>
+
+
+                        <div class="location-input-wrap">
+
+                            <span class="location-marker"></span>
+
+
+                            <input
+                                id="startLocation"
+                                class="location-input"
+                                type="text"
+                                placeholder="e.g. Kankurgachi, Kolkata"
+                                autocomplete="off"
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="swap-container">
+
+                        <button
+                            type="button"
+                            class="swap-button"
+                            id="swapButton"
+                            title="Swap locations"
+                        >
+                            ⇄
+                        </button>
+
+                    </div>
+
+
+                    <div class="location-field">
+
+                        <label class="field-label">
+                            DESTINATION LOCATION
+                        </label>
+
+
+                        <div class="location-input-wrap">
+
+                            <span
+                                class="location-marker destination-marker"
+                            ></span>
+
+
+                            <input
+                                id="destinationLocation"
+                                class="location-input"
+                                type="text"
+                                placeholder="e.g. Sector V, Kolkata"
+                                autocomplete="off"
+                            >
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- DATE TIME -->
+
+                <div class="options-grid">
+
+
+                    <div class="option-group">
+
+                        <label class="field-label">
+                            TRAVEL SCHEDULE
+                        </label>
+
+
+                        <div class="date-time-grid">
+
+                            <input
+                                id="travelDate"
+                                class="input-field"
+                                type="date"
+                            >
+
+
+                            <input
+                                id="travelTime"
+                                class="input-field"
+                                type="time"
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="option-group">
+
+                        <label class="field-label">
+                            SEATS REQUIRED
+                        </label>
+
+
+                        <select
+                            id="seatCount"
+                            class="input-field"
+                        >
+
+                            <option value="1">
+                                1 Seat
+                            </option>
+
+                            <option value="2">
+                                2 Seats
+                            </option>
+
+                            <option value="3">
+                                3 Seats
+                            </option>
+
+                            <option value="4">
+                                4 Seats
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <!-- RECURRING -->
+
+                <div class="recurring-section">
+
+                    <div class="recurring-top">
+
+                        <div class="recurring-info">
+
+                            <h4>
+                                Recurring Ride
+                            </h4>
+
+                            <p>
+                                Repeat this journey on selected weekdays.
+                            </p>
+
+                        </div>
+
+
+                        <label class="toggle">
+
+                            <input
+                                type="checkbox"
+                                id="recurringToggle"
+                            >
+
+                            <span class="toggle-slider"></span>
+
+                        </label>
+
+                    </div>
+
+
+                    <div
+                        class="weekdays"
+                        id="weekdays"
+                    >
+
+                        <div class="day">
+                            <input type="checkbox" id="mon" value="Monday">
+                            <label for="mon">MON</label>
+                        </div>
+
+                        <div class="day">
+                            <input type="checkbox" id="tue" value="Tuesday">
+                            <label for="tue">TUE</label>
+                        </div>
+
+                        <div class="day">
+                            <input type="checkbox" id="wed" value="Wednesday">
+                            <label for="wed">WED</label>
+                        </div>
+
+                        <div class="day">
+                            <input type="checkbox" id="thu" value="Thursday">
+                            <label for="thu">THU</label>
+                        </div>
+
+                        <div class="day">
+                            <input type="checkbox" id="fri" value="Friday">
+                            <label for="fri">FRI</label>
+                        </div>
+
+                        <div class="day">
+                            <input type="checkbox" id="sat" value="Saturday">
+                            <label for="sat">SAT</label>
+                        </div>
+
+                        <div class="day">
+                            <input type="checkbox" id="sun" value="Sunday">
+                            <label for="sun">SUN</label>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- MESSAGE -->
+
+                <div
+                    class="message-box"
+                    id="messageBox"
+                ></div>
+
+
+                <!-- SEARCH BUTTON -->
+
+                <div class="search-action">
+
+                    <button
+                        class="find-button"
+                        id="findButton"
+                        type="button"
+                    >
+                        Find Matching Rides →
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- RESULTS -->
+
+            <section id="resultsSection">
+
+                <div class="results-header">
+
+                    <div class="results-title">
+                        Available rides
+                    </div>
+
+                    <div
+                        class="results-count"
+                        id="resultsCount"
+                    >
+                        0 matches
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="ride-list"
+                    id="rideList"
+                ></div>
+
+            </section>
+
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<script>
+
+"use strict";
+
+/* ============================================================
+   CONFIG
+============================================================ */
+
+const API_BASE_URL =
+    window.RideSyncConfig?.API_BASE_URL ||
+    "http://localhost:5000/api";
+
+
+/* ============================================================
+   DOM
+============================================================ */
+
+const sidebar =
+    document.getElementById("sidebar");
+
+const mobileMenu =
+    document.getElementById("mobileMenu");
+
+const logoutButton =
+    document.getElementById("logoutButton");
+
+const sidebarName =
+    document.getElementById("sidebarName");
+
+const sidebarAvatar =
+    document.getElementById("sidebarAvatar");
+
+const findRideTab =
+    document.getElementById("findRideTab");
+
+const offerRideTab =
+    document.getElementById("offerRideTab");
+
+const startLocation =
+    document.getElementById("startLocation");
+
+const destinationLocation =
+    document.getElementById("destinationLocation");
+
+const travelDate =
+    document.getElementById("travelDate");
+
+const travelTime =
+    document.getElementById("travelTime");
+
+const seatCount =
+    document.getElementById("seatCount");
+
+const swapButton =
+    document.getElementById("swapButton");
+
+const recurringToggle =
+    document.getElementById("recurringToggle");
+
+const weekdays =
+    document.getElementById("weekdays");
+
+const findButton =
+    document.getElementById("findButton");
+
+const messageBox =
+    document.getElementById("messageBox");
+
+const resultsSection =
+    document.getElementById("resultsSection");
+
+const rideList =
+    document.getElementById("rideList");
+
+const resultsCount =
+    document.getElementById("resultsCount");
+
+
+/* ============================================================
+   STORAGE HELPERS
+============================================================ */
+
+function getToken() {
+
+    return (
+        localStorage.getItem("token") ||
+        localStorage.getItem("accessToken") ||
+        sessionStorage.getItem("token") ||
+        ""
+    );
+}
+
+
+function getStoredUser() {
+
+    const possibleKeys = [
+        "user",
+        "currentUser",
+        "ridesyncUser",
+        "loggedInUser"
+    ];
+
+    for (const key of possibleKeys) {
+
+        const raw =
+            localStorage.getItem(key);
+
+        if (!raw) {
+            continue;
+        }
+
+        try {
+
+            const parsed =
+                JSON.parse(raw);
+
+            if (parsed) {
+                return parsed;
+            }
+
+        } catch {
+
+            return {
+                name: raw
+            };
+
+        }
+    }
+
+    return null;
+}
+
+
+/* ============================================================
+   AUTH
+============================================================ */
+
+function requireAuthentication() {
+
+    const token = getToken();
+
+    if (!token) {
+
+        window.location.replace(
+            "login.html"
+        );
+
+        return false;
+    }
+
+    return true;
+}
+
+
+function loadUserProfile() {
+
+    const user =
+        getStoredUser();
+
+    if (!user) {
+        return;
+    }
+
+    const name =
+        user.name ||
+        user.fullName ||
+        user.username ||
+        user.email ||
+        "Employee";
+
+    sidebarName.textContent =
+        name;
+
+    const initials =
+        name
+            .split(/\s+/)
+            .filter(Boolean)
+            .slice(0, 2)
+            .map(part => part[0])
+            .join("")
+            .toUpperCase();
+
+    sidebarAvatar.textContent =
+        initials || "U";
+}
+
+
+/* ============================================================
+   MESSAGE
+============================================================ */
+
+function showMessage(
+    message,
+    type = "error"
+) {
+
+    messageBox.textContent =
+        message;
+
+    messageBox.className =
+        "message-box show " + type;
+
+}
+
+
+function hideMessage() {
+
+    messageBox.textContent =
+        "";
+
+    messageBox.className =
+        "message-box";
+
+}
+
+
+/* ============================================================
+   MOBILE MENU
+============================================================ */
+
+mobileMenu.addEventListener(
+    "click",
+    () => {
+
+        sidebar.classList.toggle(
+            "open"
+        );
+
+    }
+);
+
+
+/* ============================================================
+   LOGOUT
+============================================================ */
+
+logoutButton.addEventListener(
+    "click",
+    () => {
+
+        localStorage.removeItem("token");
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("user");
+        localStorage.removeItem("currentUser");
+        localStorage.removeItem("ridesyncUser");
+        localStorage.removeItem("loggedInUser");
+
+        sessionStorage.removeItem("token");
+
+        window.location.replace(
+            "login.html"
+        );
+
+    }
+);
+
+
+/* ============================================================
+   FIND / OFFER SWITCH
+============================================================ */
+
+findRideTab.addEventListener(
+    "click",
+    () => {
+
+        findRideTab.classList.add(
+            "active"
+        );
+
+        offerRideTab.classList.remove(
+            "active"
+        );
+
+    }
+);
+
+
+offerRideTab.addEventListener(
+    "click",
+    () => {
+
+        window.location.href =
+            "offer-ride.html";
+
+    }
+);
+
+
+/* ============================================================
+   SWAP
+============================================================ */
+
+swapButton.addEventListener(
+    "click",
+    () => {
+
+        const oldStart =
+            startLocation.value;
+
+        startLocation.value =
+            destinationLocation.value;
+
+        destinationLocation.value =
+            oldStart;
+
+    }
+);
+
+
+/* ============================================================
+   RECURRING
+============================================================ */
+
+recurringToggle.addEventListener(
+    "change",
+    () => {
+
+        weekdays.classList.toggle(
+            "show",
+            recurringToggle.checked
+        );
+
+    }
+);
+
+
+/* ============================================================
+   API FETCH HELPER
+============================================================ */
+
+async function apiFetch(
+    path,
+    options = {}
+) {
+
+    const token =
+        getToken();
+
+    const headers = {
+        "Content-Type":
+            "application/json",
+        ...(options.headers || {})
+    };
+
+    if (token) {
+
+        headers.Authorization =
+            `Bearer ${token}`;
+
+    }
+
+    const response =
+        await fetch(
+            `${API_BASE_URL}${path}`,
+            {
+                ...options,
+                headers
+            }
+        );
+
+    let data = null;
+
+    const contentType =
+        response.headers.get(
+            "content-type"
+        ) || "";
+
+    if (
+        contentType.includes(
+            "application/json"
+        )
+    ) {
+
+        data =
+            await response.json();
+
+    } else {
+
+        const text =
+            await response.text();
+
+        data =
+            text
+                ? { message: text }
+                : null;
+
+    }
+
+    if (!response.ok) {
+
+        const error =
+            new Error(
+                data?.message ||
+                data?.error ||
+                `API request failed (${response.status})`
+            );
+
+        error.status =
+            response.status;
+
+        error.data =
+            data;
+
+        throw error;
+
+    }
+
+    return data;
+
+}
+
+
+/* ============================================================
+   EXTRACT ARRAY
+============================================================ */
+
+function extractArray(data) {
+
+    if (Array.isArray(data)) {
+        return data;
+    }
+
+    if (
+        Array.isArray(
+            data?.rides
+        )
+    ) {
+        return data.rides;
+    }
+
+    if (
+        Array.isArray(
+            data?.data
+        )
+    ) {
+        return data.data;
+    }
+
+    if (
+        Array.isArray(
+            data?.data?.rides
+        )
+    ) {
+        return data.data.rides;
+    }
+
+    if (
+        Array.isArray(
+            data?.results
+        )
+    ) {
+        return data.results;
+    }
+
+    return [];
+
+}
+
+
+/* ============================================================
+   NORMALIZE RIDE
+============================================================ */
+
+function normalizeRide(
+    ride
+) {
+
+    const driver =
+        ride.driver ||
+        ride.user ||
+        ride.owner ||
+        ride.createdBy ||
+        {};
+
+    const vehicle =
+        ride.vehicle ||
+        {};
+
+    return {
+
+        id:
+            ride.id ||
+            ride._id ||
+            ride.rideId ||
+            ride.ride_id,
+
+        driverName:
+            driver.name ||
+            driver.fullName ||
+            driver.username ||
+            ride.driverName ||
+            ride.driver_name ||
+            "RideSync Driver",
+
+        driverMeta:
+            vehicle.model ||
+            ride.vehicleModel ||
+            ride.vehicle ||
+            ride.vehicleNumber ||
+            "",
+
+        start:
+            ride.startLocation ||
+            ride.start_location ||
+            ride.from ||
+            ride.source ||
+            ride.pickupLocation ||
+            "",
+
+        destination:
+            ride.destinationLocation ||
+            ride.destination_location ||
+            ride.to ||
+            ride.destination ||
+            ride.dropLocation ||
+            "",
+
+        date:
+            ride.date ||
+            ride.rideDate ||
+            ride.travelDate ||
+            ride.travel_date ||
+            "",
+
+        time:
+            ride.time ||
+            ride.rideTime ||
+            ride.travelTime ||
+            ride.travel_time ||
+            "",
+
+        seats:
+            Number(
+                ride.availableSeats ??
+                ride.available_seats ??
+                ride.seatsAvailable ??
+                ride.seats ??
+                0
+            ),
+
+        fare:
+            ride.fare ??
+            ride.price ??
+            ride.cost ??
+            ride.amount ??
+            0
+
+    };
+
+}
+
+
+/* ============================================================
+   FORMAT DATE
+============================================================ */
+
+function formatDate(
+    value
+) {
+
+    if (!value) {
+        return "Date not specified";
+    }
+
+    const date =
+        new Date(value);
+
+    if (
+        Number.isNaN(
+            date.getTime()
+        )
+    ) {
+        return String(value);
+    }
+
+    return date.toLocaleDateString(
+        "en-IN",
+        {
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
+        }
+    );
+
+}
+
+
+/* ============================================================
+   DRIVER INITIALS
+============================================================ */
+
+function initials(
+    name
+) {
+
+    return name
+        .split(/\s+/)
+        .filter(Boolean)
+        .slice(0, 2)
+        .map(
+            part =>
+                part
+                    .charAt(0)
+                    .toUpperCase()
+        )
+        .join("");
+
+}
+
+
+/* ============================================================
+   ESCAPE HTML
+============================================================ */
+
+function escapeHtml(
+    value
+) {
+
+    return String(
+        value ?? ""
+    )
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+
+}
+
+
+/* ============================================================
+   LOAD RIDES
+============================================================ */
+
+async function loadRides() {
+
+    rideList.innerHTML = `
+        <div class="loading">
+            <div class="spinner"></div>
+            Loading live rides...
+        </div>
+    `;
+
+    resultsSection.classList.add(
+        "show"
+    );
+
+    resultsCount.textContent =
+        "Loading...";
+
+    try {
+
+        const params =
+            new URLSearchParams();
+
+
+        if (
+            startLocation.value.trim()
+        ) {
+
+            params.set(
+                "startLocation",
+                startLocation.value.trim()
+            );
+
+        }
+
+
+        if (
+            destinationLocation.value.trim()
+        ) {
+
+            params.set(
+                "destinationLocation",
+                destinationLocation.value.trim()
+            );
+
+        }
+
+
+        if (
+            travelDate.value
+        ) {
+
+            params.set(
+                "date",
+                travelDate.value
+            );
+
+        }
+
+
+        if (
+            travelTime.value
+        ) {
+
+            params.set(
+                "time",
+                travelTime.value
+            );
+
+        }
+
+
+        params.set(
+            "seats",
+            seatCount.value
+        );
+
+
+        /*
+         * Main endpoint.
+         *
+         * If your backend exposes GET /api/rides,
+         * this request works directly.
+         */
+
+        const query =
+            params.toString();
+
+        const endpoint =
+            query
+                ? `/rides?${query}`
+                : `/rides`;
+
+
+        const response =
+            await apiFetch(
+                endpoint,
+                {
+                    method: "GET"
+                }
+            );
+
+
+        const rides =
+            extractArray(
+                response
+            );
+
+
+        renderRides(
+            rides
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Ride fetch error:",
+            error
+        );
+
+
+        rideList.innerHTML = `
+            <div class="empty">
+
+                <div class="empty-icon">
+                    ⚠
+                </div>
+
+                <h3>
+                    Unable to load rides
+                </h3>
+
+                <p>
+                    ${escapeHtml(
+                        error.message ||
+                        "Could not connect to the RideSync API."
+                    )}
+                </p>
+
+            </div>
+        `;
+
+
+        resultsCount.textContent =
+            "API error";
+
+
+        showMessage(
+            "Ride API could not be reached. Check that the backend is running on " +
+            API_BASE_URL +
+            " and that GET /api/rides is available.",
+            "error"
+        );
+
+    }
+
+}
+
+
+/* ============================================================
+   RENDER RIDES
+============================================================ */
+
+function renderRides(
+    rides
+) {
+
+    const normalized =
+        rides
+            .map(normalizeRide)
+            .filter(
+                ride => ride.id
+            );
+
+
+    if (
+        normalized.length === 0
+    ) {
+
+        resultsCount.textContent =
+            "0 matches";
+
+
+        rideList.innerHTML = `
+            <div class="empty">
+
+                <div class="empty-icon">
+                    🚙
+                </div>
+
+                <h3>
+                    No rides found
+                </h3>
+
+                <p>
+                    No live rides currently match
+                    your selected journey.
+                </p>
+
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    resultsCount.textContent =
+        `${normalized.length} ${
+            normalized.length === 1
+                ? "match"
+                : "matches"
+        }`;
+
+
+    rideList.innerHTML =
+        normalized
+            .map(
+                ride =>
+                    createRideCard(
+                        ride
+                    )
+            )
+            .join("");
+
+
+    document
+        .querySelectorAll(
+            ".book-button"
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        const rideId =
+                            button.dataset.rideId;
+
+                        bookRide(
+                            rideId
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+}
+
+
+/* ============================================================
+   RIDE CARD
+============================================================ */
+
+function createRideCard(
+    ride
+) {
+
+    const safeId =
+        escapeHtml(
+            ride.id
+        );
+
+    const driver =
+        escapeHtml(
+            ride.driverName
+        );
+
+    const driverMeta =
+        escapeHtml(
+            ride.driverMeta ||
+            "Employee Driver"
+        );
+
+    const start =
+        escapeHtml(
+            ride.start ||
+            "Start location"
+        );
+
+    const destination =
+        escapeHtml(
+            ride.destination ||
+            "Destination"
+        );
+
+    const date =
+        escapeHtml(
+            formatDate(
+                ride.date
+            )
+        );
+
+    const time =
+        escapeHtml(
+            ride.time ||
+            "Time not specified"
+        );
+
+    const seats =
+        Number.isFinite(
+            ride.seats
+        )
+            ? ride.seats
+            : 0;
+
+    const fare =
+        Number(
+            ride.fare
+        ) || 0;
+
+
+    return `
+
+        <article
+            class="ride-card"
+            data-ride-id="${safeId}"
+        >
+
+            <div class="driver">
+
+                <div class="driver-avatar">
+                    ${escapeHtml(
+                        initials(
+                            ride.driverName
+                        ) || "D"
+                    )}
+                </div>
+
+
+                <div>
+
+                    <div class="driver-name">
+                        ${driver}
+                    </div>
+
+                    <div class="driver-meta">
+                        ${driverMeta}
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="route">
+
+                <div class="route-point">
+
+                    <div class="route-label">
+                        Pickup
+                    </div>
+
+                    <div class="route-location">
+                        ${start}
+                    </div>
+
+                </div>
+
+
+                <div class="route-point">
+
+                    <div class="route-label">
+                        Drop
+                    </div>
+
+                    <div class="route-location">
+                        ${destination}
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="ride-info">
+
+                <div class="ride-time">
+                    ${date}
+                </div>
+
+                <div class="ride-detail">
+                    ${time}
+                </div>
+
+                <div class="ride-detail">
+                    ${seats > 0
+                        ? `${seats} seat${
+                            seats === 1
+                                ? ""
+                                : "s"
+                          } available`
+                        : "Seat availability unavailable"}
+                </div>
+
+            </div>
+
+
+            <div class="ride-action">
+
+                <div>
+
+                    <div class="ride-price">
+                        ₹${escapeHtml(
+                            fare
+                        )}
+                        <small>
+                            / seat
+                        </small>
+                    </div>
+
+                    <button
+                        class="book-button"
+                        type="button"
+                        data-ride-id="${safeId}"
+                    >
+                        Book Ride
+                    </button>
+
+                </div>
+
+            </div>
+
+        </article>
+
+    `;
+
+}
+
+
+/* ============================================================
+   BOOK RIDE
+============================================================ */
+
+async function bookRide(
+    rideId
+) {
+
+    if (!rideId) {
+
+        showMessage(
+            "Ride ID is missing.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    /*
+     * First go to the dedicated booking page.
+     *
+     * This keeps the dashboard responsible only
+     * for searching/selecting rides.
+     */
+
+    sessionStorage.setItem(
+        "selectedRideId",
+        rideId
+    );
+
+
+    window.location.href =
+        `book-ride.html?rideId=${encodeURIComponent(
+            rideId
+        )}`;
+
+}
+
+
+/* ============================================================
+   FIND BUTTON
+============================================================ */
+
+findButton.addEventListener(
+    "click",
+    async () => {
+
+        hideMessage();
+
+
+        if (
+            !startLocation.value.trim()
+        ) {
+
+            showMessage(
+                "Please enter your start location.",
+                "error"
+            );
+
+            startLocation.focus();
+
+            return;
+
+        }
+
+
+        if (
+            !destinationLocation.value.trim()
+        ) {
+
+            showMessage(
+                "Please enter your destination.",
+                "error"
+            );
+
+            destinationLocation.focus();
+
+            return;
+
+        }
+
+
+        findButton.disabled =
+            true;
+
+        findButton.textContent =
+            "Searching...";
+
+
+        try {
+
+            await loadRides();
+
+        } finally {
+
+            findButton.disabled =
+                false;
+
+            findButton.textContent =
+                "Find Matching Rides →";
+
+        }
+
+    }
+);
+
+
+/* ============================================================
+   NOTIFICATION
+============================================================ */
+
+document
+    .getElementById(
+        "notificationButton"
+    )
+    .addEventListener(
+        "click",
+        () => {
+
+            showMessage(
+                "Notifications will appear here when RideSync receives new activity.",
+                "success"
+            );
+
+        }
+    );
+
+
+/* ============================================================
+   DATE DEFAULT
+============================================================ */
+
+function setMinimumDate() {
+
+    const today =
+        new Date();
+
+
+    const yyyy =
+        today.getFullYear();
+
+
+    const mm =
+        String(
+            today.getMonth() + 1
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    const dd =
+        String(
+            today.getDate()
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    const value =
+        `${yyyy}-${mm}-${dd}`;
+
+
+    travelDate.min =
+        value;
+
+
+    if (!travelDate.value) {
+        travelDate.value =
+            value;
+    }
+
+}
+
+
+/* ============================================================
+   INITIALIZE
+============================================================ */
+
+(function init() {
+
+    /*
+     * Do not allow unauthenticated users
+     * to remain on dashboard.
+     */
+
+    if (
+        !requireAuthentication()
+    ) {
+        return;
+    }
+
+
+    loadUserProfile();
+
+    setMinimumDate();
+
+})();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Payment Summary — RideSync</title>
+
+    <link rel="stylesheet" href="payment-summary.css">
+</head>
+
+<body>
+
+    <div class="page">
+
+        <header class="header">
+
+            <button class="back-btn" id="backBtn" aria-label="Go back">
+                ←
+            </button>
+
+            <div class="header-title">
+                <span>RIDESYNC</span>
+                <h1>Payment</h1>
+            </div>
+
+            <div class="secure">
+                <span class="secure-dot"></span>
+                Secure
+            </div>
+
+        </header>
+
+
+        <main class="main">
+
+            <div class="progress">
+
+                <div class="step active">
+                    <div class="step-number">1</div>
+                    <span>Summary</span>
+                </div>
+
+                <div class="line"></div>
+
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <span>Payment</span>
+                </div>
+
+                <div class="line"></div>
+
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <span>Complete</span>
+                </div>
+
+            </div>
+
+
+            <section class="content">
+
+                <div class="left">
+
+                    <div class="heading">
+
+                        <span class="eyebrow">PAYMENT SUMMARY</span>
+
+                        <h2>Review your trip</h2>
+
+                        <p>
+                            Check your trip details and total amount
+                            before choosing a payment method.
+                        </p>
+
+                    </div>
+
+
+                    <div class="trip-card">
+
+                        <div class="card-top">
+
+                            <div>
+                                <span class="label">RIDE ID</span>
+                                <strong id="rideId">RS-10284</strong>
+                            </div>
+
+                            <div class="status">
+                                COMPLETED
+                            </div>
+
+                        </div>
+
+
+                        <div class="route">
+
+                            <div class="route-point">
+                                <div class="point start"></div>
+
+                                <div>
+                                    <span>Pickup</span>
+                                    <strong id="pickup">
+                                        Salt Lake Sector V
+                                    </strong>
+                                </div>
+                            </div>
+
+
+                            <div class="route-line"></div>
+
+
+                            <div class="route-point">
+                                <div class="point end"></div>
+
+                                <div>
+                                    <span>Destination</span>
+                                    <strong id="destination">
+                                        Howrah Railway Station
+                                    </strong>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="trip-info">
+
+                            <div>
+                                <span>Distance</span>
+                                <strong id="distance">24.5 km</strong>
+                            </div>
+
+                            <div>
+                                <span>Duration</span>
+                                <strong id="duration">45 min</strong>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="price-card">
+
+                        <div class="price-row">
+                            <span>Ride fare</span>
+                            <strong id="fare">₹180.00</strong>
+                        </div>
+
+                        <div class="price-row">
+                            <span>Platform fee</span>
+                            <strong>₹0.00</strong>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <div class="total-row">
+                            <span>Total payable</span>
+                            <strong id="total">₹180.00</strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <aside class="right">
+
+                    <div class="checkout-card">
+
+                        <span class="eyebrow">TOTAL AMOUNT</span>
+
+                        <div class="amount" id="sideAmount">
+                            ₹180.00
+                        </div>
+
+                        <p>
+                            Choose your preferred payment method
+                            on the next step.
+                        </p>
+
+
+                        <button
+                            class="primary-btn"
+                            id="continueBtn"
+                            type="button"
+                        >
+                            <span>Continue to Payment</span>
+                            <span class="arrow">→</span>
+                        </button>
+
+
+                        <div class="security">
+
+                            <span>✓</span>
+
+                            <p>
+                                Your payment information is
+                                securely processed.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="trust-card">
+
+                        <div class="trust-item">
+                            <strong>Secure payment</strong>
+                            <span>Protected checkout</span>
+                        </div>
+
+                        <div class="trust-item">
+                            <strong>No hidden charges</strong>
+                            <span>What you see is what you pay</span>
+                        </div>
+
+                    </div>
+
+                </aside>
+
+            </section>
+
+        </main>
+
+
+        <footer class="footer">
+            <span>© 2026 RideSync</span>
+
+            <div>
+                <span>Secure Checkout</span>
+                <span>•</span>
+                <span>Privacy</span>
+            </div>
+        </footer>
+
+    </div>
+
+
+    <script src="payment-summary.js"></script>
+
+</body>
+</html>

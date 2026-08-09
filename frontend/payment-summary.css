@@ -1,0 +1,1185 @@
+
+/* =====================================================
+   RIDESYNC
+   PAYMENT SUMMARY
+   PREMIUM WHITE + BLUE GLASS SYSTEM
+   ===================================================== */
+
+:root {
+    /* ---------- BACKGROUND ---------- */
+    --bg: #f5f8ff;
+    --bg-soft: #eef4ff;
+    --white: #ffffff;
+
+    /* ---------- BLUE ---------- */
+    --blue: #2563eb;
+    --blue-dark: #1d4ed8;
+    --blue-light: #3b82f6;
+    --blue-pale: #eff6ff;
+    --blue-soft: rgba(37, 99, 235, 0.08);
+    --blue-glow: rgba(37, 99, 235, 0.16);
+
+    /* ---------- TEXT ---------- */
+    --text: #0f172a;
+    --text-soft: #475569;
+    --text-muted: #64748b;
+
+    /* ---------- BORDERS ---------- */
+    --border: rgba(37, 99, 235, 0.12);
+    --border-blue: rgba(37, 99, 235, 0.25);
+
+    /* ---------- GLASS ---------- */
+    --glass: rgba(255, 255, 255, 0.78);
+    --glass-strong: rgba(255, 255, 255, 0.92);
+
+    /* ---------- SHADOW ---------- */
+    --shadow-sm:
+        0 8px 24px rgba(30, 64, 175, 0.07);
+
+    --shadow-md:
+        0 16px 40px rgba(30, 64, 175, 0.10);
+
+    --shadow-lg:
+        0 24px 70px rgba(30, 64, 175, 0.13);
+
+    /* ---------- RADIUS ---------- */
+    --radius-sm: 10px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+    --radius-xl: 24px;
+
+    /* ---------- TRANSITION ---------- */
+    --transition: 0.2s ease;
+}
+
+
+/* =====================================================
+   RESET
+   ===================================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at 8% 5%,
+            rgba(37, 99, 235, 0.10),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 92% 20%,
+            rgba(59, 130, 246, 0.08),
+            transparent 25%
+        ),
+        linear-gradient(
+            180deg,
+            #f8fbff 0%,
+            #f3f7ff 50%,
+            #ffffff 100%
+        );
+
+    color: var(--text);
+
+    font-family:
+        Inter,
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    font-size: 14px;
+
+    -webkit-font-smoothing: antialiased;
+}
+
+button,
+input {
+    font: inherit;
+}
+
+button,
+a {
+    -webkit-tap-highlight-color: transparent;
+}
+
+button {
+    cursor: pointer;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+
+/* =====================================================
+   PAGE
+   ===================================================== */
+
+.page {
+    width: min(
+        1200px,
+        calc(100% - 40px)
+    );
+
+    min-height: 100vh;
+
+    margin: auto;
+
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* =====================================================
+   HEADER
+   ===================================================== */
+
+.header {
+    min-height: 82px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 16px;
+
+    border-bottom:
+        1px solid var(--border);
+}
+
+.back-btn {
+    width: 42px;
+    height: 42px;
+
+    border:
+        1px solid var(--border-blue);
+
+    border-radius:
+        var(--radius-sm);
+
+    background:
+        rgba(255, 255, 255, 0.75);
+
+    backdrop-filter:
+        blur(12px);
+
+    -webkit-backdrop-filter:
+        blur(12px);
+
+    color:
+        var(--blue);
+
+    font-size: 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 5px 18px rgba(37, 99, 235, 0.06);
+
+    transition:
+        background var(--transition),
+        color var(--transition),
+        border-color var(--transition),
+        transform var(--transition),
+        box-shadow var(--transition);
+}
+
+.back-btn:hover {
+    background:
+        var(--blue);
+
+    border-color:
+        var(--blue);
+
+    color:
+        var(--white);
+
+    transform:
+        translateX(-2px);
+
+    box-shadow:
+        0 8px 24px rgba(37, 99, 235, 0.20);
+}
+
+.header-title {
+    flex: 1;
+}
+
+.header-title span {
+    display: block;
+
+    color:
+        var(--blue);
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.18em;
+
+    text-transform: uppercase;
+}
+
+.header-title h1 {
+    margin-top: 4px;
+
+    color:
+        var(--text);
+
+    font-size: 17px;
+
+    line-height: 1.2;
+
+    font-weight: 750;
+}
+
+.secure {
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    color:
+        var(--text-muted);
+
+    font-size: 11px;
+}
+
+.secure-dot {
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background:
+        var(--blue);
+
+    box-shadow:
+        0 0 12px
+        rgba(37, 99, 235, 0.45);
+}
+
+
+/* =====================================================
+   MAIN
+   ===================================================== */
+
+.main {
+    flex: 1;
+
+    padding:
+        35px 0 60px;
+}
+
+
+/* =====================================================
+   PROGRESS
+   ===================================================== */
+
+.progress {
+    width:
+        min(550px, 100%);
+
+    margin:
+        0 auto 45px;
+
+    display: flex;
+
+    align-items: center;
+}
+
+.step {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 8px;
+
+    min-width: 65px;
+}
+
+.step-number {
+    width: 32px;
+    height: 32px;
+
+    border:
+        1px solid
+        rgba(100, 116, 139, 0.20);
+
+    border-radius: 50%;
+
+    background:
+        rgba(255, 255, 255, 0.80);
+
+    color:
+        var(--text-muted);
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    box-shadow:
+        0 4px 14px rgba(30, 64, 175, 0.05);
+
+    transition:
+        var(--transition);
+}
+
+.step span {
+    color:
+        var(--text-muted);
+
+    font-size: 10px;
+
+    font-weight: 600;
+}
+
+.step.active .step-number {
+    background:
+        linear-gradient(
+            135deg,
+            var(--blue),
+            var(--blue-light)
+        );
+
+    border-color:
+        var(--blue);
+
+    color:
+        var(--white);
+
+    box-shadow:
+        0 0 0 4px
+        rgba(37, 99, 235, 0.08),
+        0 8px 22px
+        rgba(37, 99, 235, 0.22);
+}
+
+.step.active span {
+    color:
+        var(--blue);
+
+    font-weight: 700;
+}
+
+.line {
+    height: 1px;
+
+    flex: 1;
+
+    margin-bottom: 26px;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(37, 99, 235, 0.20),
+            rgba(37, 99, 235, 0.08)
+        );
+}
+
+
+/* =====================================================
+   CONTENT
+   ===================================================== */
+
+.content {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        340px;
+
+    gap: 35px;
+}
+
+
+/* =====================================================
+   HEADING
+   ===================================================== */
+
+.heading {
+    margin-bottom: 25px;
+}
+
+.eyebrow {
+    color:
+        var(--blue);
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.16em;
+
+    text-transform: uppercase;
+}
+
+.heading h2 {
+    margin-top: 9px;
+
+    color:
+        var(--text);
+
+    font-size: 30px;
+
+    line-height: 1.15;
+
+    font-weight: 800;
+
+    letter-spacing: -0.03em;
+}
+
+.heading p {
+    margin-top: 9px;
+
+    max-width: 580px;
+
+    color:
+        var(--text-soft);
+
+    font-size: 12px;
+
+    line-height: 1.7;
+}
+
+
+/* =====================================================
+   COMMON GLASS CARDS
+   ===================================================== */
+
+.trip-card,
+.price-card,
+.checkout-card,
+.trust-card {
+    border:
+        1px solid var(--border);
+
+    background:
+        var(--glass);
+
+    border-radius:
+        var(--radius-lg);
+
+    backdrop-filter:
+        blur(18px);
+
+    -webkit-backdrop-filter:
+        blur(18px);
+
+    box-shadow:
+        var(--shadow-sm);
+}
+
+.trip-card {
+    padding: 22px;
+
+    transition:
+        transform var(--transition),
+        box-shadow var(--transition),
+        border-color var(--transition);
+}
+
+.trip-card:hover {
+    transform:
+        translateY(-2px);
+
+    border-color:
+        var(--border-blue);
+
+    box-shadow:
+        var(--shadow-md);
+}
+
+
+/* =====================================================
+   CARD TOP
+   ===================================================== */
+
+.card-top {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding-bottom: 18px;
+
+    border-bottom:
+        1px solid var(--border);
+}
+
+.label {
+    display: block;
+
+    color:
+        var(--text-muted);
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.12em;
+
+    text-transform: uppercase;
+}
+
+.card-top strong {
+    display: block;
+
+    margin-top: 5px;
+
+    color:
+        var(--text);
+
+    font-size: 12px;
+
+    font-weight: 700;
+}
+
+.status {
+    padding:
+        7px 10px;
+
+    border:
+        1px solid
+        var(--border-blue);
+
+    border-radius:
+        999px;
+
+    background:
+        var(--blue-soft);
+
+    color:
+        var(--blue);
+
+    font-size: 8px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.08em;
+}
+
+
+/* =====================================================
+   ROUTE
+   ===================================================== */
+
+.route {
+    padding:
+        22px 0;
+}
+
+.route-point {
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+}
+
+.point {
+    width: 11px;
+    height: 11px;
+
+    border-radius: 50%;
+
+    flex-shrink: 0;
+
+    border:
+        2px solid var(--blue);
+
+    background:
+        var(--white);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(37, 99, 235, 0.08);
+}
+
+.point.end {
+    border-radius: 3px;
+
+    background:
+        var(--blue);
+}
+
+.route-point span {
+    display: block;
+
+    color:
+        var(--text-muted);
+
+    font-size: 9px;
+
+    margin-bottom: 4px;
+}
+
+.route-point strong {
+    display: block;
+
+    color:
+        var(--text);
+
+    font-size: 12px;
+
+    font-weight: 650;
+}
+
+.route-line {
+    width: 1px;
+
+    height: 25px;
+
+    margin:
+        4px 0 4px 5px;
+
+    background:
+        linear-gradient(
+            180deg,
+            var(--blue),
+            rgba(37, 99, 235, 0.12)
+        );
+}
+
+
+/* =====================================================
+   TRIP INFO
+   ===================================================== */
+
+.trip-info {
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 10px;
+
+    padding-top: 18px;
+
+    border-top:
+        1px solid var(--border);
+}
+
+.trip-info div {
+    padding: 12px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius:
+        var(--radius-sm);
+
+    background:
+        rgba(255, 255, 255, 0.62);
+
+    transition:
+        border-color var(--transition),
+        background var(--transition),
+        transform var(--transition);
+}
+
+.trip-info div:hover {
+    border-color:
+        var(--border-blue);
+
+    background:
+        var(--blue-pale);
+
+    transform:
+        translateY(-1px);
+}
+
+.trip-info span {
+    display: block;
+
+    color:
+        var(--text-muted);
+
+    font-size: 9px;
+}
+
+.trip-info strong {
+    display: block;
+
+    margin-top: 5px;
+
+    color:
+        var(--text);
+
+    font-size: 11px;
+
+    font-weight: 700;
+}
+
+
+/* =====================================================
+   PRICE CARD
+   ===================================================== */
+
+.price-card {
+    margin-top: 14px;
+
+    padding: 20px;
+}
+
+.price-row,
+.total-row {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 9px 0;
+}
+
+.price-row span {
+    color:
+        var(--text-soft);
+
+    font-size: 11px;
+}
+
+.price-row strong {
+    color:
+        var(--text);
+
+    font-size: 11px;
+
+    font-weight: 650;
+}
+
+.divider {
+    height: 1px;
+
+    margin:
+        8px 0;
+
+    background:
+        var(--border);
+}
+
+.total-row {
+    padding-top: 15px;
+}
+
+.total-row span {
+    color:
+        var(--text);
+
+    font-size: 12px;
+
+    font-weight: 700;
+}
+
+.total-row strong {
+    color:
+        var(--blue);
+
+    font-size: 18px;
+
+    font-weight: 800;
+}
+
+
+/* =====================================================
+   RIGHT COLUMN
+   ===================================================== */
+
+.right {
+    position: sticky;
+
+    top: 20px;
+
+    align-self: start;
+}
+
+
+/* =====================================================
+   CHECKOUT CARD
+   ===================================================== */
+
+.checkout-card {
+    padding: 24px;
+
+    border-color:
+        rgba(37, 99, 235, 0.18);
+
+    background:
+        rgba(255, 255, 255, 0.88);
+
+    box-shadow:
+        var(--shadow-md);
+}
+
+.amount {
+    margin-top: 9px;
+
+    color:
+        var(--text);
+
+    font-size: 34px;
+
+    line-height: 1;
+
+    font-weight: 800;
+
+    letter-spacing: -0.04em;
+}
+
+.checkout-card p {
+    margin-top: 13px;
+
+    color:
+        var(--text-soft);
+
+    font-size: 11px;
+
+    line-height: 1.6;
+}
+
+
+/* =====================================================
+   PRIMARY BUTTON
+   ===================================================== */
+
+.primary-btn {
+    width: 100%;
+
+    height: 52px;
+
+    margin-top: 22px;
+
+    border: 0;
+
+    border-radius:
+        var(--radius-sm);
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--blue),
+            var(--blue-light)
+        );
+
+    color:
+        var(--white);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 10px;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 10px 28px
+        rgba(37, 99, 235, 0.24);
+
+    transition:
+        background var(--transition),
+        transform var(--transition),
+        box-shadow var(--transition);
+}
+
+.primary-btn:hover {
+    background:
+        linear-gradient(
+            135deg,
+            var(--blue-dark),
+            var(--blue)
+        );
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 15px 35px
+        rgba(37, 99, 235, 0.30);
+}
+
+.primary-btn:active {
+    transform:
+        translateY(0);
+
+    box-shadow:
+        0 8px 20px
+        rgba(37, 99, 235, 0.18);
+}
+
+.arrow {
+    font-size: 18px;
+
+    line-height: 1;
+}
+
+
+/* =====================================================
+   SECURITY
+   ===================================================== */
+
+.security {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 8px;
+
+    margin-top: 16px;
+}
+
+.security > span {
+    color:
+        var(--blue);
+
+    font-size: 12px;
+
+    font-weight: 700;
+}
+
+.security p {
+    margin: 0;
+
+    color:
+        var(--text-muted);
+
+    font-size: 9px;
+
+    line-height: 1.5;
+}
+
+
+/* =====================================================
+   TRUST CARD
+   ===================================================== */
+
+.trust-card {
+    margin-top: 12px;
+
+    padding:
+        7px 18px;
+
+    background:
+        rgba(255, 255, 255, 0.72);
+}
+
+.trust-item {
+    padding:
+        13px 0;
+
+    border-bottom:
+        1px solid var(--border);
+}
+
+.trust-item:last-child {
+    border-bottom: 0;
+}
+
+.trust-item strong {
+    display: block;
+
+    color:
+        var(--text);
+
+    font-size: 10px;
+
+    font-weight: 700;
+}
+
+.trust-item span {
+    display: block;
+
+    margin-top: 4px;
+
+    color:
+        var(--text-muted);
+
+    font-size: 9px;
+}
+
+
+/* =====================================================
+   FOOTER
+   ===================================================== */
+
+.footer {
+    min-height: 70px;
+
+    border-top:
+        1px solid var(--border);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    color:
+        var(--text-muted);
+
+    font-size: 9px;
+}
+
+.footer div {
+    display: flex;
+
+    gap: 12px;
+}
+
+.footer a {
+    transition:
+        color var(--transition);
+}
+
+.footer a:hover {
+    color:
+        var(--blue);
+}
+
+
+/* =====================================================
+   RESPONSIVE — TABLET
+   ===================================================== */
+
+@media (max-width: 800px) {
+
+    .content {
+        grid-template-columns:
+            1fr;
+    }
+
+    .right {
+        position: static;
+    }
+}
+
+
+/* =====================================================
+   RESPONSIVE — MOBILE
+   ===================================================== */
+
+@media (max-width: 500px) {
+
+    .page {
+        width:
+            calc(100% - 24px);
+    }
+
+    .main {
+        padding-top:
+            25px;
+    }
+
+    .progress {
+        margin-bottom:
+            32px;
+    }
+
+    .step {
+        min-width:
+            55px;
+    }
+
+    .step span {
+        font-size:
+            9px;
+    }
+
+    .heading h2 {
+        font-size:
+            26px;
+    }
+
+    .trip-card,
+    .price-card,
+    .checkout-card {
+        padding:
+            17px;
+    }
+
+    .footer {
+        flex-direction:
+            column;
+
+        justify-content:
+            center;
+
+        gap:
+            8px;
+
+        padding:
+            18px 0;
+    }
+}
+
+
+/* =====================================================
+   SMALL MOBILE
+   ===================================================== */
+
+@media (max-width: 380px) {
+
+    body {
+        font-size:
+            13px;
+    }
+
+    .page {
+        width:
+            calc(100% - 18px);
+    }
+
+    .header {
+        min-height:
+            72px;
+    }
+
+    .header-title h1 {
+        font-size:
+            15px;
+    }
+
+    .secure {
+        display:
+            none;
+    }
+
+    .heading h2 {
+        font-size:
+            24px;
+    }
+
+    .amount {
+        font-size:
+            30px;
+    }
+}
+

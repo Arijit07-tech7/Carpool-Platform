@@ -1,0 +1,1091 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" class="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>My Vehicles - RideSync</title>
+
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- Google Fonts -->
+<link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+>
+
+<!-- Material Icons -->
+<link
+    href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
+    rel="stylesheet"
+>
+
+<!-- Tailwind Configuration -->
+<script>
+    tailwind.config = {
+        darkMode: "class",
+
+        theme: {
+            extend: {
+                colors: {
+                    primary: "#0052ff",
+                    "primary-container": "#dbeafe",
+                    "on-primary-container": "#001a41",
+
+                    surface: "#f9f9f9",
+                    "surface-container": "#f3f3f3",
+                    "surface-container-low": "#f9f9f9",
+                    "surface-container-high": "#ececec",
+
+                    "on-surface": "#1a1a1a",
+                    "on-surface-variant": "#444444",
+
+                    outline: "#dadada",
+                    "outline-variant": "#eeeeee",
+
+                    purple: {
+                        500: "#8b5cf6",
+                        600: "#7c3aed",
+                        700: "#6d28d9"
+                    }
+                },
+
+                fontFamily: {
+                    sans: ["Plus Jakarta Sans", "sans-serif"]
+                },
+
+                borderRadius: {
+                    xl: "12px",
+                    "2xl": "16px",
+                    "3xl": "24px"
+                }
+            }
+        }
+    };
+</script>
+
+<!-- Custom CSS -->
+<style>
+    body {
+        font-family: "Plus Jakarta Sans", sans-serif;
+        overflow: hidden;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #e0e0e0;
+        border-radius: 10px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: #d0d0d0;
+    }
+
+    .glass-sidebar {
+        border-right: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .active-nav {
+        background: rgba(0, 82, 255, 0.06);
+        color: #0052ff;
+        font-weight: 600;
+    }
+</style>
+
+</head>
+
+<body class="bg-surface text-on-surface flex h-screen">
+
+<!-- =====================================================
+     SIDEBAR NAVIGATION
+====================================================== -->
+<aside class="w-64 glass-sidebar bg-white flex flex-col shrink-0">
+
+    <!-- Logo -->
+    <div class="p-8 pb-4">
+        <h1 class="text-2xl font-extrabold tracking-tighter text-primary">
+            RideSync
+        </h1>
+    </div>
+
+
+    <!-- Driver Profile -->
+    <div class="px-6 py-4 flex flex-col items-center text-center">
+
+        <img
+            src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200"
+            alt="Mrigank Sharma"
+            class="w-20 h-20 rounded-full object-cover mb-3 ring-4 ring-blue-50"
+        >
+
+        <h2 class="font-bold text-lg leading-tight">
+            Mrigank Sharma
+        </h2>
+
+        <p class="text-xs text-on-surface-variant font-medium uppercase tracking-wider mb-2">
+            Pro Driver â€¢ 4.98 â˜…
+        </p>
+
+    </div>
+
+
+    <!-- Navigation -->
+    <nav class="flex-1 px-4 mt-4 space-y-1">
+
+        <!-- Dashboard -->
+        <a
+            href="#"
+            class="flex items-center px-4 py-3 text-on-surface-variant
+                   hover:bg-surface-container rounded-xl transition-colors"
+        >
+            <span class="material-icons-outlined mr-3">
+                dashboard
+            </span>
+
+            <span class="text-sm font-medium">
+                Dashboard
+            </span>
+        </a>
+
+
+        <!-- My Vehicles -->
+        <a
+            href="#"
+            class="flex items-center px-4 py-3 active-nav rounded-xl"
+        >
+            <span class="material-icons-outlined mr-3">
+                directions_car
+            </span>
+
+            <span class="text-sm">
+                My Vehicles
+            </span>
+        </a>
+
+
+        <!-- Trip History -->
+        <a
+            href="#"
+            class="flex items-center px-4 py-3 text-on-surface-variant
+                   hover:bg-surface-container rounded-xl transition-colors"
+        >
+            <span class="material-icons-outlined mr-3">
+                history
+            </span>
+
+            <span class="text-sm font-medium">
+                Trip History
+            </span>
+        </a>
+
+
+        <!-- Earnings -->
+        <a
+            href="#"
+            class="flex items-center px-4 py-3 text-on-surface-variant
+                   hover:bg-surface-container rounded-xl transition-colors"
+        >
+            <span class="material-icons-outlined mr-3">
+                payments
+            </span>
+
+            <span class="text-sm font-medium">
+                Earnings
+            </span>
+        </a>
+
+
+        <!-- Account Settings -->
+        <a
+            href="#"
+            class="flex items-center px-4 py-3 text-on-surface-variant
+                   hover:bg-surface-container rounded-xl transition-colors"
+        >
+            <span class="material-icons-outlined mr-3">
+                person
+            </span>
+
+            <span class="text-sm font-medium">
+                Account Settings
+            </span>
+        </a>
+
+    </nav>
+
+
+    <!-- Partner Button -->
+    <div class="p-6 mt-auto">
+
+        <button
+            class="w-full bg-primary text-white py-4 rounded-2xl
+                   font-bold text-sm shadow-lg shadow-blue-500/20
+                   hover:scale-[1.02] active:scale-95 transition-all"
+        >
+            Become a Partner
+        </button>
+
+    </div>
+
+</aside>
+
+
+<!-- =====================================================
+     MAIN CONTENT
+====================================================== -->
+<main class="flex-1 flex flex-col overflow-hidden bg-white ml-1">
+
+    <!-- Header -->
+    <header
+        class="h-20 border-b border-outline-variant
+               flex items-center justify-between px-10 shrink-0"
+    >
+
+        <div>
+            <h2 class="text-2xl font-bold">
+                My Vehicles
+            </h2>
+
+            <p class="text-sm text-on-surface-variant font-medium">
+                Manage your registered vehicles for driving.
+            </p>
+        </div>
+
+
+        <!-- Add Vehicle Button -->
+        <button
+            onclick="openAddVehicleModal()"
+            class="flex items-center bg-primary text-white
+                   px-6 py-3 rounded-xl font-bold text-sm
+                   hover:opacity-90 transition-opacity"
+        >
+            <span class="material-icons-outlined mr-2 text-lg">
+                add
+            </span>
+
+            Add Vehicle
+        </button>
+
+    </header>
+
+
+    <!-- =================================================
+         SCROLLABLE CONTENT
+    ================================================== -->
+    <div
+        class="flex-1 overflow-y-auto custom-scrollbar
+               p-10 space-y-12 pb-24"
+    >
+
+        <!-- =================================================
+             STANDARD FLEET
+        ================================================== -->
+        <section>
+
+            <div class="flex items-center justify-between mb-8">
+
+                <h3 class="text-xl font-bold flex items-center">
+
+                    <span
+                        class="w-2 h-8 bg-primary rounded-full mr-3"
+                    ></span>
+
+                    Standard Fleet
+
+                </h3>
+
+            </div>
+
+
+            <!-- Vehicle Grid -->
+            <div
+                class="grid grid-cols-1 md:grid-cols-2
+                       xl:grid-cols-3 gap-6"
+            >
+
+                <!-- =================================================
+                     WAGONR
+                ================================================== -->
+                <div
+                    class="group relative bg-white border border-outline
+                           rounded-3xl overflow-hidden
+                           hover:border-primary transition-all
+                           hover:shadow-xl hover:shadow-blue-500/5"
+                >
+
+                    <!-- Active Badge -->
+                    <div
+                        class="absolute top-4 right-4 z-10
+                               bg-primary text-white p-1
+                               rounded-full shadow-md"
+                    >
+                        <span class="material-icons-outlined text-sm">
+                            check
+                        </span>
+                    </div>
+
+
+                    <!-- Vehicle Image -->
+                    <div class="aspect-[16/10] overflow-hidden bg-surface-container">
+
+                        <img
+                            src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&q=80&w=900"
+                            alt="Maruti Suzuki WagonR"
+                            class="w-full h-full object-cover
+                                   group-hover:scale-105
+                                   transition-transform duration-500"
+                        >
+
+                    </div>
+
+
+                    <!-- Vehicle Details -->
+                    <div class="p-6">
+
+                        <div class="flex justify-between items-start mb-2">
+
+                            <h4 class="font-bold text-lg">
+                                Maruti Suzuki WagonR
+                            </h4>
+
+                            <span
+                                class="px-3 py-1 bg-surface-container
+                                       rounded-full text-[10px]
+                                       font-bold uppercase
+                                       tracking-wider
+                                       text-on-surface-variant"
+                            >
+                                Car
+                            </span>
+
+                        </div>
+
+                        <p class="text-sm text-on-surface-variant mb-4">
+                            Hatchback
+                        </p>
+
+
+                        <div
+                            class="flex items-center space-x-4
+                                   text-xs font-semibold
+                                   text-on-surface-variant"
+                        >
+
+                            <span class="flex items-center">
+                                <span class="material-icons-outlined text-sm mr-1">
+                                    group
+                                </span>
+                                4 Seats
+                            </span>
+
+                            <span class="flex items-center">
+                                <span class="material-icons-outlined text-sm mr-1">
+                                    local_gas_station
+                                </span>
+                                Petrol
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     TATA TIAGO
+                ================================================== -->
+                <div
+                    class="group bg-white border border-outline
+                           rounded-3xl overflow-hidden
+                           hover:border-primary transition-all
+                           hover:shadow-xl hover:shadow-blue-500/5"
+                >
+
+                    <div class="aspect-[16/10] overflow-hidden bg-surface-container">
+
+                        <img
+                            src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&q=80&w=900"
+                            alt="Tata Tiago"
+                            class="w-full h-full object-cover
+                                   group-hover:scale-105
+                                   transition-transform duration-500"
+                        >
+
+                    </div>
+
+
+                    <div class="p-6">
+
+                        <div class="flex justify-between items-start mb-2">
+
+                            <h4 class="font-bold text-lg">
+                                Tata Tiago
+                            </h4>
+
+                            <span
+                                class="px-3 py-1 bg-surface-container
+                                       rounded-full text-[10px]
+                                       font-bold uppercase
+                                       tracking-wider
+                                       text-on-surface-variant"
+                            >
+                                Car
+                            </span>
+
+                        </div>
+
+                        <p class="text-sm text-on-surface-variant mb-4">
+                            Compact Hatchback
+                        </p>
+
+
+                        <div
+                            class="flex items-center space-x-4
+                                   text-xs font-semibold
+                                   text-on-surface-variant"
+                        >
+
+                            <span class="flex items-center">
+                                <span class="material-icons-outlined text-sm mr-1">
+                                    group
+                                </span>
+                                4 Seats
+                            </span>
+
+                            <span class="flex items-center">
+                                <span class="material-icons-outlined text-sm mr-1">
+                                    local_gas_station
+                                </span>
+                                Petrol
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     ROYAL ENFIELD CLASSIC 350
+                ================================================== -->
+                <div
+                    class="group bg-white border border-outline
+                           rounded-3xl overflow-hidden
+                           hover:border-primary transition-all
+                           hover:shadow-xl hover:shadow-blue-500/5"
+                >
+
+                    <div class="aspect-[16/10] overflow-hidden bg-surface-container">
+
+                        <img
+                            src="https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&q=80&w=900"
+                            alt="Royal Enfield Classic 350"
+                            class="w-full h-full object-cover
+                                   group-hover:scale-105
+                                   transition-transform duration-500"
+                        >
+
+                    </div>
+
+
+                    <div class="p-6">
+
+                        <div class="flex justify-between items-start mb-2">
+
+                            <h4 class="font-bold text-lg">
+                                Royal Enfield Classic 350
+                            </h4>
+
+                            <span
+                                class="px-3 py-1 bg-surface-container
+                                       rounded-full text-[10px]
+                                       font-bold uppercase
+                                       tracking-wider
+                                       text-on-surface-variant"
+                            >
+                                Bike
+                            </span>
+
+                        </div>
+
+                        <p class="text-sm text-on-surface-variant mb-4">
+                            Cruiser Motorcycle
+                        </p>
+
+
+                        <div
+                            class="flex items-center space-x-4
+                                   text-xs font-semibold
+                                   text-on-surface-variant"
+                        >
+
+                            <span class="flex items-center">
+                                <span class="material-icons-outlined text-sm mr-1">
+                                    group
+                                </span>
+                                2 Seats
+                            </span>
+
+                            <span class="flex items-center">
+                                <span class="material-icons-outlined text-sm mr-1">
+                                    local_gas_station
+                                </span>
+                                Petrol
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             PURPLE EXCLUSIVE SECTION
+        ================================================== -->
+        <section
+            class="bg-purple-500/5 border border-purple-500/20
+                   rounded-[40px] p-8"
+        >
+
+            <div
+                class="flex flex-col md:flex-row md:items-center
+                       justify-between mb-8 gap-4"
+            >
+
+                <div>
+
+                    <h3
+                        class="text-2xl font-black text-purple-700
+                               flex items-center italic tracking-tight"
+                    >
+
+                        <span class="material-icons-outlined mr-2 text-3xl">
+                            female
+                        </span>
+
+                        PURPLE
+
+                    </h3>
+
+                    <p
+                        class="text-sm text-purple-600/80
+                               font-medium max-w-lg mt-1"
+                    >
+                        Exclusive fleet for female riders.
+                        Booking restricted for male riders to
+                        ensure safety and comfort.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- Purple Fleet Grid -->
+            <div
+                class="grid grid-cols-1 md:grid-cols-2
+                       xl:grid-cols-3 gap-6"
+            >
+
+                <!-- Purple Verna -->
+                <div
+                    class="group bg-white border-2
+                           border-purple-500/10 rounded-3xl
+                           overflow-hidden hover:border-purple-500
+                           transition-all shadow-sm"
+                >
+
+                    <div
+                        class="aspect-[16/10]
+                               overflow-hidden bg-purple-100"
+                    >
+
+                        <img
+                            src="https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&fit=crop&q=80&w=900"
+                            alt="Purple Edition Verna"
+                            class="w-full h-full object-cover
+                                   group-hover:scale-105
+                                   transition-transform duration-500"
+                        >
+
+                    </div>
+
+
+                    <div class="p-6">
+
+                        <div class="flex justify-between items-start mb-2">
+
+                            <h4 class="font-bold text-lg text-purple-900">
+                                Purple Edition Verna
+                            </h4>
+
+                            <span
+                                class="px-3 py-1 bg-purple-500/10
+                                       text-purple-600 rounded-full
+                                       text-[10px] font-bold
+                                       uppercase tracking-wider"
+                            >
+                                Premium
+                            </span>
+
+                        </div>
+
+                        <p class="text-sm text-on-surface-variant mb-4">
+                            Luxury Sedan
+                        </p>
+
+
+                        <div
+                            class="flex items-center space-x-4
+                                   text-xs font-semibold
+                                   text-on-surface-variant"
+                        >
+
+                            <span class="flex items-center text-purple-600">
+                                <span class="material-icons-outlined text-sm mr-1">
+                                    group
+                                </span>
+                                4 Seats
+                            </span>
+
+                            <span class="flex items-center">
+                                <span class="material-icons-outlined text-sm mr-1">
+                                    local_gas_station
+                                </span>
+                                Petrol
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Purple Access -->
+                <div
+                    class="group bg-white border-2
+                           border-purple-500/10 rounded-3xl
+                           overflow-hidden hover:border-purple-500
+                           transition-all shadow-sm"
+                >
+
+                    <div
+                        class="aspect-[16/10]
+                               overflow-hidden bg-purple-100"
+                    >
+
+                        <img
+                            src="https://images.unsplash.com/photo-1558981285-6f0c94958bb6?auto=format&fit=crop&q=80&w=900"
+                            alt="Purple Edition Access"
+                            class="w-full h-full object-cover
+                                   group-hover:scale-105
+                                   transition-transform duration-500"
+                        >
+
+                    </div>
+
+
+                    <div class="p-6">
+
+                        <div class="flex justify-between items-start mb-2">
+
+                            <h4 class="font-bold text-lg text-purple-900">
+                                Purple Edition Access
+                            </h4>
+
+                            <span
+                                class="px-3 py-1 bg-purple-500/10
+                                       text-purple-600 rounded-full
+                                       text-[10px] font-bold
+                                       uppercase tracking-wider"
+                            >
+                                Scooty
+                            </span>
+
+                        </div>
+
+                        <p class="text-sm text-on-surface-variant mb-4">
+                            Comfort Scooter
+                        </p>
+
+
+                        <div
+                            class="flex items-center space-x-4
+                                   text-xs font-semibold
+                                   text-on-surface-variant"
+                        >
+
+                            <span class="flex items-center text-purple-600">
+                                <span class="material-icons-outlined text-sm mr-1">
+                                    group
+                                </span>
+                                2 Seats
+                            </span>
+
+                            <span class="flex items-center">
+                                <span class="material-icons-outlined text-sm mr-1">
+                                    local_gas_station
+                                </span>
+                                Petrol
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Purple Classic 350 -->
+                <div
+                    class="group bg-white border-2
+                           border-purple-500/10 rounded-3xl
+                           overflow-hidden hover:border-purple-500
+                           transition-all shadow-sm"
+                >
+
+                    <div
+                        class="aspect-[16/10]
+                               overflow-hidden bg-purple-100"
+                    >
+
+                        <img
+                            src="https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&q=80&w=900"
+                            alt="Purple Edition Classic 350"
+                            class="w-full h-full object-cover
+                                   group-hover:scale-105
+                                   transition-transform duration-500"
+                        >
+
+                    </div>
+
+
+                    <div class="p-6">
+
+                        <div class="flex justify-between items-start mb-2">
+
+                            <h4 class="font-bold text-lg text-purple-900">
+                                Purple Edition Classic 350
+                            </h4>
+
+                            <span
+                                class="px-3 py-1 bg-purple-500/10
+                                       text-purple-600 rounded-full
+                                       text-[10px] font-bold
+                                       uppercase tracking-wider"
+                            >
+                                Bike
+                            </span>
+
+                        </div>
+
+                        <p class="text-sm text-on-surface-variant mb-4">
+                            Iconic Cruiser
+                        </p>
+
+
+                        <div
+                            class="flex items-center space-x-4
+                                   text-xs font-semibold
+                                   text-on-surface-variant"
+                        >
+
+                            <span class="flex items-center text-purple-600">
+                                <span class="material-icons-outlined text-sm mr-1">
+                                    group
+                                </span>
+                                2 Seats
+                            </span>
+
+                            <span class="flex items-center">
+                                <span class="material-icons-outlined text-sm mr-1">
+                                    local_gas_station
+                                </span>
+                                Petrol
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             REGISTER NEW VEHICLE
+        ================================================== -->
+        <button
+            onclick="openAddVehicleModal()"
+            class="w-full py-16 border-4 border-dashed
+                   border-outline rounded-[40px]
+                   flex flex-col items-center justify-center
+                   text-on-surface-variant
+                   hover:border-primary hover:text-primary
+                   transition-all hover:bg-blue-50 group"
+        >
+
+            <div
+                class="w-16 h-16 bg-surface-container-high
+                       rounded-full flex items-center justify-center
+                       mb-4 group-hover:bg-blue-100
+                       transition-colors"
+            >
+
+                <span class="material-icons-outlined text-3xl">
+                    directions_car
+                </span>
+
+            </div>
+
+            <span class="text-lg font-bold">
+                Register a new vehicle
+            </span>
+
+            <p class="text-sm font-medium opacity-60">
+                Add a car, bike, or scooter to your profile
+            </p>
+
+        </button>
+
+    </div>
+
+</main>
+
+
+<!-- =====================================================
+     ADD VEHICLE MODAL
+====================================================== -->
+<div
+    id="vehicleModal"
+    class="hidden fixed inset-0 z-50
+           bg-black/40 backdrop-blur-sm
+           items-center justify-center p-4"
+>
+
+    <div
+        class="bg-white w-full max-w-md rounded-3xl
+               shadow-2xl p-8"
+    >
+
+        <div class="flex items-center justify-between mb-6">
+
+            <h2 class="text-2xl font-bold">
+                Add Vehicle
+            </h2>
+
+            <button
+                onclick="closeAddVehicleModal()"
+                class="w-10 h-10 rounded-full
+                       bg-surface-container
+                       flex items-center justify-center
+                       hover:bg-gray-200"
+            >
+                <span class="material-icons-outlined">
+                    close
+                </span>
+            </button>
+
+        </div>
+
+
+        <form onsubmit="addVehicle(event)" class="space-y-4">
+
+            <input
+                id="vehicleName"
+                type="text"
+                placeholder="Vehicle Name"
+                required
+                class="w-full px-4 py-3 bg-surface-container
+                       rounded-xl outline-none
+                       focus:ring-2 focus:ring-primary"
+            >
+
+
+            <select
+                id="vehicleType"
+                required
+                class="w-full px-4 py-3 bg-surface-container
+                       rounded-xl outline-none
+                       focus:ring-2 focus:ring-primary"
+            >
+                <option value="">
+                    Select Vehicle Type
+                </option>
+
+                <option value="Car">
+                    Car
+                </option>
+
+                <option value="Bike">
+                    Bike
+                </option>
+
+                <option value="Scooter">
+                    Scooter
+                </option>
+            </select>
+
+
+            <input
+                id="vehicleSeats"
+                type="number"
+                min="1"
+                max="8"
+                placeholder="Number of Seats"
+                required
+                class="w-full px-4 py-3 bg-surface-container
+                       rounded-xl outline-none
+                       focus:ring-2 focus:ring-primary"
+            >
+
+
+            <select
+                id="vehicleFuel"
+                required
+                class="w-full px-4 py-3 bg-surface-container
+                       rounded-xl outline-none
+                       focus:ring-2 focus:ring-primary"
+            >
+                <option value="">
+                    Select Fuel Type
+                </option>
+
+                <option value="Petrol">
+                    Petrol
+                </option>
+
+                <option value="Diesel">
+                    Diesel
+                </option>
+
+                <option value="Electric">
+                    Electric
+                </option>
+
+                <option value="CNG">
+                    CNG
+                </option>
+            </select>
+
+
+            <button
+                type="submit"
+                class="w-full bg-primary text-white
+                       py-4 rounded-xl font-bold
+                       hover:opacity-90 transition-opacity"
+            >
+                Add Vehicle
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     JAVASCRIPT
+====================================================== -->
+<script>
+
+    /* Open Add Vehicle Modal */
+    function openAddVehicleModal() {
+
+        const modal = document.getElementById("vehicleModal");
+
+        modal.classList.remove("hidden");
+        modal.classList.add("flex");
+    }
+
+
+    /* Close Add Vehicle Modal */
+    function closeAddVehicleModal() {
+
+        const modal = document.getElementById("vehicleModal");
+
+        modal.classList.add("hidden");
+        modal.classList.remove("flex");
+    }
+
+
+    /* Add Vehicle */
+    function addVehicle(event) {
+
+        event.preventDefault();
+
+        const vehicleName =
+            document.getElementById("vehicleName").value.trim();
+
+        const vehicleType =
+            document.getElementById("vehicleType").value;
+
+        const vehicleSeats =
+            document.getElementById("vehicleSeats").value;
+
+        const vehicleFuel =
+            document.getElementById("vehicleFuel").value;
+
+
+        if (
+            !vehicleName ||
+            !vehicleType ||
+            !vehicleSeats ||
+            !vehicleFuel
+        ) {
+            alert("Please complete all vehicle details.");
+            return;
+        }
+
+
+        alert(
+            `${vehicleName} has been added successfully!`
+        );
+
+
+        /* Reset form */
+        event.target.reset();
+
+        /* Close modal */
+        closeAddVehicleModal();
+
+    }
+
+
+    /* Close modal when clicking outside */
+    document
+        .getElementById("vehicleModal")
+        .addEventListener("click", function (event) {
+
+            if (event.target === this) {
+                closeAddVehicleModal();
+            }
+
+        });
+
+</script>
+
+</body>
+
+</html>

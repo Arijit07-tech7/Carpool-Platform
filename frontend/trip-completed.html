@@ -1,0 +1,409 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="RideSync Trip Completed"
+    >
+
+    <title>Trip Completed — RideSync</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="trip-completed.css"
+    >
+</head>
+
+<body>
+
+    <main class="trip-page">
+
+        <!-- ================= HEADER ================= -->
+
+        <header class="topbar">
+
+            <div class="brand">
+
+                <div class="brand-mark">
+                    <span></span>
+                    <span></span>
+                </div>
+
+                <div class="brand-text">
+                    <strong>Ride<span>Sync</span></strong>
+                    <small>SMART CARPOOLING</small>
+                </div>
+
+            </div>
+
+            <div class="secure-badge">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                >
+                    <rect
+                        x="5"
+                        y="10"
+                        width="14"
+                        height="10"
+                        rx="2"
+                    />
+                    <path d="M8 10V7a4 4 0 0 1 8 0v3" />
+                </svg>
+
+                <span>SECURE</span>
+
+            </div>
+
+        </header>
+
+
+        <!-- ================= CONTENT ================= -->
+
+        <section class="trip-content">
+
+            <!-- Success Icon -->
+
+            <div class="success-icon">
+
+                <div class="success-circle">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <path d="M5 12.5l4 4L19 7.5" />
+                    </svg>
+
+                </div>
+
+            </div>
+
+
+            <!-- Heading -->
+
+            <div class="heading">
+
+                <span class="eyebrow">
+                    TRIP COMPLETED
+                </span>
+
+                <h1>
+                    Your ride has<br>
+                    <span>successfully ended.</span>
+                </h1>
+
+                <p>
+                    Thanks for riding with RideSync.
+                    Your trip details are ready for payment.
+                </p>
+
+            </div>
+
+
+            <!-- ================= TRIP CARD ================= -->
+
+            <div class="trip-card">
+
+                <div class="card-top">
+
+                    <div>
+                        <span class="label">
+                            TRIP ID
+                        </span>
+
+                        <strong>
+                            RS-10284
+                        </strong>
+                    </div>
+
+                    <div class="completed-pill">
+
+                        <span class="dot"></span>
+
+                        Completed
+
+                    </div>
+
+                </div>
+
+
+                <div class="route">
+
+                    <!-- Pickup -->
+
+                    <div class="location">
+
+                        <div class="location-icon pickup">
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            >
+                                <circle
+                                    cx="12"
+                                    cy="12"
+                                    r="3"
+                                />
+                            </svg>
+
+                        </div>
+
+                        <div>
+                            <span>FROM</span>
+
+                            <strong>
+                                Salt Lake Sector V
+                            </strong>
+                        </div>
+
+                    </div>
+
+
+                    <div class="route-line">
+
+                        <span></span>
+
+                    </div>
+
+
+                    <!-- Destination -->
+
+                    <div class="location">
+
+                        <div class="location-icon destination">
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            >
+                                <path
+                                    d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"
+                                />
+
+                                <circle
+                                    cx="12"
+                                    cy="10"
+                                    r="2.5"
+                                />
+                            </svg>
+
+                        </div>
+
+                        <div>
+                            <span>TO</span>
+
+                            <strong>
+                                Howrah Railway Station
+                            </strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Trip Stats -->
+
+                <div class="stats">
+
+                    <div class="stat">
+
+                        <span>Distance</span>
+
+                        <strong>
+                            24.5 km
+                        </strong>
+
+                    </div>
+
+                    <div class="stat">
+
+                        <span>Duration</span>
+
+                        <strong>
+                            45 min
+                        </strong>
+
+                    </div>
+
+                    <div class="stat">
+
+                        <span>Fare</span>
+
+                        <strong class="fare">
+                            ₹180.00
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================= PAYMENT NOTICE ================= -->
+
+            <div class="payment-notice">
+
+                <div class="notice-icon">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                    >
+                        <path
+                            d="M12 3v18"
+                        />
+
+                        <path
+                            d="M17 7.5c0-1.7-2.2-3-5-3s-5 1.3-5 3 2.2 3 5 3 5 1.3 5 3-2.2 3-5 3-5-1.3-5-3"
+                        />
+
+                    </svg>
+
+                </div>
+
+                <div>
+
+                    <strong>
+                        Payment pending
+                    </strong>
+
+                    <p>
+                        Complete your payment to close this trip.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================= CTA ================= -->
+
+            <button
+                type="button"
+                id="proceedPaymentBtn"
+                class="proceed-button"
+            >
+
+                <span>
+                    Proceed to Payment
+                </span>
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <path d="M5 12h14" />
+                    <path d="m13 6 6 6-6 6" />
+                </svg>
+
+            </button>
+
+
+            <p class="secure-text">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                >
+                    <rect
+                        x="5"
+                        y="10"
+                        width="14"
+                        height="10"
+                        rx="2"
+                    />
+
+                    <path d="M8 10V7a4 4 0 0 1 8 0v3" />
+
+                </svg>
+
+                Secure payment powered by RideSync
+
+            </p>
+
+        </section>
+
+
+        <!-- ================= FOOTER ================= -->
+
+        <footer class="footer">
+
+            <span>
+                © 2026 RideSync
+            </span>
+
+            <div>
+
+                <span>
+                    Trusted
+                </span>
+
+                <span>
+                    •
+                </span>
+
+                <span>
+                    Secure
+                </span>
+
+                <span>
+                    •
+                </span>
+
+                <span>
+                    Reliable
+                </span>
+
+            </div>
+
+        </footer>
+
+    </main>
+
+
+    <!-- PAGE-SPECIFIC JAVASCRIPT -->
+
+    <script src="trip-completed.js"></script>
+
+</body>
+
+</html>
